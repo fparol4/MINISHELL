@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/02/24 21:08:37 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/02/24 21:40:00 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef enum e_type
 
 typedef struct s_token
 {
+	int		id;
 	char	**token;
 	t_type	type;
 }	t_token;
