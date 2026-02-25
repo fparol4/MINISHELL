@@ -32,7 +32,7 @@ typedef struct s_token
 	t_type	type;
 }	t_token;
 
-typedef struct s_AST
+typedef struct S_AST
 {
 
 }	t_AST;
