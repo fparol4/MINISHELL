@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_create_node.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/07 17:22:16 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/03/07 05:15:42 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/03/07 05:16:03 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	add_token_to_list(t_manager *manager, char *value, t_token_type type)
+t_node	*ft_create_node(void *content)
 {
-	t_node			*node;
-	t_list_token	*token;
+	t_node	*node;
 
-	token = malloc(sizeof(t_list_token));
-	token->value = value;
-	token->type = type;
-
-	node = ft_create_node(token);
-	ft_add_back(manager, node);
+	node = malloc(sizeof(t_node));
+	if (!node)
+		return (NULL);
+	node->content = content;
+	node->next = NULL;
+	node->prev = NULL;
+	return (node);
 }

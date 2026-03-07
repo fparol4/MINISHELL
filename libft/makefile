@@ -10,6 +10,7 @@ SRC = 	ft_isdigit.c  ft_memset.c   ft_strdup.c      ft_strncmp.c \
 		get_next_line.c             get_next_line_utils.c \
 		ft_printf.c   ft_pointer_printf.c            ft_printcstr_printf.c \
 		ft_puthex_printf.c          ft_putnbr_printf.c              ft_putunbr_printf.c \
+		ft_create_node.c \          ft_add_back.c \                 ft_jump_space \
 
 OBJ = $(SRC:%.c=%.o)
 
