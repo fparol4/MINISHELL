@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:08:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/07 05:16:52 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/09 23:32:42 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(void)
 	while (1)
 	{
 		input = readline("minishell ");
-		lexer_controll(input);
+		lexer_controll(&input);
 	}
 	return (0);
 }
