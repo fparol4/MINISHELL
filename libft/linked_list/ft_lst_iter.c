@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_jump_space.c                                    :+:      :+:    :+:   */
+/*   ft_lst_iter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 17:34:42 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/14 21:34:18 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/03/14 19:49:26 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/03/14 20:14:05 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "header.h"
 
-void	ft_jump_space(char **string)
+void	ft_lst_iter(t_list *lst, void (*f)(void *))
 {
-	int	index;
-
-	index = 0;
-
-	if (!*string)
+	if (!lst || !f)
 		return ;
-	while (*string[index] && (*string[index] == ' ' || (*string[index] >= 9
-				&& *string[index] <= 13)))
-		index++;
-	*string += index;
+	while (lst)
+	{
+		f(lst->content);
+		lst = lst->next;
+	}
 }

@@ -10,13 +10,25 @@ SRC = 	ft_isdigit.c  ft_memset.c   ft_strdup.c      ft_strncmp.c \
 		get_next_line.c             get_next_line_utils.c \
 		ft_printf.c   ft_pointer_printf.c            ft_printcstr_printf.c \
 		ft_puthex_printf.c          ft_putnbr_printf.c              ft_putunbr_printf.c \
-		ft_create_node.c \          ft_add_back.c \                 ft_jump_space \
+		ft_jump_space.c \
+		linked_list/ft_dlist_add_back.c \
+		linked_list/ft_lst_add_back.c \
+		linked_list/ft_lst_add_front.c \
+		linked_list/ft_lst_clear.c \
+		linked_list/ft_lst_del_one.c \
+		linked_list/ft_lst_iter.c \
+		linked_list/ft_lst_last.c \
+		linked_list/ft_lst_new.c \
+		linked_list/ft_lst_size.c \
+		linked_list/ft_print_list.c \
+		linked_list/ft_create_node.c \
+
 
 OBJ = $(SRC:%.c=%.o)
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -Ilinked_list
 
 %.o: %.c
 

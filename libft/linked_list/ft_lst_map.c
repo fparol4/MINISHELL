@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_create_node.c                                   :+:      :+:    :+:   */
+/*   ft_lst_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 05:15:42 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/07 05:16:03 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/03/14 20:06:48 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/03/14 20:09:40 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "header.h"
 
-t_node	*ft_create_node(void *content)
+t_list	*ft_lst_map(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_node	*node;
 
-	node = malloc(sizeof(t_node));
-	if (!node)
-		return (NULL);
-	node->content = content;
-	node->next = NULL;
-	node->prev = NULL;
-	return (node);
 }

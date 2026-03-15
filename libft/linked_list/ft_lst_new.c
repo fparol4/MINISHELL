@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_jump_space.c                                    :+:      :+:    :+:   */
+/*   ft_lst_new.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 17:34:42 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/14 21:34:18 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/03/10 12:42:00 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/03/14 20:06:38 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "header.h"
 
-void	ft_jump_space(char **string)
+t_list	*ft_lst_new(void *content)
 {
-	int	index;
+	t_list	*test;
 
-	index = 0;
-
-	if (!*string)
-		return ;
-	while (*string[index] && (*string[index] == ' ' || (*string[index] >= 9
-				&& *string[index] <= 13)))
-		index++;
-	*string += index;
+	test = malloc(sizeof(t_list));
+	if (!test)
+		return (NULL);
+	test->content = content;
+	test->next = NULL;
+	return (test);
 }

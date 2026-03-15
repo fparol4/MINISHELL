@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:56:07 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/07 17:41:37 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/14 21:32:42 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,6 @@
 # include <stdlib.h>
 # include <stdint.h>
 # include <unistd.h>
-
-typedef struct s_node
-{
-	void			*content;
-	struct s_node	*next;
-	struct s_node	*prev;
-}	t_node;
-
-typedef struct s_manager
-{
-	t_node	*head;
-	t_node	*tail;
-}	t_manager;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -73,8 +60,6 @@ char	*get_next_line(int fd);
 int		ft_printf(const char *format, ...);
 int		ft_msg_error(void);
 
-void	ft_jump_space(char *string);
-t_node	*ft_create_node(void *content);
-void	ft_add_back(t_manager *manager, t_node *new_node);
+void	ft_jump_space(char **string);
 
 #endif

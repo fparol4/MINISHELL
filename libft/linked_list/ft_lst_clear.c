@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft.c                                               :+:      :+:    :+:   */
+/*   ft_lst_clear.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 05:17:56 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/07 05:18:15 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/03/14 19:46:32 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/03/14 20:13:17 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "header.h"
 
-void	ft_add_back(t_manager *manager, t_node *new_node)
+void	ft_lst_clear(t_list **lst, void (*del)(void *))
 {
-	if (!manager)
+	t_list	*next_node;
+
+	if (!lst || !del || !*lst)
 		return ;
-	if (!manager->head)
+	while (next_node != NULL)
 	{
-		manager->head = new_node;
-		manager->tail = new_node;
-	}
-	else
-	{
-		manager->tail->next = new_node;
-		new_node->prev = manager->tail;
-		manager->tail = new_node;
+		next_node = (*lst)->next;
+		ft_lst_del_one(*lst, del);
+		*lst = next_node;
 	}
 }

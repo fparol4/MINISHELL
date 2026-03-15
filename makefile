@@ -10,6 +10,7 @@ INCLUDES = -Iincludes -Ilibft
 
 SRCS = src/lexer/main.c \
 	   src/lexer/lexer.c \
+	   src/lexer/utils.c \
 
 OBJ_DIR = obj
 OBJS = $(SRCS:src/lexer/%.c=$(OBJ_DIR)/%.o)

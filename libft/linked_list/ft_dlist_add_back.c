@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_jump_space.c                                    :+:      :+:    :+:   */
+/*   ft_dlist_add_back.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 17:34:42 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/14 21:34:18 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/03/07 05:17:56 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/03/14 20:11:29 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "header.h"
 
-void	ft_jump_space(char **string)
+void	ft_dlist_add_back(t_manager *manager, t_node *new_node)
 {
-	int	index;
-
-	index = 0;
-
-	if (!*string)
+	if (!manager)
 		return ;
-	while (*string[index] && (*string[index] == ' ' || (*string[index] >= 9
-				&& *string[index] <= 13)))
-		index++;
-	*string += index;
+	if (!manager->head)
+	{
+		manager->head = new_node;
+		manager->tail = new_node;
+	}
+	else
+	{
+		manager->tail->next = new_node;
+		new_node->prev = manager->tail;
+		manager->tail = new_node;
+	}
 }
