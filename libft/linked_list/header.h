@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 12:42:57 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/14 21:46:57 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/25 21:26:52 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,12 @@ t_list	*ft_lst_last(t_list *lst);
 void	ft_lst_add_back(t_list **lst, t_list *new);
 void	ft_lst_del_one(t_list *lst, void (*del)(void *));
 void	ft_lst_clear(t_list **lst, void (*del)(void *));
-void	ft_print_list(void *content);
+void	ft_lst_iter(t_list *lst, void (*f)(void *));
 
 
 // DOUBLE LINKED LIST
 void	ft_dlist_add_back(t_manager *manager, t_node *new_node);
 t_node	*ft_create_node(void *content);
+void	ft_dlist_iter(t_node *lst, void (*f)(void *));
 
 #endif

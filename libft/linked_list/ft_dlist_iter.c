@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_list.c                                    :+:      :+:    :+:   */
+/*   ft_dlist_iter.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/14 19:28:41 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/14 20:18:26 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/03/16 18:12:18 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/03/25 19:04:34 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-#include "../libft.h"
 
-void	ft_print_list(void *content)
+void	ft_dlist_iter(t_node *lst, void (*f)(void *))
 {
-	ft_printf("Conteudo do seu nó é: %s\n", (char *)content);
+	if (!lst || !f)
+		return ;
+	while (lst)
+	{
+		f(lst->content);
+		lst = lst->next;
+	}
 }

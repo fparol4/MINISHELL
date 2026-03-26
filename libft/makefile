@@ -20,8 +20,9 @@ SRC = 	ft_isdigit.c  ft_memset.c   ft_strdup.c      ft_strncmp.c \
 		linked_list/ft_lst_last.c \
 		linked_list/ft_lst_new.c \
 		linked_list/ft_lst_size.c \
-		linked_list/ft_print_list.c \
 		linked_list/ft_create_node.c \
+		linked_list/ft_lst_iter.c \
+		linked_list/ft_dlist_iter.c \
 
 
 OBJ = $(SRC:%.c=%.o)

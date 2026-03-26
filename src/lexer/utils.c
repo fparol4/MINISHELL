@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/14 21:47:24 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/25 21:31:27 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,15 @@ t_list_token	*add_token_to_list(t_manager *manager, char *value,
 
 	node = ft_create_node(token);
 	ft_dlist_add_back(manager, node);
+	ft_printf("value e: %s\n", ((t_list_token *)(node->content))->value);
 	return (token);
+}
+
+void	ft_print_list(void *content)
+{
+	t_list_token	*token;
+
+	token = (t_list_token *)content;
+	ft_printf("Conteudo do seu nó é: %s\n", token->value);
+	ft_printf("the type is: %i\n", token->type);
 }

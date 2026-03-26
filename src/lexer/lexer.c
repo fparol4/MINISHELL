@@ -6,14 +6,14 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/14 21:34:41 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/25 21:04:14 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void			ft_get_token(t_manager *manager,
-						char **input);
+						char *input);
 static char			*ft_capture_word(char **input);
 static char			*get_redir_or_pipe(char **input);
 static t_token_type	define_type(char *type);
@@ -21,39 +21,39 @@ static t_token_type	define_type(char *type);
 t_manager	lexer_controll(char	**input)
 {
 	t_manager		manager;
-	t_list_token	*token;
+	char			*tmp;
 
-	token = add_token_to_list(&manager, NULL, 0);
-	ft_get_token(&manager, input);
-	while (token)
+	manager.head = NULL;
+	manager.tail = NULL;
+	tmp = *input;
+	ft_get_token(&manager, tmp);
+	if (manager.head)
 	{
-		ft_print_list(token->value);
-		ft_printf("type is: %i", token->type);
+		ft_dlist_iter(manager.head, ft_print_list);
 	}
 	return (manager);
 }
 
-static void	ft_get_token(t_manager *manager, char **input)
+static void	ft_get_token(t_manager *manager, char *input)
 {
 	char	*word;
 	char	*type;
 
-	if (!*input)
+	if (!input)
 		return ;
 	while (*input)
 	{
-		ft_jump_space(input);
-		word = ft_capture_word(input);
+		ft_jump_space(&input);
+		word = ft_capture_word(&input);
 		if (!word)
 			return ;
 		add_token_to_list(manager, word, TOKEN_WORD);
-		ft_jump_space(input);
-		type = get_redir_or_pipe(input);
+		ft_jump_space(&input);
+		type = get_redir_or_pipe(&input);
 		if (!type)
 			return ;
 		add_token_to_list(manager, type, define_type(type));
 	}
-
 }
 
 static char	*ft_capture_word(char **input)
@@ -66,7 +66,8 @@ static char	*ft_capture_word(char **input)
 	if (**input == '"' || **input == '\'')
 		write(1, "Caso ainda não tratado", 24);
 	first_position = *input;
-	while (**input != ' ' && **input != '|' && **input != '<' && **input != '>')
+	while (**input && (**input != ' ' && **input != '|' && **input != '<'
+			&& **input != '>'))
 		(*input)++;
 	word = malloc((*input - first_position) * sizeof(char) + 1);
 	if (!word)
@@ -86,9 +87,12 @@ static char	*get_redir_or_pipe(char **input)
 		return (NULL);
 	first_position = *input;
 	len = 0;
-	if ((**input == '<' && **(input + 1) == '<')
-		|| (**input == '>' && **(input + 1) == '>'))
+	if ((**input == '<' && *(*input + 1) == '<')
+		|| (**input == '>' && *(*input + 1) == '>'))
+	{
 		len = 2;
+		(*input)++;
+	}
 	if (**input == ' ' || **input == '|' || **input == '<' || **input == '>')
 		len = 1;
 	type = malloc(len * sizeof(char) + 1);

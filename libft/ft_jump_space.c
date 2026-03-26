@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 17:34:42 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/14 21:34:18 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/25 19:19:56 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	ft_jump_space(char **string)
 
 	if (!*string)
 		return ;
-	while (*string[index] && (*string[index] == ' ' || (*string[index] >= 9
-				&& *string[index] <= 13)))
+	while ((*string)[index] && ((*string)[index] == ' '
+			|| ((*string)[index] >= 9 && (*string)[index] <= 13)))
 		index++;
 	*string += index;
 }
