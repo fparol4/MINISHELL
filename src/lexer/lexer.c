@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/25 21:04:14 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/26 11:35:56 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_manager	lexer_controll(char	**input)
 	ft_get_token(&manager, tmp);
 	if (manager.head)
 	{
+		ft_printf("-----------THE NODE TOKEN HAVE THIS ELEMENTS-----------\n");
 		ft_dlist_iter(manager.head, ft_print_list);
 	}
 	return (manager);
@@ -39,20 +40,22 @@ static void	ft_get_token(t_manager *manager, char *input)
 	char	*word;
 	char	*type;
 
+	word = NULL;
+	type = NULL;
 	if (!input)
 		return ;
 	while (*input)
 	{
-		ft_jump_space(&input);
+		if (ft_jump_space(&input))
+			return ;
 		word = ft_capture_word(&input);
-		if (!word)
+		if (word)
+			add_token_to_list(manager, word, TOKEN_WORD);
+		if (ft_jump_space(&input))
 			return ;
-		add_token_to_list(manager, word, TOKEN_WORD);
-		ft_jump_space(&input);
 		type = get_redir_or_pipe(&input);
-		if (!type)
-			return ;
-		add_token_to_list(manager, type, define_type(type));
+		if (type)
+			add_token_to_list(manager, type, define_type(type));
 	}
 }
 
@@ -64,7 +67,7 @@ static char	*ft_capture_word(char **input)
 	if (!*input)
 		return (NULL);
 	if (**input == '"' || **input == '\'')
-		write(1, "Caso ainda não tratado", 24);
+		write(1, "Caso ainda não tratado\n", 24);
 	first_position = *input;
 	while (**input && (**input != ' ' && **input != '|' && **input != '<'
 			&& **input != '>'))
@@ -83,38 +86,36 @@ static char	*get_redir_or_pipe(char **input)
 	char		*first_position;
 	size_t		len;
 
-	if (!*input)
+	if (!**input || !*input)
 		return (NULL);
 	first_position = *input;
 	len = 0;
 	if ((**input == '<' && *(*input + 1) == '<')
 		|| (**input == '>' && *(*input + 1) == '>'))
-	{
 		len = 2;
-		(*input)++;
-	}
-	if (**input == ' ' || **input == '|' || **input == '<' || **input == '>')
+	if ((**input == ' ' || **input == '|' || **input == '<' || **input == '>')
+		&& len == 0)
 		len = 1;
 	type = malloc(len * sizeof(char) + 1);
 	if (!type)
 		return (NULL);
 	ft_memcpy(type, first_position, len);
 	type[len] = '\0';
-	(*input)++;
+	(*input) += len;
 	return (type);
 }
 
 static t_token_type	define_type(char *type)
 {
+	if (ft_strncmp(type, ">>", 2) == 0)
+		return (TOKEN_APPEND);
+	if (ft_strncmp(type, "<<", 2) == 0)
+		return (TOKEN_HEREDOC);
 	if (ft_strncmp(type, "|", 1) == 0)
 		return (TOKEN_PIPE);
 	if (ft_strncmp(type, "<", 1) == 0)
 		return (TOKEN_REDIR_IN);
 	if (ft_strncmp(type, ">", 1) == 0)
 		return (TOKEN_REDIR_OUT);
-	if (ft_strncmp(type, ">>", 2) == 0)
-		return (TOKEN_APPEND);
-	if (ft_strncmp(type, "<<", 2) == 0)
-		return (TOKEN_HEREDOC);
 	return (0);
 }

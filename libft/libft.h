@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:56:07 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/25 19:20:02 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/26 11:31:48 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ char	*get_next_line(int fd);
 int		ft_printf(const char *format, ...);
 int		ft_msg_error(void);
 
-void	ft_jump_space(char **string);
+int		ft_jump_space(char **string);
 
 #endif
