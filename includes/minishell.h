@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/25 21:30:12 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/26 19:29:04 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ struct s_ast
 	t_ast				*right;
 };
 
-t_manager		lexer_controll(char	**input);
+t_manager		*lexer_controll(char	**input);
 t_list_token	*add_token_to_list(t_manager *manager, char *value,
 					t_token_type type);
 void			ft_print_list(void *content);

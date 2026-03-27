@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:08:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/26 11:00:17 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/26 19:20:31 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int	main(void)
 {
-	char	*input;
-	int		test;
+	//t_manager	*manager_token;
+	char		*input;
+	int			test;
 
 	test = 3;
 	while (test)

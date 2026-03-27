@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/26 11:35:56 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/26 22:18:26 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,20 @@ static char			*ft_capture_word(char **input);
 static char			*get_redir_or_pipe(char **input);
 static t_token_type	define_type(char *type);
 
-t_manager	lexer_controll(char	**input)
+t_manager	*lexer_controll(char	**input)
 {
-	t_manager		manager;
+	t_manager		*manager;
 	char			*tmp;
 
-	manager.head = NULL;
-	manager.tail = NULL;
+	manager = malloc(sizeof(t_manager));
+	manager->head = NULL;
+	manager->tail = NULL;
 	tmp = *input;
-	ft_get_token(&manager, tmp);
-	if (manager.head)
+	ft_get_token(manager, tmp);
+	if (manager->head)
 	{
 		ft_printf("-----------THE NODE TOKEN HAVE THIS ELEMENTS-----------\n");
-		ft_dlist_iter(manager.head, ft_print_list);
+		ft_dlist_iter(manager->head, ft_print_list);
 	}
 	return (manager);
 }
@@ -56,6 +57,8 @@ static void	ft_get_token(t_manager *manager, char *input)
 		type = get_redir_or_pipe(&input);
 		if (type)
 			add_token_to_list(manager, type, define_type(type));
+		if (ft_jump_space(&input))
+			return ;
 	}
 }
 
@@ -64,7 +67,8 @@ static char	*ft_capture_word(char **input)
 	char	*word;
 	char	*first_position;
 
-	if (!*input)
+	if (!input || !*input || !**input || **input == ' ' || **input == '|'
+		|| **input == '<' || **input == '>')
 		return (NULL);
 	if (**input == '"' || **input == '\'')
 		write(1, "Caso ainda não tratado\n", 24);
@@ -86,7 +90,7 @@ static char	*get_redir_or_pipe(char **input)
 	char		*first_position;
 	size_t		len;
 
-	if (!**input || !*input)
+	if (!input || !*input || !**input)
 		return (NULL);
 	first_position = *input;
 	len = 0;
@@ -96,6 +100,8 @@ static char	*get_redir_or_pipe(char **input)
 	if ((**input == ' ' || **input == '|' || **input == '<' || **input == '>')
 		&& len == 0)
 		len = 1;
+	if (len == 0)
+		return (NULL);
 	type = malloc(len * sizeof(char) + 1);
 	if (!type)
 		return (NULL);
