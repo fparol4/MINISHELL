@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/26 22:18:26 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/27 16:40:42 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static void	ft_get_token(t_manager *manager, char *input)
 		if (ft_jump_space(&input))
 			return ;
 	}
+	free(word);
+	free(type);
 }
 
 static char	*ft_capture_word(char **input)
@@ -70,9 +72,12 @@ static char	*ft_capture_word(char **input)
 	if (!input || !*input || !**input || **input == ' ' || **input == '|'
 		|| **input == '<' || **input == '>')
 		return (NULL);
-	if (**input == '"' || **input == '\'')
-		write(1, "Caso ainda não tratado\n", 24);
 	first_position = *input;
+	if (**input == '"' || **input == '\'')
+	{
+		word = ft_tokenizer_quotes(input, **input);
+		return (word);
+	}
 	while (**input && (**input != ' ' && **input != '|' && **input != '<'
 			&& **input != '>'))
 		(*input)++;

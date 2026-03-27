@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 17:34:42 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/26 11:31:42 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/27 16:43:07 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_jump_space(char **string)
 
 	index = 0;
 
-	if (!string || !*string)
+	if (!string || !*string || !**string)
 		return (1);
 	while ((*string)[index] && ((*string)[index] == ' '
 			|| ((*string)[index] >= 9 && (*string)[index] <= 13)))
