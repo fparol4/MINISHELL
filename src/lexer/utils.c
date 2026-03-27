@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/27 16:52:42 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/27 18:54:13 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,29 @@ void	ft_print_list(void *content)
 	ft_printf("the content is: %s\n", token->value);
 }
 
-char	*ft_tokenizer_quotes(char **input, char quote)
+char	*ft_tokenizer_quotes(char *input, char quote)
 {
 	char	*start;
 	char	*word;
 
 	start = NULL;
-	if (quote == **input)
+	if (quote == *input)
 	{
-		(*input)++;
-		start = *input;
-		while (**input && **input != quote)
+		input++;
+		start = input;
+		while (*input && *input != quote)
 			(*input)++;
-		if (**input == quote)
+		if (*input == quote)
 		{
-			word = malloc((*input - start) * sizeof(char) + 1);
+			word = malloc((input - start) * sizeof(char) + 1);
 			if (!word)
 				return (NULL);
-			ft_memcpy(word, start, (*input - start));
-			word[*input - start] = '\0';
-			(*input)++;
+			ft_memcpy(word, start, (input - start));
+			word[input - start] = '\0';
+			input++;
 			return (word);
 		}
-		(*input)++;
+		input++;
 	}
 	write(1, "\n\nINVALID_QUOTE\n\n", 18);
 	return (NULL);

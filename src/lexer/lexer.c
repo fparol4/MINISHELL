@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/27 16:40:42 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/27 19:17:57 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,22 @@ static char	*ft_capture_word(char **input)
 {
 	char	*word;
 	char	*first_position;
+	char	quote;
 
+	quote = '\0';
 	if (!input || !*input || !**input || **input == ' ' || **input == '|'
 		|| **input == '<' || **input == '>')
 		return (NULL);
 	first_position = *input;
-	if (**input == '"' || **input == '\'')
+	while (**input && ((**input != ' ' && **input != '|' && **input != '<'
+				&& **input != '>') || quote))
 	{
-		word = ft_tokenizer_quotes(input, **input);
-		return (word);
-	}
-	while (**input && (**input != ' ' && **input != '|' && **input != '<'
-			&& **input != '>'))
+		if (**input == '\'' || **input == '"')
+			quote = **input;
 		(*input)++;
+		if (**input == quote)
+			quote = '\0';
+	}
 	word = malloc((*input - first_position) * sizeof(char) + 1);
 	if (!word)
 		return (NULL);
