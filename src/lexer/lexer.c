@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/27 19:17:57 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/27 22:47:47 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,7 @@ static char	*ft_capture_word(char **input)
 	first_position = *input;
 	while (**input && ((**input != ' ' && **input != '|' && **input != '<'
 				&& **input != '>') || quote))
-	{
-		if (**input == '\'' || **input == '"')
-			quote = **input;
-		(*input)++;
-		if (**input == quote)
-			quote = '\0';
-	}
+		quote = is_quote(input, quote);
 	word = malloc((*input - first_position) * sizeof(char) + 1);
 	if (!word)
 		return (NULL);
