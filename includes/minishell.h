@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/27 22:45:37 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/30 22:55:45 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ t_list_token	*add_token_to_list(t_manager *manager, char *value,
 					t_token_type type);
 void			ft_print_list(void *content);
 char			is_quote(char **input, char quote);
+char			*ft_remove_char(char *str, char c);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/27 22:47:47 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/30 23:22:13 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static char	*ft_capture_word(char **input)
 	char	quote;
 
 	quote = '\0';
+	word = NULL;
 	if (!input || !*input || !**input || **input == ' ' || **input == '|'
 		|| **input == '<' || **input == '>')
 		return (NULL);
@@ -78,12 +79,18 @@ static char	*ft_capture_word(char **input)
 	while (**input && ((**input != ' ' && **input != '|' && **input != '<'
 				&& **input != '>') || quote))
 		quote = is_quote(input, quote);
-	word = malloc((*input - first_position) * sizeof(char) + 1);
-	if (!word)
-		return (NULL);
-	ft_memcpy(word, first_position, (*input - first_position));
-	word[*input - first_position] = '\0';
-	return (word);
+	word = ft_remove_char(first_position, quote);
+	if (word)
+		return (word);
+	else
+	{
+		word = malloc((*input - first_position) * sizeof(char) + 1);
+		if (!word)
+			return (NULL);
+		ft_memcpy(word, first_position, (*input - first_position));
+		word[*input - first_position] = '\0';
+		return (word);
+	}
 }
 
 static char	*get_redir_or_pipe(char **input)

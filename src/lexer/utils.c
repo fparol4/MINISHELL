@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/27 22:47:00 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/03/30 22:58:12 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,3 +49,29 @@ char	is_quote(char **input, char quote)
 	return (quote);
 }
 
+char	*ft_remove_char(char *str, char c)
+{
+	char	*new_str;
+	size_t	len;
+	size_t	index;
+
+	if (!str || !c)
+		return (NULL);
+	len = 0;
+	index = 0;
+	while (str[index])
+	{
+		if (*str != c)
+			len++;
+		index++;
+	}
+	index = 0;
+	new_str = malloc((len + 1) * sizeof(char)); // lembrar de faze rum safe_calloc pra facilitar a vida
+	while (str[index])
+	{
+		if (str[index] != c)
+			new_str[index] = str[index];
+		index++;
+	}
+	return (new_str);
+}
