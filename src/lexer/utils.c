@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/30 22:58:12 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/01 15:12:39 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,15 @@ char	*ft_remove_char(char *str, char c)
 			len++;
 		index++;
 	}
-	index = 0;
 	new_str = malloc((len + 1) * sizeof(char)); // lembrar de faze rum safe_calloc pra facilitar a vida
-	while (str[index])
+	index = 0;
+	len = 0;
+	while (str[len])
 	{
-		if (str[index] != c)
-			new_str[index] = str[index];
-		index++;
+		if (str[len] != c)
+			new_str[index++] = str[len];
+		len++;
 	}
+	new_str[index] = '\0';
 	return (new_str);
 }

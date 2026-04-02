@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/30 23:22:13 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/01 15:14:28 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ static void	ft_get_token(t_manager *manager, char *input)
 	char	*word;
 	char	*type;
 
-	word = NULL;
-	type = NULL;
 	if (!input)
 		return ;
 	while (*input)
@@ -51,9 +49,11 @@ static void	ft_get_token(t_manager *manager, char *input)
 			return ;
 		word = ft_capture_word(&input);
 		if (word)
+		{
+			word = ft_remove_char(word, '\"');
+			word = ft_remove_char(word, '\'');
 			add_token_to_list(manager, word, TOKEN_WORD);
-		if (ft_jump_space(&input))
-			return ;
+		}
 		type = get_redir_or_pipe(&input);
 		if (type)
 			add_token_to_list(manager, type, define_type(type));
@@ -72,6 +72,8 @@ static char	*ft_capture_word(char **input)
 
 	quote = '\0';
 	word = NULL;
+	if (ft_jump_space(input))
+		return (NULL);
 	if (!input || !*input || !**input || **input == ' ' || **input == '|'
 		|| **input == '<' || **input == '>')
 		return (NULL);
@@ -79,18 +81,12 @@ static char	*ft_capture_word(char **input)
 	while (**input && ((**input != ' ' && **input != '|' && **input != '<'
 				&& **input != '>') || quote))
 		quote = is_quote(input, quote);
-	word = ft_remove_char(first_position, quote);
-	if (word)
-		return (word);
-	else
-	{
-		word = malloc((*input - first_position) * sizeof(char) + 1);
-		if (!word)
-			return (NULL);
-		ft_memcpy(word, first_position, (*input - first_position));
-		word[*input - first_position] = '\0';
-		return (word);
-	}
+	word = malloc((*input - first_position) * sizeof(char) + 1);
+	if (!word)
+		return (NULL);
+	ft_memcpy(word, first_position, (*input - first_position));
+	word[*input - first_position] = '\0';
+	return (word);
 }
 
 static char	*get_redir_or_pipe(char **input)
@@ -100,6 +96,8 @@ static char	*get_redir_or_pipe(char **input)
 	size_t		len;
 
 	if (!input || !*input || !**input)
+		return (NULL);
+	if (ft_jump_space(input))
 		return (NULL);
 	first_position = *input;
 	len = 0;

@@ -1,46 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   infra.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/01 19:26:40 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/04/01 19:24:52 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/04/01 20:22:47 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef INFRA_H
+# define INFRA_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include "libft.h"
 # include "../libft/linked_list/header.h"
-# include "lexer.h"
-# include "infra.h"
 
 
-
-typedef enum e_node_type
+typedef enum e_capture_status
 {
-	NODE_CMD,
-	NODE_PIPE,
-	NODE_REDIR,
-}	t_node_type;
+	CAPTURE_OK,
+	CAPTURE_FAIL,
+	CAPTURE_UNCLOSED_GROUP,
+}	t_capture_status;
 
-typedef struct s_ast	t_ast;
-struct s_ast
+typedef enum e_char_flag
 {
-	t_list_token		*token;
-	t_node_type			type;
-	t_ast				*left;
-	t_ast				*right;
-};
-
-
+	CHAR_NONE = 0,
+	CHAR_SKIP = 1 << 0,
+	CHAR_DELIM = 1 << 1,
+	CHAR_OPEN_GROUP = 1 << 2,
+	CHAR_CLOSE_GROUP = 1 << 3,
+	CHAR_ESCAPE = 1 << 4,
+	CHAR_OPERATOR = 1 << 5,
+}	t_char_flag;
 
 #endif
