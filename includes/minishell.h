@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/02 21:43:52 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/03 16:41:08 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "libft.h"
+# include "../libft/linked_list/header.h"
 # include "lexer.h"
-# include "infra.h"
-
-
 
 typedef enum e_node_type
 {
