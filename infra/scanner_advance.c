@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 16:21:11 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/03 16:51:31 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/03 17:39:21 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void	scanner_advance(t_scanner *sc)
 {
 	if (sc->input)
-		sc->input++;
+		sc->cursor++;
 }
