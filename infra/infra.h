@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 19:24:52 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/01 20:22:47 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/02 21:40:53 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,19 @@ typedef enum e_char_flag
 	CHAR_ESCAPE = 1 << 4,
 	CHAR_OPERATOR = 1 << 5,
 }	t_char_flag;
+
+typedef struct s_scanner
+{
+	char	*input;
+	size_t	index;
+}	t_scanner;
+
+void	scanner_init(t_scanner *sc, const char *input);
+void	scanner_advance(t_scanner *sc);
+char	scanner_current(t_scanner *sc);
+char	scanner_peek(t_scanner *sc, size_t index);
+int		scanner_is_end(t_scanner *sc);
+size_t	scanner_position(t_scanner *sc);
+
 
 #endif
