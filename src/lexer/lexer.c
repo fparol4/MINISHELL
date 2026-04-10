@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/01 15:14:28 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:55:39 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char			*ft_capture_word(char **input);
 static char			*get_redir_or_pipe(char **input);
 static t_token_type	define_type(char *type);
 
-t_manager	*lexer_controll(char	**input)
+t_manager	*lexer_controll(t_scanner	*i_scanner)
 {
 	t_manager		*manager;
 	char			*tmp;
@@ -26,7 +26,7 @@ t_manager	*lexer_controll(char	**input)
 	manager = malloc(sizeof(t_manager));
 	manager->head = NULL;
 	manager->tail = NULL;
-	tmp = *input;
+	tmp = i_scanner;
 	ft_get_token(manager, tmp);
 	if (manager->head)
 	{
@@ -36,29 +36,21 @@ t_manager	*lexer_controll(char	**input)
 	return (manager);
 }
 
-static void	ft_get_token(t_manager *manager, char *input)
+static void	ft_get_token(t_manager *manager, t_scanner *i_scanner)
 {
 	char	*word;
 	char	*type;
 
-	if (!input)
+	if (!i_scanner)
 		return ;
-	while (*input)
+	while (!scanner_is_end(i_scanner))
 	{
-		if (ft_jump_space(&input))
-			return ;
-		word = ft_capture_word(&input);
-		if (word)
+		if (scanner_current(i_scanner) != ' ')
 		{
-			word = ft_remove_char(word, '\"');
-			word = ft_remove_char(word, '\'');
-			add_token_to_list(manager, word, TOKEN_WORD);
+			ft_capture_word(i_scanner);
+			get_redir_or_pipe(i_scanner);
+			scanner_advance(i_scanner);
 		}
-		type = get_redir_or_pipe(&input);
-		if (type)
-			add_token_to_list(manager, type, define_type(type));
-		if (ft_jump_space(&input))
-			return ;
 	}
 	free(word);
 	free(type);

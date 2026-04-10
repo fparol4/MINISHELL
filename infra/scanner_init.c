@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 16:20:30 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/03 18:21:50 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:41:43 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	scanner_init(t_scanner *sc, const char *input)
 {
 	if (!sc || !input)
 		return ;
-	sc->input = input;
+	sc->input = (char *)input;
 	sc->cursor = 0;
 	sc->len = ft_strlen(sc->input);
 }

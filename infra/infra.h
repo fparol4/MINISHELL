@@ -6,14 +6,14 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 19:24:52 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/03 18:18:22 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:37:40 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INFRA_H
 # define INFRA_H
 
-# include "libft.h"
+# include "../libft/libft.h"
 # include "../libft/linked_list/header.h"
 
 
@@ -37,9 +37,9 @@ typedef enum e_char_flag
 
 typedef struct s_scanner
 {
-	char	*input;
-	size_t	cursor;
-	size_t	len;
+	char		*input;
+	size_t		cursor;
+	size_t		len;
 }	t_scanner;
 
 void	scanner_init(t_scanner *sc, const char *input);

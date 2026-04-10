@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 16:23:07 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/03 17:32:46 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:40:50 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,5 @@
 
 int	scanner_is_end(t_scanner *sc)
 {
-	if (sc->input)
-		return (0);
-	return (1);
+	return (sc->cursor == sc->len);
 }

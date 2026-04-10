@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 16:21:52 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/03 18:21:40 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/09 04:45:06 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 char	scanner_peek(t_scanner *sc, size_t offset)
 {
-	size_t	pos_current;
-
-	pos_current = scanner_position(sc);
+	if (!sc || !sc->input)
+		return ('\0');
 	if (sc && sc->input)
 	{
-		if ((offset + pos_current) < sc->len)
-			return (sc->input[offset + pos_current]);
+		if ((offset + sc->cursor) < sc->len)
+			return (sc->input[offset + sc->cursor]);
 	}
 	return ('\0');
 }

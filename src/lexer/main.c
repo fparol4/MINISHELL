@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:08:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/26 19:20:31 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/10 17:45:34 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,27 @@
 int	main(void)
 {
 	//t_manager	*manager_token;
-	char		*input;
 	int			test;
+	char		check;
+	t_scanner	*sc;
 
+	check = '\0';
+	sc = malloc(sizeof(*sc));
 	test = 3;
 	while (test)
 	{
-		input = readline("minishell ");
-		if (!input)
+		sc->input = readline("minishell ");
+		if (!sc->input)
 			return (0);
-		lexer_controll(&input);
-		free(input);
+		scanner_init(sc, (const char *)sc->input);
+		while (!scanner_is_end(sc))
+		{
+			check = scanner_current(sc);
+			ft_printf("O valor é: %c\n", check);
+			scanner_advance(sc);
+		}
+		lexer_controll(sc);
+		free(sc->input);
 		test--;
 	}
 	return (0);
