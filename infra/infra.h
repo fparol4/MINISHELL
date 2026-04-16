@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 19:24:52 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/11 21:40:29 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/16 12:57:53 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,14 @@ typedef struct s_scanner
 	size_t		start;
 }	t_scanner;
 
+typedef struct s_flags
+{
+	t_char_flag	flags[256];
+}	t_flags;
+
+
+/* ------------SCANNER INPUT----------------- */
+
 void	scanner_init(t_scanner *sc, const char *input);
 void	scanner_advance(t_scanner *sc);
 char	scanner_current(t_scanner *sc);
@@ -51,6 +59,6 @@ int		scanner_is_end(t_scanner *sc);
 size_t	scanner_position(t_scanner *sc);
 size_t	scanner_mark_start(t_scanner *sc);
 void	scanner_take_while(t_scanner *sc, int (*f)(int));
-
+char	*scanner_extract(t_scanner *sc);
 
 #endif

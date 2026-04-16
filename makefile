@@ -45,4 +45,7 @@ fclean: clean
 
 re: fclean all
 
+val:
+	@valgrind -q --leak-check=full --show-leak-kinds=all track-origin=yes \
+	--suppressions={ARQ_NAME} --track-fds=yes ./$(NAME)
 .PHONY: all clean fclean re
