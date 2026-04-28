@@ -18,7 +18,7 @@ SRCS =	scanner_advance.c \
 		scanner_extract.c \
 		scanner_mark_start.c \
 		scanner_take_while.c \
-		define_flags.c
+		init_char_table.c
 
 OBJ_DIR = obj
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)

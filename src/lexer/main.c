@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:08:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/10 17:45:34 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/22 10:49:21 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int	main(void)
 {
 	//t_manager	*manager_token;
-	int			test;
-	char		check;
-	t_scanner	*sc;
+	int				test;
+	char			check;
+	t_scanner		*sc;
 
 	check = '\0';
 	sc = malloc(sizeof(*sc));

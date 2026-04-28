@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/01 15:12:39 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/27 17:48:50 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ void	ft_print_list(void *content)
 	ft_printf("the content is: %s\n", token->value);
 }
 
-char	is_quote(char **input, char quote)
+char	is_quote(char *i_scanner, char quote)
 {
-	if (**input == '\'' || **input == '"')
-		quote = **input;
-	(*input)++;
-	if (**input == quote)
+	if (*i_scanner == '\'' || *i_scanner == '"')
+		quote = *i_scanner;
+	(*i_scanner)++;
+	if (*i_scanner == quote)
 	{
 		quote = '\0';
-		(*input)++;
+		(*i_scanner)++;
 	}
 	return (quote);
 }
@@ -76,4 +76,30 @@ char	*ft_remove_char(char *str, char c)
 	}
 	new_str[index] = '\0';
 	return (new_str);
+}
+
+int	get_operator(int operator)
+{
+	return (operator & (L_PIPE | (L_REDIR_IN | L_REDIR_OUT)));
+}
+
+void	init_token_table(t_token_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < 256)
+	{
+		if (ft_isalpha(i) || ft_isdigit(i))
+			table->token_props[i] |= TOKEN_WORD;
+		if (i == '|')
+			table->token_props[i] |= TOKEN_PIPE;
+		if (i == '>')
+			table->token_props[i] |= TOKEN_REDIR_IN;
+		if (i == '<')
+			table->token_props[i] |= TOKEN_REDIR_OUT;
+		else
+			table->token_props[i] |= TOKEN_NONE;
+		i++;
+	}
 }
