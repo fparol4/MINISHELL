@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/09 03:21:17 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/30 10:40:32 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 # include "lexer.h"
 # include "../infra/infra.h"
 
+typedef struct s_rules
+{
+	t_char_table	table;
+	unsigned int	is_word;
+	unsigned int	is_operator;
+}	t_rules;
+
 typedef enum e_node_type
 {
 	NODE_CMD,
@@ -38,7 +45,5 @@ struct s_ast
 	t_ast				*left;
 	t_ast				*right;
 };
-
-
 
 #endif

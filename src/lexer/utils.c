@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/27 17:48:50 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/30 10:34:03 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_list_token	*add_token_to_list(t_manager *manager, char *value,
 	t_list_token	*token;
 
 	token = malloc(sizeof(t_list_token));
-	token->value = value;
+	token->value = ft_strdup((const char *)value);
 	token->type = type;
 
 	node = ft_create_node(token);
@@ -36,17 +36,16 @@ void	ft_print_list(void *content)
 	ft_printf("the content is: %s\n", token->value);
 }
 
-char	is_quote(char *i_scanner, char quote)
+void	update_qupte_state(unsigned int props, unsigned int *state)
 {
-	if (*i_scanner == '\'' || *i_scanner == '"')
-		quote = *i_scanner;
-	(*i_scanner)++;
-	if (*i_scanner == quote)
-	{
-		quote = '\0';
-		(*i_scanner)++;
-	}
-	return (quote);
+	if ((props & P_SQUOTE) && *state == P_NONE)
+		*state = P_SQUOTE;
+	else if ((props & P_DQUOTE) && *state == P_NONE)
+		*state = P_DQUOTE;
+	else if ((props & P_SQUOTE) && *state == P_SQUOTE)
+		*state = P_NONE;
+	else if ((props & P_DQUOTE) && *state == P_DQUOTE)
+		*state = P_NONE;
 }
 
 char	*ft_remove_char(char *str, char c)
@@ -78,12 +77,7 @@ char	*ft_remove_char(char *str, char c)
 	return (new_str);
 }
 
-int	get_operator(int operator)
-{
-	return (operator & (L_PIPE | (L_REDIR_IN | L_REDIR_OUT)));
-}
-
-void	init_token_table(t_token_table *table)
+void	init_token_table(t_char_table *table)
 {
 	int	i;
 
@@ -91,15 +85,17 @@ void	init_token_table(t_token_table *table)
 	while (i < 256)
 	{
 		if (ft_isalpha(i) || ft_isdigit(i))
-			table->token_props[i] |= TOKEN_WORD;
-		if (i == '|')
-			table->token_props[i] |= TOKEN_PIPE;
-		if (i == '>')
-			table->token_props[i] |= TOKEN_REDIR_IN;
-		if (i == '<')
-			table->token_props[i] |= TOKEN_REDIR_OUT;
+			table->props[i] |= L_WORD;
+		else if (i == '|')
+			table->props[i] |= L_PIPE;
+		else if (i == '>')
+			table->props[i] |= L_REDIR_IN;
+		else if (i == '<')
+			table->props[i] |= L_REDIR_OUT;
+		else if (i == '$')
+			table->props[i] |= L_DOLAR;
 		else
-			table->token_props[i] |= TOKEN_NONE;
+			table->props[i] |= L_NONE;
 		i++;
 	}
 }
