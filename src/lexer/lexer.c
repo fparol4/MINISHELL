@@ -6,16 +6,18 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/28 19:29:35 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/30 14:09:45 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void			ft_state_machine(t_manager *manager,
-						t_scanner *input, t_char_table table);
-static void			get_word(t_manager *manager, t_scanner *input,
-						t_char_table table, unsigned int props);
+						t_scanner *input, t_rules *rules);
+static t_list_token	*get_word(t_manager *manager, t_scanner *input,
+						t_rules *rules);
+static t_list_token	*get_operator(t_manager *manager, t_scanner *input,
+						t_rules *rules);
 // static char			*ft_capture_word(char *input);
 // static char			*get_redir_or_pipe(char *input);
 // static t_token_type	define_type(char *type);
@@ -23,15 +25,13 @@ static void			get_word(t_manager *manager, t_scanner *input,
 t_manager	*lexer_controll(t_scanner	*input)
 {
 	t_manager		*manager;
-	t_char_table	table;
-	char			*tmp;
+	t_rules			*rules;
 
 	manager = malloc(sizeof(t_manager));
 	manager->head = NULL;
 	manager->tail = NULL;
-	init_char_table(table);
-	tmp = input;
-	ft_state_machine(manager, tmp, table);
+	init_char_table(rules->table);
+	ft_state_machine(manager, input, rules);
 	if (manager->head)
 	{
 		ft_printf("-----------THE NODE TOKEN HAVE THIS ELEMENTS-----------\n");
@@ -41,7 +41,7 @@ t_manager	*lexer_controll(t_scanner	*input)
 }
 
 static void	ft_state_machine(t_manager *manager, t_scanner *input,
-	t_char_table table)
+	t_rules *rules)
 {
 	unsigned int	props;
 
@@ -49,36 +49,62 @@ static void	ft_state_machine(t_manager *manager, t_scanner *input,
 		return ;
 	while (!scanner_is_end(input))
 	{
-		props = table.props[scanner_current(input)];
-		if (props & (P_ALPHA | P_DIGIT))
-			get_word(manager, input, table, props);
+		props = rules->table.props[scanner_current(input)];
+		if (props & (P_ALPHA | P_DIGIT | P_DQUOTE | P_SQUOTE))
+			get_word(manager, input, rules);
 		else if (props & P_SYMBOL)
-			get_operator(manager, input, table);
+			get_operator(manager, input, rules);
 		else
 			scanner_advance(input);
 	}
 }
 
-static void	get_word(t_manager *manager, t_scanner *input, t_char_table table,
-	unsigned int props)
+static t_list_token	*get_word(t_manager *manager, t_scanner *input,
+		t_rules *rules)
 {
 	unsigned int	state;
 	unsigned int	props;
+	char			*word;
+	t_list_token	*token;
 
 	state = P_NONE;
 	scanner_mark_start(input);
 	while (!scanner_is_end(input))
 	{
-		props = table.props[scanner_current(input)];
-		if (props & P_SQUOTE)
-			state = P_SQUOTE;
-		else if (props & P_DQUOTE)
-			state = P_DQUOTE;
-		else if (!(state & (P_SQUOTE | P_DQUOTE)))
-		{
-			scanner_extract(input);
-		}
+		props = rules->table.props[scanner_current(input)];
+		update_qupte_state(props, &state);
+		if ((state == P_NONE) && (props & (P_SPACE | P_SYMBOL)))
+			break ;
+		scanner_advance(input);
 	}
+	word = scanner_extract(input);
+	token = add_token_to_list(manager, word, TOKEN_WORD);
+	free(word);
+	return (token);
+}
+
+static t_list_token	*get_operator(t_manager *manager, t_scanner *input,
+						t_rules *rules)
+{
+	unsigned int	state;
+	unsigned int	props;
+	char			*type;
+	t_list_token	*token;
+
+	state = P_NONE;
+	scanner_mark_start(input);
+	while (!scanner_is_end(input))
+	{
+		props = rules->table.props[scanner_current(input)];
+		update_qupte_state(props, &state);
+		if ((state == P_NONE) && (props & (L_PIPE | L_REDIR_IN | L_REDIR_OUT)))
+			break ;
+		scanner_advance(input);
+	}
+	type = scanner_extract(input);
+	token = add_token_to_list(manager, type, define_type(type));
+	free(type);
+	return (token);
 }
 
 // static char	*ft_capture_word(char *input)
@@ -135,17 +161,17 @@ static void	get_word(t_manager *manager, t_scanner *input, t_char_table table,
 // 	return (type);
 // }
 
-// static t_token_type	define_type(char *type)
-// {
-// 	if (ft_strncmp(type, ">>", 2) == 0)
-// 		return (TOKEN_APPEND);
-// 	if (ft_strncmp(type, "<<", 2) == 0)
-// 		return (TOKEN_HEREDOC);
-// 	if (ft_strncmp(type, "|", 1) == 0)
-// 		return (TOKEN_PIPE);
-// 	if (ft_strncmp(type, "<", 1) == 0)
-// 		return (TOKEN_REDIR_IN);
-// 	if (ft_strncmp(type, ">", 1) == 0)
-// 		return (TOKEN_REDIR_OUT);
-// 	return (0);
-// }
+static t_token_type	define_type(char *type)
+{
+	if (ft_strncmp(type, ">>", 2) == 0)
+		return (TOKEN_APPEND);
+	if (ft_strncmp(type, "<<", 2) == 0)
+		return (TOKEN_HEREDOC);
+	if (ft_strncmp(type, "|", 1) == 0)
+		return (TOKEN_PIPE);
+	if (ft_strncmp(type, "<", 1) == 0)
+		return (TOKEN_REDIR_IN);
+	if (ft_strncmp(type, ">", 1) == 0)
+		return (TOKEN_REDIR_OUT);
+	return (0);
+}

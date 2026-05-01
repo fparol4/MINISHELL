@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 19:24:52 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/28 11:21:01 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/04/30 19:31:38 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,18 @@ typedef struct s_char_table
 
 /* ------------SCANNER INPUT----------------- */
 
-void	scanner_init(t_scanner *sc, const char *input);
-void	scanner_advance(t_scanner *sc);
-char	scanner_current(t_scanner *sc);
-char	scanner_peek(t_scanner *sc, size_t offset);
-int		scanner_is_end(t_scanner *sc);
-size_t	scanner_mark_start(t_scanner *sc);
-void	scanner_take_while(t_scanner *sc, int (*f)(int));
-char	*scanner_extract(t_scanner *sc);
-void	init_char_table(t_char_table table);
-int		state_char(int n);
+void			scanner_init(t_scanner *sc, const char *input);
+void			scanner_advance(t_scanner *sc);
+char			scanner_current(t_scanner *sc);
+char			scanner_peek(t_scanner *sc, size_t offset);
+int				scanner_is_end(t_scanner *sc);
+size_t			scanner_mark_start(t_scanner *sc);
+void			scanner_take_while(t_scanner *sc, int (*f)(int));
+char			*scanner_extract(t_scanner *sc);
+void			init_char_table(t_char_table table);
+int				state_char(int n);
+unsigned int	rules_word(unsigned int props);
+unsigned int	rules_operator(unsigned int props); // pensar em como deixar isso generico
+
 
 #endif
