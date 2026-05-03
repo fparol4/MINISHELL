@@ -1,0 +1,6 @@
+- [2026-05-03 19:08] Created `t_cmd` binary tree node and `t_cmd_type` enum (command, pipe, and, or) in `src/types/minishell.h`.
+- [2026-05-03 19:09] Added `char **args` to `t_cmd` struct in `src/types/minishell.h`.
+- [2026-05-03 19:11] Created `tests/mocks/mock_commands.c` with example functions returning ASTs (single command, pipe, and logical AND).
+- [2026-05-03 19:15] Downloaded `snow.h` testing framework into `tests/snow.h`.
+- [2026-05-03 19:21] Created `src/env/guideline.md` detailing architecture, edge cases, and testing strategy for the Env module.
+- [2026-05-03 19:27] Created `docs/problem_overview.md` outlining intent, current execution problems, and modular strategy.
