@@ -1,0 +1,81 @@
+diff --git a/tests/Makefile b/tests/Makefile
+index a11712e..73d1a55 100644
+--- a/tests/Makefile
++++ b/tests/Makefile
+@@ -4,33 +4,49 @@ CFLAGS  = -g3 -Wall -Wextra -Werror
+ ROOT    = ..
+ LIBFT_A = $(ROOT)/lib/libft/libft.a
+ 
+-ENV_SRCS = \
+-	$(ROOT)/src/env/init.c \
+-	$(ROOT)/src/env/get.c \
+-	$(ROOT)/src/env/set.c \
+-	$(ROOT)/src/env/unset.c \
+-	$(ROOT)/src/env/toarr.c \
+-	$(ROOT)/src/env/free.c
++ENVM_SRCS = \
++	$(ROOT)/src/envm/init.c \
++	$(ROOT)/src/envm/get.c \
++	$(ROOT)/src/envm/set.c \
++	$(ROOT)/src/envm/unset.c \
++	$(ROOT)/src/envm/toarr.c \
++	$(ROOT)/src/envm/free.c
++
++BUILTINS_SRCS = \
++	$(ROOT)/src/builtins/echo.c \
++	$(ROOT)/src/builtins/cd.c \
++	$(ROOT)/src/builtins/pwd.c \
++	$(ROOT)/src/builtins/export.c \
++	$(ROOT)/src/builtins/unset.c \
++	$(ROOT)/src/builtins/env.c \
++	$(ROOT)/src/builtins/exit.c
+ 
+ INCLUDES = \
+ 	-I$(ROOT)/lib/libft \
+-	-I$(ROOT)/src/env \
+-	-I$(ROOT)/src \
++	-I$(ROOT)/src/types \
++	-I$(ROOT)/src/builtins \
+ 	-I.
+ 
+-all: test_env
++all: test_envm test_builtins
+ 
+ $(LIBFT_A):
+ 	$(MAKE) -sC $(ROOT)/lib/libft
+ 
+-test_env: $(LIBFT_A)
++test_envm: $(LIBFT_A)
+ 	$(CC) $(CFLAGS) -DSNOW_ENABLED \
+ 		$(INCLUDES) \
+-		$(ENV_SRCS) test_env.c \
+-		$(LIBFT_A) -o test_env
+-	@./test_env
++		$(ENVM_SRCS) envm.c \
++		$(LIBFT_A) -o test_envm
++	@./test_envm --log /tmp/snow_envm.log && cat /tmp/snow_envm.log
++
++test_builtins: $(LIBFT_A)
++	$(CC) $(CFLAGS) -DSNOW_ENABLED \
++		$(INCLUDES) \
++		$(ENVM_SRCS) $(BUILTINS_SRCS) test_builtins.c \
++		$(LIBFT_A) -o test_builtins
++	@./test_builtins --log /tmp/snow_builtins.log && cat /tmp/snow_builtins.log
+ 
+ clean:
+-	rm -f test_env
++	rm -f test_envm test_builtins
+ 
+-.PHONY: all test_env clean
++.PHONY: all test_envm test_builtins clean
+diff --git a/tests/envm.c b/tests/envm.c
+index 434a52c..4926db4 100644
+--- a/tests/envm.c
++++ b/tests/envm.c
+@@ -1,5 +1,5 @@
+ # include "snow.h"
+-# include "env.h"
++# include "envm.h"
+ # include "libft.h"
+ # include <stdlib.h>
+ # include <string.h>
