@@ -13,6 +13,7 @@ INCLUDES = -Iincludes -Ilibft -Iinfra/includes
 
 SRCS = src/lexer/main.c \
 	   src/lexer/lexer.c \
+	   src/lexer/lexer_manager.c \
 	   src/lexer/utils.c
 
 OBJ_DIR = obj
@@ -27,7 +28,7 @@ $(INFRA):
 	$(MAKE) -sC $(INFRA_DIR)
 
 $(NAME): $(OBJS) $(LIBFT) $(INFRA)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(INFRA) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS)  $(INFRA) $(LIBFT) -lreadline -o $(NAME)
 
 $(OBJ_DIR)/%.o: src/lexer/%.c
 	@mkdir -p $(OBJ_DIR)

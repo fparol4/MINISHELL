@@ -6,15 +6,18 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 16:21:33 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/23 13:28:09 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/04 14:59:54 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "infra.h"
 
-unsigned char	scanner_current(t_scanner *sc)
+unsigned int	scanner_current(t_scanner *sc)
 {
-	if (!sc || !sc->input)
-		return ((unsigned char)'\0');
-	return ((unsigned char)sc->input[sc->cursor]);
+	unsigned int	current;
+
+	if (!sc || !sc->input)	
+		return (0);
+	current = (unsigned int)sc->input[sc->cursor];
+	return (current);
 }

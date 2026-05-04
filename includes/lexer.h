@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 18:49:16 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/30 14:03:42 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/04 14:29:02 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef enum e_lexer_table
 	L_SQUOTE = 1 << (OFFSET + 5),
 	L_DQUOTE = 1 << (OFFSET + 6),
 	L_PIPE = 1 << (OFFSET + 7)
-}	t_lexer_table;
+}	t_lexer;
 
 typedef enum e_state
 {
@@ -53,13 +53,13 @@ typedef struct s_list_token
 	t_token_type		type;
 }	t_list_token;
 
-t_manager		*lexer_controll(char	*i_scanner);
+t_manager		*lexer_controll(t_scanner	*i_scanner);
 t_list_token	*add_token_to_list(t_manager *manager, char *value,
 					t_token_type type);
 void			ft_print_list(void *content);
 char			is_quote(char *i_scanner, char quote);
 char			*ft_remove_char(char *str, char c);
-void			init_token_table(t_char_table *table);
-void			update_qupte_state(unsigned int props, unsigned int *state);
+void			init_token_table(t_char_table table);
+void			update_quote_state(unsigned int props, unsigned int *state);
 
 #endif

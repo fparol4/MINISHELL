@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/04/30 10:40:32 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/04 14:33:04 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <readline/history.h>
 # include "libft.h"
 # include "../libft/linked_list/header.h"
-# include "lexer.h"
 # include "../infra/infra.h"
+# include "lexer.h"
 
 typedef struct s_rules
 {
