@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/04 14:53:46 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/04 20:25:40 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ t_manager	*lexer_controll(t_scanner	*input)
 	manager->head = NULL;
 	manager->tail = NULL;
 	rules = malloc(sizeof(t_rules));
-	init_char_table(rules->table);
-	init_token_table(rules->table);
+	init_char_table(&rules->table);
+	init_token_table(&rules->table);
 	ft_state_machine(manager, input, rules);
 	if (manager->head)
 	{
@@ -47,13 +47,13 @@ static void	ft_state_machine(t_manager *manager, t_scanner *input,
 {
 	unsigned int	props;
 
-
 	if (!input)
 		return ;
 	while (!scanner_is_end(input))
 	{
+		props = 0;
 		props = rules->table.props[scanner_current(input)];
-		if (props & (P_ALPHA | P_DIGIT | P_DQUOTE | P_SQUOTE))
+		if (props & (P_ALPHA | P_DIGIT | P_DQUOTE | P_SQUOTE | P_SYMBOL))
 			get_word(manager, input, rules);
 		else if (props & P_SYMBOL)
 			get_operator(manager, input, rules);
@@ -76,7 +76,7 @@ static t_list_token	*get_word(t_manager *manager, t_scanner *input,
 	{
 		props = rules->table.props[scanner_current(input)];
 		update_quote_state(props, &state);
-		if ((state == P_NONE) && (props & (P_SPACE | P_SYMBOL)))
+		if ((state == P_NONE) && (props & (P_SPACE)))
 			break ;
 		scanner_advance(input);
 	}

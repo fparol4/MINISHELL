@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 19:24:52 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/04 14:22:17 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/04 18:23:00 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int				scanner_is_end(t_scanner *sc);
 size_t			scanner_mark_start(t_scanner *sc);
 void			scanner_take_while(t_scanner *sc, int (*f)(int));
 char			*scanner_extract(t_scanner *sc);
-void			init_char_table(t_char_table table);
+void			init_char_table(t_char_table *table);
 int				state_char(int n);
 
 

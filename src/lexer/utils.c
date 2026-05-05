@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/04 14:36:04 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/04 18:44:49 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	update_quote_state(unsigned int props, unsigned int *state)
 		*state = P_NONE;
 }
 
-void	init_token_table(t_char_table table)
+void	init_token_table(t_char_table *table)
 {
 	int	i;
 
@@ -40,17 +40,17 @@ void	init_token_table(t_char_table table)
 	while (i < 256)
 	{
 		if (ft_isalpha(i) || ft_isdigit(i))
-			table.props[i] |= L_WORD;
+			table->props[i] |= L_WORD;
 		else if (i == '|')
-			table.props[i] |= L_PIPE;
+			table->props[i] |= L_PIPE;
 		else if (i == '>')
-			table.props[i] |= L_REDIR_IN;
+			table->props[i] |= L_REDIR_IN;
 		else if (i == '<')
-			table.props[i] |= L_REDIR_OUT;
+			table->props[i] |= L_REDIR_OUT;
 		else if (i == '$')
-			table.props[i] |= L_DOLAR;
+			table->props[i] |= L_DOLAR;
 		else
-			table.props[i] |= L_NONE;
+			table->props[i] |= L_NONE;
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 18:49:16 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/04 14:29:02 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/04 18:23:05 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_list_token	*add_token_to_list(t_manager *manager, char *value,
 void			ft_print_list(void *content);
 char			is_quote(char *i_scanner, char quote);
 char			*ft_remove_char(char *str, char c);
-void			init_token_table(t_char_table table);
+void			init_token_table(t_char_table *table);
 void			update_quote_state(unsigned int props, unsigned int *state);
 
 #endif

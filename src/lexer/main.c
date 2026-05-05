@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:08:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/04 14:51:09 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/04 21:31:42 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(void)
 	test = 3;
 	while (test)
 	{
-		sc->input = readline("minishell ");
+		sc->input = readline("ga&fab:minishell ");
 		if (!sc->input)
 			return (0);
 		scanner_init(sc, (const char *)sc->input);
