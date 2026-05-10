@@ -6,35 +6,44 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/02/24 21:49:49 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/09 19:23:51 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-typedef enum e_type
-{
-	PIPE,
-	I_REDIRECT,
-	O_REDIRECT,
-	APPEND,
-	HEREDOC,
-	WORD,
-	ARGUMENT,
-	COMAND,
-}	t_type;
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "libft.h"
+# include "../libft/linked_list/header.h"
+# include "../infra/infra.h"
+# include "lexer.h"
 
-typedef struct s_token
+typedef struct s_rules
 {
-	int		id;
-	char	**token;
-	t_type	type;
-}	t_token;
+	t_char_table	table;
+	unsigned int	is_word;
+	unsigned int	is_operator;
+}	t_rules;
 
-typedef struct S_AST
+typedef enum e_node_type
 {
+	NODE_CMD,
+	NODE_PIPE,
+	NODE_REDIR,
+}	t_node_type;
 
-}	t_AST;
+typedef struct s_ast	t_ast;
+struct s_ast
+{
+	t_list_token		*token;
+	t_node_type			type;
+	t_ast				*left;
+	t_ast				*right;
+};
 
 #endif
