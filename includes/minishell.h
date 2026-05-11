@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/09 19:23:51 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/11 14:56:04 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 typedef struct s_rules
 {
 	t_char_table	table;
-	unsigned int	is_word;
-	unsigned int	is_operator;
+	unsigned int	start_word;
+	unsigned int	start_operator;
 }	t_rules;
 
 typedef enum e_node_type

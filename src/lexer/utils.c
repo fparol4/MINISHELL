@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/09 20:12:47 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/11 14:55:52 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int	init_lexer_variable(t_manager **manager, t_rules **rules)
 
 void	define_rules(t_rules *rules)
 {
-	rules->is_word = P_ALPHA | P_DIGIT;
-	rules->is_operator = (L_PIPE | L_REDIR_IN | L_REDIR_OUT);
+	rules->start_word = (L_WORD | P_DQUOTE | P_SQUOTE | P_SYMBOL);
+	rules->start_operator = (L_PIPE | L_REDIR_IN | L_REDIR_OUT);
 }
 
 // char	*ft_remove_char(char *str, char c)
