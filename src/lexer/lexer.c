@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/11 14:50:44 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:24:24 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static t_list_token	*get_word(t_manager *manager, t_scanner *input,
 						t_rules *rules);
 static t_list_token	*get_operator(t_manager *manager, t_scanner *input,
 						t_rules *rules);
-static t_token_type	define_type(char *type);
 
 t_manager	*lexer_controll(t_scanner	*input)
 {
@@ -98,19 +97,4 @@ static t_list_token	*get_operator(t_manager *manager, t_scanner *input,
 	token = add_token_to_list(manager, type, define_type(type));
 	free(type);
 	return (token);
-}
-
-static t_token_type	define_type(char *type)
-{
-	if (ft_strncmp(type, ">>", 2) == 0)
-		return (TOKEN_APPEND);
-	if (ft_strncmp(type, "<<", 2) == 0)
-		return (TOKEN_HEREDOC);
-	if (ft_strncmp(type, "|", 1) == 0)
-		return (TOKEN_PIPE);
-	if (ft_strncmp(type, "<", 1) == 0)
-		return (TOKEN_REDIR_IN);
-	if (ft_strncmp(type, ">", 1) == 0)
-		return (TOKEN_REDIR_OUT);
-	return (0);
 }

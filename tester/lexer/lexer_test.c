@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 11:43:50 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/11 15:04:02 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/11 19:05:48 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,13 @@ int	main(void)
 	run_test("ls | cat");
 	run_test("echo hel'lo worl'd");
 	run_test("ls | cat > out | echo hel'lo worl'd tes\"tando algo 123 \" algo");
+}
+
+void	ft_print_list(void *content)
+{
+	t_list_token	*token;
+
+	token = (t_list_token *)content;
+	ft_printf("the type is: %i | ", token->type);
+	ft_printf("the content is: %s\n", token->value);
 }

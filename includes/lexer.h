@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 18:49:16 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/09 19:52:11 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:36:05 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,7 @@ typedef struct s_scanner	t_scanner;
 typedef struct s_list_token	t_list_token;
 typedef struct s_char_table	t_char_table;
 typedef struct s_rules		t_rules;
-
-typedef enum e_token_type
-{
-	TOKEN_NONE,
-	TOKEN_PIPE,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_WORD
-}	t_token_type;
+typedef enum e_token_type	t_token_type;
 
 typedef enum e_lexer_table
 {
@@ -44,12 +34,16 @@ typedef enum e_lexer_table
 	L_PIPE = 1 << (OFFSET + 7)
 }	t_lexer;
 
-typedef enum e_state
+typedef enum e_token_type
 {
-	S_NORMAL = 1 << 1,
-	S_IN_SQUOTE = 1 << 2,
-	S_IN_DQUOTE = 1 << 3,
-}	t_state;
+	TOKEN_NONE,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_WORD
+}	t_token_type;
 
 typedef struct s_list_token
 {
@@ -67,5 +61,5 @@ void			init_token_table(t_char_table *table);
 void			update_quote_state(unsigned int props, unsigned int *state);
 int				init_lexer_variable(t_manager **manager, t_rules **rules);
 void			define_rules(t_rules *rules);
-
+t_token_type	define_type(char *type);
 #endif
