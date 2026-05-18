@@ -5,6 +5,10 @@ typedef enum e_cmd_type
 {
 	CMD_COMMAND,
 	CMD_PIPE,
+	CMD_REDIR_IN,
+	CMD_REDIR_OUT,
+	CMD_REDIR_APPEND,
+	CMD_HEREDOC,
 	CMD_AND,
 	CMD_OR
 }	t_cmd_type;
