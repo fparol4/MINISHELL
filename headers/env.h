@@ -1,0 +1,21 @@
+# ifndef ENVM_H
+# define ENVM_H
+
+# define ENV_PWD "PWD"
+# define ENV_PWDO "PWD_O"
+
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+	struct s_env *next;
+} t_env;
+
+t_env* env_init(char **env);
+int	env_set(t_env **env, const char *key, const char *value);
+char *env_get(t_env **env, char *key);
+char **env_toarr(t_env **env);
+void env_unset(t_env **env, const char *key);
+void env_free(t_env **envm);
+
+#endif
