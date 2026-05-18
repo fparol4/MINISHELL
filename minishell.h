@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fcardozo <fcardozo@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/04 22:08:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/09 23:32:42 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/03/28 21:07:13 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-int	main(void)
-{
-	char	*input;
+# include "libraries/libft/libft.h"
 
-	while (1)
-	{
-		input = readline("minishell ");
-		lexer_controll(&input);
-	}
-	return (0);
-}
+
+#endif
