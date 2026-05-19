@@ -24,7 +24,7 @@ int bin_echo(char **args, t_env **env)
 		ft_putchar_fd('\n', 1);
 		return (0);
 	}
-	i = 1;
+	i = 0;
 	nl = 1;
 	while (args[i] && f_newline(args[i]))
 	{
