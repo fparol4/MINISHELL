@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/19 18:03:00 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/19 18:03:00 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../headers/minishell.h"
 
-static int f_newline(char *arg)
+static int	f_newline(char *arg)
 {
-	int i;
+	int	i;
 
 	if (!arg || arg[0] != '-' || arg[1] == '\0')
 		return (0);
@@ -13,12 +25,12 @@ static int f_newline(char *arg)
 	return (1);
 }
 
-int bin_echo(char **args, t_env **env)
+int	bin_echo(char **args, t_env **env)
 {
-	int i;
-	int nl;
-	(void) env;
+	int	i;
+	int	nl;
 
+	(void)env;
 	if (!args)
 	{
 		ft_putchar_fd('\n', 1);

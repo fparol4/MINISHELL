@@ -2,7 +2,8 @@
 # define ENVM_H
 
 # define ENV_PWD "PWD"
-# define ENV_PWDO "PWD_O"
+# define ENV_OPWD "OPWD"
+# define ENV_ERRCODE "$?"
 
 typedef struct s_env
 {

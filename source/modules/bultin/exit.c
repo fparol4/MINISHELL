@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,21 +12,18 @@
 
 #include "../../../headers/minishell.h"
 
-int	bin_env(char **args, t_env **env)
+int	bin_exit(char **args, t_env **env)
 {
-	t_env	*item;
+	int	code;
 
-	(void)args;
-	item = *env;
-	while (item)
+	(void)env;
+	ft_putstr_fd("exit", 1);
+	if (!args[0])
+		exit(0);
+	if (!ft_vatoi(args[0]))
 	{
-		if (item->value)
-		{
-			ft_putstr_fd(item->key, 1);
-			ft_putchar_fd('=', 1);
-			ft_putendl_fd(item->value, 1);
-		}
-		item = item->next;
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
 	}
-	return (0);
 }

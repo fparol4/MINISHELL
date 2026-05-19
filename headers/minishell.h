@@ -21,17 +21,4 @@ typedef struct s_cmd_node {
   struct s_cmd_node *right;
 } t_cmd_node;
 
-int cm_message(char *message, int fd)
-{
-	ft_putstr_fd((char *) MSG_MINISHELL, fd);
-	ft_putendl_fd(message, fd);
-	return ft_strlen(MSG_MINISHELL) + ft_strlen(message);
-}
-
-int cm_perror(char *message)
-{
-	// @TODO
-	perror(message);
-}
-
 #endif
