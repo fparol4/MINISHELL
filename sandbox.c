@@ -5,8 +5,8 @@
 
 void main()
 {
-	char *s1 = "ALPHA";
-	char *s2 = "BETA";
+	char *s1 = "C";
+	char *s2 = "B";
 	int c = ft_strcmp(s1, s2);
 	println("c::%d\n", c);
 }

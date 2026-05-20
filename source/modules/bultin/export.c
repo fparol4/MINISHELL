@@ -40,37 +40,68 @@ static void f_sortkeys(char **keys, int size)
 	}
 }
 
+static char **f_getkeys(t_env **env, int size)
+{
+	int i;
+	t_env *node;
+	char **keys;
+
+	keys = ft_calloc(size + 1, sizeof(char *));
+	if (!keys)
+		return (NULL);
+	i = 0;
+	node = *env;
+	while (node)
+	{
+		keys[i++] = node->key;
+		node = node->next;
+	}
+	f_sortkeys(keys, size);
+	return keys;
+}
+
 static int f_print(t_env **env)
 {
 	int	i;
-	int size;
+	int k_size;
 	t_env *node;
-	t_env *c_node;
 	char **keys;
 
-	size = env_size(env);
-	keys = ft_calloc(size + 1, sizeof(char));
+	k_size = env_size(env);
+	keys = f_getkeys(env, k_size);
 	if (!keys)
 		return (1);
 	i = 0;
-	c_node = *env;
-	while (c_node)
+	while (keys[i])
 	{
-		keys[i++] = c_node->key;
-		c_node = c_node->next;
+		node = *env;
+		while (node && ft_strcmp(node->key, keys[i]))
+			node = node->next;
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(keys[i], 1);
+		if (node && node->value)
+		{
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(node->value, 1);
+			ft_putstr_fd("\"", 1);
+		}
+		ft_putchar_fd('\n', 1);
+		i++;
 	}
-	f_sortkeys(keys)
+	free(keys);
+	return (0);
 }
 
 int bin_export(char **args, t_env **env)
 {
 	int i;
-	int err;
+	int code;
 	char *key;
 	char *c_eq;
 
+	code = 0;
 	if (!args[0])
-		return (f_list(env));
+		return (f_print(env));
 	i = 0;
 	while (args[i])
 	{
@@ -79,8 +110,7 @@ int bin_export(char **args, t_env **env)
 			ft_putstr_fd("minishell: export: '", 2);
 			ft_putstr_fd(args[i], 2);
 			ft_putendl_fd("': not a valid identifier", 2);
-			i++;
-			err = 1;
+			code = 1;
 		}
 		else
 		{
@@ -96,4 +126,5 @@ int bin_export(char **args, t_env **env)
 		}
 		i++;
 	}
+	return (code);
 }
