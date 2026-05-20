@@ -23,7 +23,7 @@ int	bin_cd(char **args, t_env **env)
 		path = env_get(env, PWD_HOME);
 		if (!path)
 		{
-			cm_message("cd: $HOME not set", 1);
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 			return (1);
 		}
 	}
@@ -32,12 +32,12 @@ int	bin_cd(char **args, t_env **env)
 	path_old = env_get(env, ENV_PWD);
 	if (chdir(path) != 0)
 	{
-		cm_perror("cd");
+		perror("minishell: cd");
 		return (1);
 	}
 	if (path_old)
-		env_set(env, ENV_PWDO, path_old);
+		env_set(env, ENV_OPWD, path_old);
 	if (getcwd(buffer, BUFFER_SIZE))
-		env_set(env, ENV_PWDO, buffer);
+		env_set(env, ENV_PWD, buffer);
 	return (0);
 }
