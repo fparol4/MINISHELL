@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#include "../libraries/libft//libft.h"
+#include "../libraries/libft/libft.h"
 #include "./env.h"
 #include "./builtin.h"
 

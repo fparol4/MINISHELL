@@ -13,6 +13,7 @@ typedef struct s_env
 } t_env;
 
 t_env* env_init(char **env);
+int env_size(t_env **envm);
 int	env_set(t_env **env, const char *key, const char *value);
 char *env_get(t_env **env, char *key);
 char **env_toarr(t_env **env);
