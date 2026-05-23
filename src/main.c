@@ -6,11 +6,11 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:08:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/04 21:31:42 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/23 18:12:22 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/public/minishell.h"
 
 int	main(void)
 {

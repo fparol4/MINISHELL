@@ -6,11 +6,11 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 22:09:36 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/11 15:24:24 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/23 18:10:06 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/private/lexer_internal.h"
 
 static void			ft_state_machine(t_manager *manager,
 						t_scanner *input, t_rules *rules);
@@ -69,6 +69,11 @@ static t_list_token	*get_word(t_manager *manager, t_scanner *input,
 			break ;
 		scanner_advance(input);
 	}
+	// if (state != P_NONE)
+	// {
+	// 	write (1, "Error", 5);
+	// 	return (0);
+	// }
 	word = scanner_extract(input);
 	token = add_token_to_list(manager, word, TOKEN_WORD);
 	free(word);

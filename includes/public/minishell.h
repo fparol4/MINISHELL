@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/11 15:18:45 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/23 18:56:27 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/05/23 18:19:10 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-static t_list_token	*get_token(t_manager *manager);
-
-int	parser_controller(t_manager *manager)
-{
-	t_list_token	*token;
-
-	token = get_token(manager);
-}
-
-static t_list_token	*get_token(t_manager *manager)
-{
-	if (!manager || !manager->head)
-		return (NULL);
-	return ((t_list_token *)manager->head->content);
-}
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "../../infra/infra.h"
+# include "lexer.h"
+# include "parser.h"
+#endif

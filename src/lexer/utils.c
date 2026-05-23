@@ -6,11 +6,11 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 01:19:06 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/11 15:24:45 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/23 18:11:54 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/private/lexer_internal.h"
 
 void	update_quote_state(unsigned int props, unsigned int *state)
 {

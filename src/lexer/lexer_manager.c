@@ -6,11 +6,11 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 14:18:13 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/04 14:18:16 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/23 18:10:08 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/private/lexer_internal.h"
 
 t_list_token	*add_token_to_list(t_manager *manager, char *value,
 	t_token_type type)

@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   lexer_internal.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/01 18:49:16 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/11 15:36:05 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/05/23 16:59:05 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/05/23 18:21:06 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef LEXER_INTERNAL_H
+# define LEXER_INTERNAL_H
+
+# include "../includes/public/lexer.h"
+# include "../infra/infra.h"
 
 # define OFFSET 8
 
-typedef struct s_manager	t_manager;
-typedef struct s_scanner	t_scanner;
-typedef struct s_list_token	t_list_token;
 typedef struct s_char_table	t_char_table;
-typedef struct s_rules		t_rules;
-typedef enum e_token_type	t_token_type;
 
 typedef enum e_lexer_table
 {
@@ -34,32 +32,21 @@ typedef enum e_lexer_table
 	L_PIPE = 1 << (OFFSET + 7)
 }	t_lexer;
 
-typedef enum e_token_type
+typedef struct s_rules
 {
-	TOKEN_NONE,
-	TOKEN_PIPE,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_WORD
-}	t_token_type;
+	t_char_table	table;
+	unsigned int	start_word;
+	unsigned int	start_operator;
+}	t_rules;
 
-typedef struct s_list_token
-{
-	char				*value;
-	t_token_type		type;
-}	t_list_token;
-
-t_manager		*lexer_controll(t_scanner	*i_scanner);
 t_list_token	*add_token_to_list(t_manager *manager, char *value,
 					t_token_type type);
-void			ft_print_list(void *content);
-char			is_quote(char *i_scanner, char quote);
+char			is_quote(char *scanner, char quote);
 char			*ft_remove_char(char *str, char c);
 void			init_token_table(t_char_table *table);
 void			update_quote_state(unsigned int props, unsigned int *state);
 int				init_lexer_variable(t_manager **manager, t_rules **rules);
 void			define_rules(t_rules *rules);
 t_token_type	define_type(char *type);
+
 #endif

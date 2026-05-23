@@ -1,35 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/24 20:56:05 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/11 15:33:17 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/04/01 18:49:16 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/05/23 18:19:46 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef LEXER_H
+# define LEXER_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft.h"
-# include "../libft/linked_list/header.h"
-# include "../infra/infra.h"
-# include "lexer.h"
-# include "parser.h"
+typedef struct s_manager	t_manager;
+typedef struct s_scanner	t_scanner;
 
-typedef struct s_rules
+typedef enum e_token_type
 {
-	t_char_table	table;
-	unsigned int	start_word;
-	unsigned int	start_operator;
-}	t_rules;
+	TOKEN_NONE,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_WORD
+}	t_token_type;
 
+typedef struct s_list_token
+{
+	char			*value;
+	t_token_type	type;
+}	t_list_token;
+
+t_manager	*lexer_controll(t_scanner *scanner);
 
 #endif

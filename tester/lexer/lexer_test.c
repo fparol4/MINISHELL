@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 11:43:50 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/05/11 19:05:48 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/21 19:59:42 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int	main(void)
 {
 	run_test("ls -la");
 	run_test("ls | cat");
-	run_test("echo hel'lo worl'd");
+	run_test("ls -la | \"$var\"");
+	run_test("echo hel'lo world");
 	run_test("ls | cat > out | echo hel'lo worl'd tes\"tando algo 123 \" algo");
 }
 

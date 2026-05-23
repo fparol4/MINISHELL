@@ -13,7 +13,7 @@ INFRA = $(INFRA_DIR)/infra.a
 
 INCLUDES = -Iincludes -Ilibft -Iinfra/includes
 
-SRCS = src/lexer/main.c \
+SRCS = src/main.c \
 	   src/lexer/lexer.c \
 	   src/lexer/lexer_manager.c \
 	   src/lexer/utils.c

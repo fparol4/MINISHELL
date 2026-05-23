@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:56:07 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/03/26 11:31:48 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/05/21 17:33:26 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@
 # include <stdlib.h>
 # include <stdint.h>
 # include <unistd.h>
+
+typedef enum e_bool
+{
+	FALSE,
+	TRUE
+}	t_bool;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
