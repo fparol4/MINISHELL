@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   general.c                                          :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,4 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
+
+void	env_free(t_env **env)
+{
+	t_env	*node;
+	t_env	*next;
+
+	if (!env || !*env)
+		return ;
+	node = *env;
+	while (node)
+	{
+		next = node->next;
+		free(node->key);
+		free(node->value);
+		free(node);
+		node = next;
+	}
+	*env = NULL;
+}

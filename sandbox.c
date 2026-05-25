@@ -1,4 +1,5 @@
 #include "./libraries/libft/libft.h"
+#include <complex.h>
 #include <errno.h>
 #define println(...) printf(__VA_ARGS__), printf("\n")
 
@@ -6,6 +7,7 @@
 
 void main()
 {
-	errno = 1;
-	perror("open");
+	char buff[1024];
+
+	char *cwd = getcwd(buff, sizeof(buff));
 }
