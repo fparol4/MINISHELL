@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/25 10:42:39 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/25 10:42:39 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../headers/minishell.h"
 
-static int f_vid(char *s)
+static int	f_vid(char *s)
 {
 	int	i;
 
@@ -16,7 +28,7 @@ static int f_vid(char *s)
 	return (1);
 }
 
-static void f_sortkeys(char **keys, int size)
+static void	f_sortkeys(char **keys, int size)
 {
 	int		i;
 	int		j;
@@ -40,11 +52,11 @@ static void f_sortkeys(char **keys, int size)
 	}
 }
 
-static char **f_getkeys(t_env **env, int size)
+static char	**f_getkeys(t_env **env, int size)
 {
-	int i;
-	t_env *node;
-	char **keys;
+	int		i;
+	t_env	*node;
+	char	**keys;
 
 	keys = ft_calloc(size + 1, sizeof(char *));
 	if (!keys)
@@ -57,15 +69,15 @@ static char **f_getkeys(t_env **env, int size)
 		node = node->next;
 	}
 	f_sortkeys(keys, size);
-	return keys;
+	return (keys);
 }
 
-static int f_print(t_env **env)
+static int	f_print(t_env **env)
 {
-	int	i;
-	int k_size;
-	t_env *node;
-	char **keys;
+	int		i;
+	int		k_size;
+	t_env	*node;
+	char	**keys;
 
 	k_size = env_size(env);
 	keys = f_getkeys(env, k_size);
@@ -92,12 +104,12 @@ static int f_print(t_env **env)
 	return (0);
 }
 
-int bin_export(char **args, t_env **env)
+int	bin_export(char **args, t_env **env)
 {
-	int i;
-	int code;
-	char *key;
-	char *c_eq;
+	int		i;
+	int		code;
+	char	*key;
+	char	*c_eq;
 
 	code = 0;
 	if (!args[0])
