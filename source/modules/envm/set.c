@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 15:42:39 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/26 15:42:39 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./common.h"
 
-int env_set(t_env **env, const char *key, const char *value)
+int	env_set(t_env **env, const char *key, const char *value)
 {
-	char *vdup;
-	size_t key_l;
-	t_env *node;
-	t_env *tail;
+	char	*vdup;
+	size_t	key_l;
+	t_env	*node;
+	t_env	*tail;
 
 	if (!env || !key)
 		return (-1);

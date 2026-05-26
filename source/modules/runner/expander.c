@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 15:42:39 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/26 15:42:39 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../headers/runner.h"
 
 typedef struct s_arglist
@@ -5,7 +17,7 @@ typedef struct s_arglist
 	char	**items;
 	int		size;
 	int		cap;
-}	t_arglist;
+}			t_arglist;
 
 typedef struct s_word
 {
@@ -13,7 +25,7 @@ typedef struct s_word
 	int		len;
 	int		cap;
 	int		active;
-}	t_word;
+}			t_word;
 
 static int	f_listgrow(t_arglist *list)
 {

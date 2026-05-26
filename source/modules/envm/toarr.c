@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   toarr.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 15:42:39 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/26 15:42:39 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../headers/minishell.h"
 
-
-static char *f_toentry(const char *key, const char *value)
+static char	*f_toentry(const char *key, const char *value)
 {
-	char *tmp;
-	char *entry;
+	char	*tmp;
+	char	*entry;
 
 	tmp = ft_strjoin(key, "=");
 	if (!tmp)
@@ -17,10 +28,10 @@ static char *f_toentry(const char *key, const char *value)
 	return (entry);
 }
 
-static int f_envsize(t_env **env)
+static int	f_envsize(t_env **env)
 {
-	int size;
-	t_env *node;
+	int		size;
+	t_env	*node;
 
 	size = 0;
 	node = *env;
@@ -32,12 +43,12 @@ static int f_envsize(t_env **env)
 	return (size);
 }
 
-char **env_toarr(t_env **env)
+char	**env_toarr(t_env **env)
 {
-	int i;
-	int es;
-	char **arr;
-	t_env *node;
+	int		i;
+	int		es;
+	char	**arr;
+	t_env	*node;
 
 	es = f_envsize(env);
 	arr = calloc(es + 1, sizeof(char *));
@@ -47,12 +58,12 @@ char **env_toarr(t_env **env)
 	i = 0;
 	while (node)
 	{
-			arr[i] = f_toentry(node->key, node->value);
-			if (!arr[i])
-			{
-				sh_freeargs(arr);
-				return (NULL);
-			}
+		arr[i] = f_toentry(node->key, node->value);
+		if (!arr[i])
+		{
+			sh_freeargs(arr);
+			return (NULL);
+		}
 		node = node->next;
 		i++;
 	}

@@ -1,16 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 15:42:39 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/26 15:42:39 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./common.h"
 
-int env_unset(t_env **env, const char *key)
+int	env_unset(t_env **env, const char *key)
 {
-	t_env *prev;
-	t_env *node;
+	t_env	*prev;
+	t_env	*node;
 
 	if (!env || !*env || !key)
 		return (0);
 	prev = NULL;
 	node = *env;
-	while (node) {
-		if (ft_strcmp(node->key, key) == 0) {
+	while (node)
+	{
+		if (ft_strcmp(node->key, key) == 0)
+		{
 			if (prev)
 				prev->next = node->next;
 			else
