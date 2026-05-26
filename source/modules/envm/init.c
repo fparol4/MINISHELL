@@ -10,32 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "./common.c"
 #include "../../../headers/minishell.h"
-#include <sys/types.h>
-
-static t_env	*f_node(const char *key, const char *value)
-{
-	t_env	*node;
-
-	node = calloc(1, sizeof(t_env));
-	if (!node)
-		return (NULL);
-	node->key = ft_strdup(key);
-	if (!node->key)
-	{
-		free(node);
-		return (NULL);
-	}
-	if (value)
-		node->value = ft_strdup(value);
-	if (value && !node->value)
-	{
-		free(node->key);
-		free(node);
-		return (NULL);
-	}
-	return (node);
-}
 
 static void	f_shlvl(t_env *env)
 {
@@ -69,7 +45,7 @@ static t_env	*f_entryparse(const char *entry)
 
 	eq = ft_strchr(entry, '=');
 	if (!eq)
-		return (f_node(entry, NULL));
+		return (f_newnode(entry, NULL));
 	key_l = (size_t)(eq - entry);
 	key = ft_substr(entry, 0, key_l);
 	if (!key)
@@ -80,7 +56,7 @@ static t_env	*f_entryparse(const char *entry)
 		free(key);
 		return (NULL);
 	}
-	node = f_node(key, value);
+	node = f_newnode(key, value);
 	free(key);
 	free(value);
 	return (node);

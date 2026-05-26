@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
+#include "./common.c"
 
 void	env_free(t_env **env)
 {
@@ -23,9 +24,7 @@ void	env_free(t_env **env)
 	while (node)
 	{
 		next = node->next;
-		free(node->key);
-		free(node->value);
-		free(node);
+		f_freenode(node);
 		node = next;
 	}
 	*env = NULL;
