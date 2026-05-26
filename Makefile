@@ -32,7 +32,9 @@ SRCS = source/main.c \
 	   source/modules/runner/path.c \
 	   source/modules/runner/pipe.c \
 	   source/modules/runner/status.c \
-	   source/modules/runner/exec.c \
+	   source/modules/runner/control.c \
+	   source/modules/runner/builtin.c \
+	   source/modules/runner/external.c \
 	   source/modules/runner/expander.c
 
 OBJ_DIR = obj
@@ -108,7 +110,9 @@ t\:runner: $(LIBFT)
 		source/modules/runner/path.c \
 		source/modules/runner/pipe.c \
 		source/modules/runner/status.c \
-		source/modules/runner/exec.c \
+		source/modules/runner/control.c \
+		source/modules/runner/builtin.c \
+		source/modules/runner/external.c \
 		source/modules/runner/expander.c \
 		$(SHARED_TEST_SRCS) \
 		$(BULTIN_TEST_SRCS) \

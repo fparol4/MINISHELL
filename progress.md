@@ -58,12 +58,11 @@
 
 ## Runner Executor
 
-- Added `source/modules/runner/exec.c`.
 - Execution flow now includes:
-  - `rn_execute(t_exnode *node, t_env **env)`
-  - `rn_exec_cmd(t_exnode *node, t_env **env)`
-  - `rn_exec_bin(char **args, t_env **env, int *status)`
-  - `rn_exec_ext(char **args, t_env **env)`
+  - `rn_execute(t_exnode *node, t_env **env)` in `source/modules/runner/control.c`
+  - `rn_exec_cmd(t_exnode *node, t_env **env)` in `source/modules/runner/control.c`
+  - `rn_exec_bin(char **args, t_env **env, int *status)` in `source/modules/runner/builtin.c`
+  - `rn_exec_ext(char **args, t_env **env)` in `source/modules/runner/external.c`
 - `rn_exec_bin` returns whether the builtin was handled and writes the status through the pointer.
 - `rn_exec_ext` performs:
   - PATH lookup through `rn_path`
@@ -78,6 +77,13 @@
 - `source/modules/runner/status.c`
   - `rn_status_set`
   - `rn_status_get`
+- `source/modules/runner/control.c`
+  - `rn_execute`
+  - `rn_exec_cmd`
+- `source/modules/runner/builtin.c`
+  - `rn_exec_bin`
+- `source/modules/runner/external.c`
+  - `rn_exec_ext`
 - `source/modules/runner/path.c`
   - `rn_path`
 - `source/modules/runner/pipe.c`

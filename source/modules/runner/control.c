@@ -1,0 +1,40 @@
+#include "../../../headers/runner.h"
+
+int	rn_exec_cmd(t_exnode *node, t_env **env)
+{
+	char	**args;
+	int		status;
+
+	if (!node || !node->args)
+		return (0);
+	args = rn_expand(node->args, env);
+	if (!args)
+		return (1);
+	if (!args[0])
+		status = 0;
+	else if (!rn_exec_bin(args, env, &status))
+		status = rn_exec_ext(args, env);
+	sh_freeargs(args);
+	return (status);
+}
+
+int	rn_exec_pipe(t_exnode *node, t_env **env)
+{
+	return (rn_pipe(node, env));
+}
+
+int	rn_execute(t_exnode *node, t_env **env)
+{
+	int	status;
+
+	if (!node)
+		return (0);
+	if (node->type == CMD)
+		status = rn_exec_cmd(node, env);
+	else if (node->type == PIPE)
+		status = rn_exec_pipe(node, env);
+	else
+		status = 1;
+	rn_status_set(env, status);
+	return (status);
+}
