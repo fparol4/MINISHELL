@@ -12,13 +12,35 @@
 
 # define  MSG_MINISHELL "minishell:"
 
-typedef enum e_cmd_type { CMD_COMMAND, CMD_PIPE, CMD_AND, CMD_OR } t_cmd_type;
+typedef enum e_node_type
+{
+	CMD,
+	PIPE
+}	t_node_type;
 
-typedef struct s_cmd_node {
-  t_cmd_type type;
-  char **args;
-  struct s_cmd_node *left;
-  struct s_cmd_node *right;
-} t_cmd_node;
+typedef enum e_redir_type
+{
+	IN_F,
+	IN_H,
+	OUT_T,
+	OUT_A
+}	t_redir_type;
+
+typedef struct s_redir
+{
+	t_redir_type	type;
+	char			*target;
+	int				expand;
+	struct s_redir	*next;
+}	t_redir;
+
+typedef struct s_exnode
+{
+	t_node_type		type;
+	char			**args;
+	t_redir			*redir;
+	struct s_node	*left;
+	struct s_node	*right;
+}	t_exnode;
 
 #endif

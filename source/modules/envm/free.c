@@ -13,13 +13,13 @@
 #include "../../../headers/minishell.h"
 #include "./common.c"
 
-void	env_free(t_env **env)
+int	env_free(t_env **env)
 {
 	t_env	*node;
 	t_env	*next;
 
 	if (!env || !*env)
-		return ;
+		return (1);
 	node = *env;
 	while (node)
 	{
@@ -28,4 +28,5 @@ void	env_free(t_env **env)
 		node = next;
 	}
 	*env = NULL;
+	return (1);
 }

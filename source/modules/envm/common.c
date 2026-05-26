@@ -1,6 +1,6 @@
 #include "../../../headers/minishell.h"
 
-t_env	*f_newnode(const char *key, const char *value)
+static t_env	*f_newnode(const char *key, const char *value)
 {
 	t_env	*node;
 
@@ -24,7 +24,7 @@ t_env	*f_newnode(const char *key, const char *value)
 	return (node);
 }
 
-int f_freenode(t_env *node)
+static int f_freenode(t_env *node)
 {
 	if (!node)
 		return (0);
