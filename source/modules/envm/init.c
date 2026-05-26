@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./common.c"
-#include "../../../headers/minishell.h"
+#include "./common.h"
 
 static void	f_shlvl(t_env *env)
 {

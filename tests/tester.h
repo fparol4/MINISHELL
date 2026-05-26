@@ -1,0 +1,29 @@
+#ifndef TESTER_H
+# define TESTER_H
+
+# include "snow.h"
+# include "../headers/builtin.h"
+# include "../headers/env.h"
+# include "../headers/runner.h"
+# include "../headers/shared.h"
+# include <fcntl.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/wait.h>
+# include <unistd.h>
+
+/*
+Suggested rn_expand tests:
+- single quotes remove quotes and keep literal $VAR
+- double quotes remove quotes and expand $VAR
+- unquoted $VAR expands and splits spaces
+- quoted $VAR expands and does not split spaces
+- unknown variables become empty
+- empty quoted args stay as empty args
+- $ alone stays literal
+- invalid var start keeps $ literal
+- $? expands from ENV_ERRCODE
+- mixed quoted/unquoted parts join into the same word
+*/
+
+#endif

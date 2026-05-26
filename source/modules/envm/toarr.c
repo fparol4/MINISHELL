@@ -7,10 +7,10 @@ static char *f_toentry(const char *key, const char *value)
 	char *entry;
 
 	tmp = ft_strjoin(key, "=");
-	if (!entry)
+	if (!tmp)
 		return (NULL);
 	if (value)
-		entry = ft_strjoin(key, value);
+		entry = ft_strjoin(tmp, value);
 	else
 		entry = ft_strdup(tmp);
 	free(tmp);
@@ -32,19 +32,6 @@ static int f_envsize(t_env **env)
 	return (size);
 }
 
-static void f_arrfree(char **arr)
-{
-	int i;
-
-	if (!arr) return;
-	if (!*arr)
-		return (free(arr));
-	i = 0;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
-}
-
 char **env_toarr(t_env **env)
 {
 	int i;
@@ -60,14 +47,14 @@ char **env_toarr(t_env **env)
 	i = 0;
 	while (node)
 	{
-		arr[i] = f_toentry(node->key, node->value);
-		if (!arr[i])
-		{
-			f_arrfree(arr);
-			return (NULL);
-		}
+			arr[i] = f_toentry(node->key, node->value);
+			if (!arr[i])
+			{
+				sh_freeargs(arr);
+				return (NULL);
+			}
 		node = node->next;
 		i++;
 	}
-	return (NULL);
+	return (arr);
 }

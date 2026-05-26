@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/minishell.h"
-#include "./common.c"
+#include "./common.h"
 
 int	env_free(t_env **env)
 {

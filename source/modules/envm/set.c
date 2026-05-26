@@ -1,5 +1,4 @@
-#include "../../../headers/minishell.h"
-#include "./common.c"
+#include "./common.h"
 
 int env_set(t_env **env, const char *key, const char *value)
 {

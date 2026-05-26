@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "../libraries/libft/libft.h"
+#include "./shared.h"
 #include "./env.h"
 #include "./builtin.h"
 
@@ -39,8 +40,8 @@ typedef struct s_exnode
 	t_node_type		type;
 	char			**args;
 	t_redir			*redir;
-	struct s_node	*left;
-	struct s_node	*right;
+	struct s_exnode	*left;
+	struct s_exnode	*right;
 }	t_exnode;
 
 #endif
