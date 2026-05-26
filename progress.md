@@ -88,6 +88,10 @@
   - `rn_path`
 - `source/modules/runner/pipe.c`
   - `rn_pipe` stub only
+  - forks left/right execution around a real pipe
+  - left side writes to stdout of the pipe
+  - right side reads from stdin of the pipe
+  - returns the right-side status to `rn_execute` stub only
 
 ## Tests
 
