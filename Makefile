@@ -48,7 +48,7 @@ SRCS = source/main.c \
 	   $(ENVM_SRCS) \
 	   $(RUNNER_SRCS)
 
-OBJ_DIR = obj
+OBJ_DIR = build
 OBJS = $(SRCS:source/%.c=$(OBJ_DIR)/%.o)
 
 all: $(LIBFT) $(NAME)
