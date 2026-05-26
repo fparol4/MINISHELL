@@ -87,11 +87,15 @@
 - `source/modules/runner/path.c`
   - `rn_path`
 - `source/modules/runner/pipe.c`
-  - `rn_pipe` stub only
+  - `rn_pipe`
   - forks left/right execution around a real pipe
   - left side writes to stdout of the pipe
   - right side reads from stdin of the pipe
-  - returns the right-side status to `rn_execute` stub only
+  - returns the right-side status to `rn_execute`
+- `source/modules/runner/redir.c`
+  - applies `IN_F`, `IN_H`, `OUT_T`, `OUT_A`
+  - expands redirect targets to exactly one argument
+  - restores stdio after command execution
 
 ## Tests
 

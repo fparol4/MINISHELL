@@ -1,15 +1,5 @@
 #include "../tester.h"
 
-static void	rn_test_node(t_exnode *node, t_node_type type, char **args,
-		t_exnode *left, t_exnode *right)
-{
-	ft_bzero(node, sizeof(*node));
-	node->type = type;
-	node->args = args;
-	node->left = left;
-	node->right = right;
-}
-
 describe(rn_exec_bin)
 {
 	it("handles builtin commands")

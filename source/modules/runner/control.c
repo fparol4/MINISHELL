@@ -15,18 +15,23 @@
 int	rn_exec_cmd(t_exnode *node, t_env **env)
 {
 	char	**args;
+	int		saved[2];
 	int		status;
 
-	if (!node || !node->args)
+	if (!node)
 		return (0);
 	args = rn_expand(node->args, env);
 	if (!args)
 		return (1);
+	if (node->redir && rn_redir_push(node->redir, env, saved))
+		return (sh_freeargs(args), 1);
 	if (!args[0])
 		status = 0;
 	else if (!rn_exec_bin(args, env, &status))
 		status = rn_exec_ext(args, env);
 	sh_freeargs(args);
+	if (node->redir && rn_redir_restore(saved))
+		status = 1;
 	return (status);
 }
 
