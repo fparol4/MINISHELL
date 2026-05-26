@@ -141,4 +141,140 @@ describe(rn_redir)
 		asserteq_str(env_get(&env, ENV_ERRCODE), "1");
 		env_free(&env);
 	}
+
+	it("consumes multiple heredocs in order and keeps the last one on stdin")
+	{
+		char		*raw[] = {"cat", NULL};
+		t_env		*env;
+		t_exnode	node;
+		t_redir		first;
+		t_redir		second;
+		char		*out;
+		int			status;
+
+		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
+		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_redir(&first, IN_H, "A", 1);
+		rn_test_redir(&second, IN_H, "B", 1);
+		first.next = &second;
+		node.redir = &first;
+		asserteq(rn_test_with_stdin("first\nA\nsecond\nB\n", &node, &env, &status,
+				&out), 0);
+		assert(out != NULL);
+		asserteq(status, 0);
+		asserteq_str(out, "second\n");
+		free(out);
+		env_free(&env);
+	}
+
+	it("lets a later file input override an earlier heredoc")
+	{
+		char		path[] = "/tmp/minishell_redir_override_in_XXXXXX";
+		char		*raw[] = {"cat", NULL};
+		t_env		*env;
+		t_exnode	node;
+		t_redir		first;
+		t_redir		second;
+		char		*out;
+		int			fd;
+		int			status;
+
+		fd = rn_test_temp(path);
+		write(fd, "file\n", 5);
+		close(fd);
+		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
+		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_redir(&first, IN_H, "EOF", 1);
+		rn_test_redir(&second, IN_F, path, 1);
+		first.next = &second;
+		node.redir = &first;
+		asserteq(rn_test_with_stdin("heredoc\nEOF\n", &node, &env, &status, &out),
+			0);
+		assert(out != NULL);
+		asserteq(status, 0);
+		asserteq_str(out, "file\n");
+		unlink(path);
+		free(out);
+		env_free(&env);
+	}
+
+	it("lets a later heredoc override an earlier file input")
+	{
+		char		path[] = "/tmp/minishell_redir_override_heredoc_XXXXXX";
+		char		*raw[] = {"cat", NULL};
+		t_env		*env;
+		t_exnode	node;
+		t_redir		first;
+		t_redir		second;
+		char		*out;
+		int			fd;
+		int			status;
+
+		fd = rn_test_temp(path);
+		write(fd, "file\n", 5);
+		close(fd);
+		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
+		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_redir(&first, IN_F, path, 1);
+		rn_test_redir(&second, IN_H, "EOF", 1);
+		first.next = &second;
+		node.redir = &first;
+		asserteq(rn_test_with_stdin("heredoc\nEOF\n", &node, &env, &status, &out),
+			0);
+		assert(out != NULL);
+		asserteq(status, 0);
+		asserteq_str(out, "heredoc\n");
+		unlink(path);
+		free(out);
+		env_free(&env);
+	}
+
+	it("warns when heredoc ends before its delimiter")
+	{
+		char		*raw[] = {"true", NULL};
+		t_env		*env;
+		t_exnode	node;
+		t_redir		redir;
+		char		*err;
+		int			status;
+
+		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
+		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_redir(&redir, IN_H, "EOF", 1);
+		node.redir = &redir;
+		asserteq(rn_test_with_stdin_error("partial line\n", &node, &env, &status,
+				&err), 0);
+		assert(err != NULL);
+		asserteq(status, 0);
+		assert(strstr(err, "warning: here-document delimited by end-of-file")
+			!= NULL);
+		assert(strstr(err, "EOF") != NULL);
+		free(err);
+		env_free(&env);
+	}
+
+	it("handles commands with only redirections")
+	{
+		char		path[] = "/tmp/minishell_redir_only_XXXXXX";
+		t_env		*env;
+		t_exnode	node;
+		t_redir		redir;
+		char		*out;
+		int			fd;
+
+		fd = rn_test_temp(path);
+		write(fd, "old\n", 4);
+		close(fd);
+		env = NULL;
+		rn_test_node(&node, CMD, NULL, NULL, NULL);
+		rn_test_redir(&redir, OUT_T, path, 1);
+		node.redir = &redir;
+		asserteq(rn_execute(&node, &env), 0);
+		out = rn_test_readfile(path);
+		assert(out != NULL);
+		asserteq_str(out, "");
+		unlink(path);
+		free(out);
+		env_free(&env);
+	}
 }

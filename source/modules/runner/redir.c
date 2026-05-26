@@ -2,6 +2,19 @@
 #include "../../../libraries/libft/lib/ft_gnline/get_next_line.h"
 #include <fcntl.h>
 
+typedef enum e_heredoc_state
+{
+	HEREDOC_DONE,
+	HEREDOC_EOF,
+	HEREDOC_FAIL
+}	t_heredoc_state;
+
+typedef struct s_redir_fd
+{
+	int	fd;
+	int	stdio;
+}	t_redir_fd;
+
 static int	rn_redir_append(char **buf, char *part)
 {
 	char	*next;
@@ -104,7 +117,17 @@ static char	*rn_redir_line(char *line, t_env **env, int expand)
 	return (out);
 }
 
-static int	rn_redir_heredoc_fill(int fd, char *target, t_env **env, int expand)
+static void	rn_redir_warn(char *target)
+{
+	ft_putstr_fd(MSG_MINISHELL, STDERR_FILENO);
+	ft_putstr_fd(" warning: here-document delimited by end-of-file (wanted `",
+		STDERR_FILENO);
+	ft_putstr_fd(target, STDERR_FILENO);
+	ft_putstr_fd("')\n", STDERR_FILENO);
+}
+
+static t_heredoc_state	rn_redir_heredoc_fill(int fd, char *target, t_env **env,
+		int expand)
 {
 	char	*line;
 	char	*out;
@@ -113,25 +136,29 @@ static int	rn_redir_heredoc_fill(int fd, char *target, t_env **env, int expand)
 	while (line)
 	{
 		if (rn_redir_delim(line, target))
-			return (free(line), 0);
+			return (free(line), HEREDOC_DONE);
 		out = rn_redir_line(line, env, expand);
 		free(line);
 		if (!out || write(fd, out, ft_strlen(out)) < 0)
-			return (free(out), 1);
+			return (free(out), HEREDOC_FAIL);
 		free(out);
 		line = get_next_line(STDIN_FILENO);
 	}
-	return (0);
+	return (HEREDOC_EOF);
 }
 
 static int	rn_redir_heredoc(char *target, t_env **env, int expand)
 {
-	int		pfd[2];
+	int				pfd[2];
+	t_heredoc_state	state;
 
 	if (pipe(pfd) == -1)
 		return (sh_err(NULL, "pipe failed"), -1);
-	if (rn_redir_heredoc_fill(pfd[1], target, env, expand))
+	state = rn_redir_heredoc_fill(pfd[1], target, env, expand);
+	if (state == HEREDOC_FAIL)
 		return (close(pfd[0]), close(pfd[1]), sh_err(NULL, "heredoc failed"), -1);
+	if (state == HEREDOC_EOF)
+		rn_redir_warn(target);
 	close(pfd[1]);
 	return (pfd[0]);
 }
@@ -184,22 +211,53 @@ static int	rn_redir_fd(t_redir *redir, t_env **env)
 
 static int	rn_redir_apply(t_redir *redir, t_env **env)
 {
-	int	fd;
-	int	stdio;
+	t_redir		*cur;
+	t_redir_fd	*opened;
+	size_t		count;
+	size_t		i;
 
-	while (redir)
+	cur = redir;
+	count = 0;
+	while (cur)
 	{
-		fd = rn_redir_fd(redir, env);
-		if (fd == -1)
-			return (1);
-		stdio = STDIN_FILENO;
-		if (redir->type == OUT_T || redir->type == OUT_A)
-			stdio = STDOUT_FILENO;
-		if (dup2(fd, stdio) == -1)
-			return (close(fd), sh_err(NULL, "dup2 failed"), 1);
-		close(fd);
-		redir = redir->next;
+		count++;
+		cur = cur->next;
 	}
+	if (!count)
+		return (0);
+	opened = malloc(sizeof(*opened) * count);
+	if (!opened)
+		return (1);
+	cur = redir;
+	i = 0;
+	while (cur)
+	{
+		opened[i].fd = rn_redir_fd(cur, env);
+		if (opened[i].fd == -1)
+		{
+			while (i > 0)
+				close(opened[--i].fd);
+			return (free(opened), 1);
+		}
+		opened[i].stdio = STDIN_FILENO;
+		if (cur->type == OUT_T || cur->type == OUT_A)
+			opened[i].stdio = STDOUT_FILENO;
+		cur = cur->next;
+		i++;
+	}
+	i = 0;
+	while (i < count)
+	{
+		if (dup2(opened[i].fd, opened[i].stdio) == -1)
+		{
+			while (i < count)
+				close(opened[i++].fd);
+			return (free(opened), sh_err(NULL, "dup2 failed"), 1);
+		}
+		close(opened[i].fd);
+		i++;
+	}
+	free(opened);
 	return (0);
 }
 
@@ -224,6 +282,9 @@ int	rn_redir_push(t_redir *redir, t_env **env, int saved[2])
 	saved[1] = dup(STDOUT_FILENO);
 	if (saved[0] == -1 || saved[1] == -1)
 		return (rn_redir_restore(saved), sh_err(NULL, "dup failed"), 1);
+	if (fcntl(saved[0], F_SETFD, FD_CLOEXEC) == -1
+		|| fcntl(saved[1], F_SETFD, FD_CLOEXEC) == -1)
+		return (rn_redir_restore(saved), sh_err(NULL, "fcntl failed"), 1);
 	if (rn_redir_apply(redir, env))
 		return (rn_redir_restore(saved), 1);
 	return (0);

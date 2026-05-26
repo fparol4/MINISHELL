@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../../headers/runner.h"
+#include <sys/stat.h>
 #include <unistd.h>
 
 static void	rn_path_free(char **dirs)
@@ -31,37 +32,49 @@ static char	*rn_path_join(char *dir, char *cmd)
 	return (full);
 }
 
+static int	rn_path_match(char *full)
+{
+	struct stat	st;
+
+	if (stat(full, &st) == -1)
+		return (0);
+	if (S_ISDIR(st.st_mode))
+		return (0);
+	return (access(full, X_OK) == 0);
+}
+
 static char	*rn_path_search(char **args, t_env **env)
 {
 	char	**dirs;
 	char	*path;
 	char	*full;
+	char	*fallback;
 	int		i;
 
 	if (ft_strchr(args[0], '/'))
-	{
-		if (access(args[0], F_OK | X_OK) == 0)
-			return (ft_strdup(args[0]));
-		return (NULL);
-	}
+		return (ft_strdup(args[0]));
 	path = env_get(env, "PATH");
-	if (!path)
+	if (!path || !*path)
 		return (NULL);
 	dirs = ft_split(path, ':');
 	if (!dirs)
 		return (NULL);
+	fallback = NULL;
 	i = 0;
 	while (dirs[i])
 	{
 		full = rn_path_join(dirs[i++], args[0]);
 		if (!full)
-			return (rn_path_free(dirs), NULL);
-		if (access(full, F_OK | X_OK) == 0)
-			return (rn_path_free(dirs), full);
-		free(full);
+			return (free(fallback), rn_path_free(dirs), NULL);
+		if (rn_path_match(full))
+			return (free(fallback), rn_path_free(dirs), full);
+		if (!fallback && access(full, F_OK) == 0)
+			fallback = full;
+		else
+			free(full);
 	}
 	rn_path_free(dirs);
-	return (NULL);
+	return (fallback);
 }
 
 char	*rn_path(char **args, t_env **env)
