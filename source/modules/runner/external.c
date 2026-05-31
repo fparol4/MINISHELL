@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/26 15:42:39 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/05/26 15:42:39 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/05/31 14:06:40 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/31 14:06:40 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef enum e_ext_kind
 	EXT_NOT_FOUND,
 	EXT_DENIED,
 	EXT_DIR
-}	t_ext_kind;
+}					t_ext_kind;
 
 static int	rn_ext_slash(char *cmd)
 {
