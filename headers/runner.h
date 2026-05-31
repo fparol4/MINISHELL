@@ -2,14 +2,16 @@
 # define RUNNER_H
 
 # include "./minishell.h"
+# include "./parser_internal.h"
 # include "./sh_signal.h"
 
 char	**rn_expand(char **args, t_env **env);
-int		rn_execute(t_exnode *node, t_env **env);
-int		rn_exec_cmd(t_exnode *node, t_env **env);
-int		rn_exec_pipe(t_exnode *node, t_env **env);
-int		rn_pipe(t_exnode *node, t_env **env);
-int		rn_redir_push(t_redir *redir, t_env **env, int saved[2]);
+int		rn_execute(t_command *cmd, t_env **env);
+int		rn_exec_cmd(t_command *cmd, t_env **env);
+int		rn_exec_pipe(t_command *cmd, t_env **env);
+int		rn_pipe(t_command *cmd, t_env **env);
+int		rn_redir_push(t_parser_redir *redirs, unsigned int count,
+			t_env **env, int saved[2]);
 int		rn_redir_restore(int saved[2]);
 char	*rn_path(char **args, t_env **env);
 int		rn_exec_bin(char **args, t_env **env, int *status);

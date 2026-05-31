@@ -41,6 +41,11 @@ int	bin_cd(char **args, t_env **env)
 	char	*path_old;
 	char	buffer[BUFFER_SIZE];
 
+	if (args[0] && args[1])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		return (1);
+	}
 	path = f_cd_path(args, env);
 	if (!path)
 		return (1);

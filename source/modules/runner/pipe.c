@@ -15,7 +15,7 @@
 
 typedef struct s_pipe_context
 {
-	t_exnode	*node;
+	t_command	*node;
 	t_env		**env;
 	int			in_fd;
 	int			out_fd;
@@ -39,7 +39,7 @@ static int	rn_pipe_status(int status)
 	return (1);
 }
 
-static void	rn_pipe_build(t_pipe_context *ctx, t_exnode *node, t_env **env,
+static void	rn_pipe_build(t_pipe_context *ctx, t_command *node, t_env **env,
 		int in_fd, int out_fd)
 {
 	ctx->node = node;
@@ -88,22 +88,24 @@ static int	rn_pipe_wait(pid_t pid)
 	return (rn_pipe_status(status));
 }
 
-int	rn_pipe(t_exnode *node, t_env **env)
+int	rn_pipe(t_command *node, t_env **env)
 {
 	t_pipe_context	left_ctx;
 	t_pipe_context	right_ctx;
 	pid_t			left_pid;
 	pid_t			right_pid;
 
-	if (!node || node->type != PIPE || !node->left || !node->right)
+	if (!node || node->type != PNODE_PIPE
+		|| !node->t_define.pipe.left || !node->t_define.pipe.right)
 		return (sh_err(NULL, "invalid pipe node"), 1);
 	left_ctx.pipefd[0] = -1;
 	left_ctx.pipefd[1] = -1;
 	if (pipe(left_ctx.pipefd) == -1)
 		return (sh_err(NULL, "pipe failed"), 1);
-	rn_pipe_build(&left_ctx, node->left, env, STDIN_FILENO, left_ctx.pipefd[1]);
-	rn_pipe_build(&right_ctx, node->right, env, left_ctx.pipefd[0],
-		STDOUT_FILENO);
+	rn_pipe_build(&left_ctx, node->t_define.pipe.left, env,
+		STDIN_FILENO, left_ctx.pipefd[1]);
+	rn_pipe_build(&right_ctx, node->t_define.pipe.right, env,
+		left_ctx.pipefd[0], STDOUT_FILENO);
 	right_ctx.pipefd[0] = left_ctx.pipefd[0];
 	right_ctx.pipefd[1] = left_ctx.pipefd[1];
 	sh_sig_mode(SIG_EXEC);

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../headers/sh_signal.h"
+#include <readline/readline.h>
 #include <unistd.h>
 
 volatile sig_atomic_t	g_signal = 0;
@@ -20,6 +21,8 @@ static void	sh_sigint_interactive(int sig)
 	(void)sig;
 	g_signal = SIGINT;
 	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
 }
 
 static void	sh_sigint_heredoc(int sig)

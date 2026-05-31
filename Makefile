@@ -11,18 +11,21 @@ TEST_FLAGS = -DSNOW_ENABLED
 
 SHARED_SRCS = source/shared/error.c \
 			  source/shared/free.c \
+			  source/shared/general.c \
 			  source/shared/string.c \
 			  source/shared/signal.c
 
-CORE_SRCS = source/shared/general.c
+CORE_SRCS = source/core/init.c \
+			source/core/loop.c \
+			source/core/run.c
 
-BULTIN_SRCS = source/modules/bultin/cd.c \
-			  source/modules/bultin/echo.c \
-			  source/modules/bultin/env.c \
-			  source/modules/bultin/exit.c \
-			  source/modules/bultin/export.c \
-			  source/modules/bultin/pwd.c \
-			  source/modules/bultin/unset.c
+BUILTIN_SRCS = source/modules/builtin/cd.c \
+			   source/modules/builtin/echo.c \
+			   source/modules/builtin/env.c \
+			   source/modules/builtin/exit.c \
+			   source/modules/builtin/export.c \
+			   source/modules/builtin/pwd.c \
+			   source/modules/builtin/unset.c
 
 ENVM_SRCS = source/modules/envm/common.c \
 			source/modules/envm/free.c \
@@ -42,12 +45,33 @@ RUNNER_SRCS = source/modules/runner/path.c \
 			  source/modules/runner/external.c \
 			  source/modules/runner/expander.c
 
+LEXER_SRCS = source/modules/lexer/scanner/utils.c \
+			 source/modules/lexer/dlist.c \
+			 source/modules/lexer/extract.c \
+			 source/modules/lexer/lexer.c \
+			 source/modules/lexer/lexer_init.c \
+			 source/modules/lexer/lexer_rules.c \
+			 source/modules/lexer/quote_state.c \
+			 source/modules/lexer/token.c \
+			 source/modules/lexer/token_table.c \
+			 source/modules/lexer/token_type.c
+
+PARSER_SRCS = source/modules/parser/dynarray.c \
+			  source/modules/parser/parser.c \
+			  source/modules/parser/parser_cleanup.c \
+			  source/modules/parser/parser_command.c \
+			  source/modules/parser/parser_errors.c \
+			  source/modules/parser/parser_state.c \
+			  source/modules/parser/parser_utils.c
+
 SRCS = source/main.c \
 	   $(CORE_SRCS) \
 	   $(SHARED_SRCS) \
-	   $(BULTIN_SRCS) \
+	   $(BUILTIN_SRCS) \
 	   $(ENVM_SRCS) \
-	   $(RUNNER_SRCS)
+	   $(RUNNER_SRCS) \
+	   $(LEXER_SRCS) \
+	   $(PARSER_SRCS)
 
 OBJ_DIR = build
 OBJS = $(SRCS:source/%.c=$(OBJ_DIR)/%.o)
@@ -74,7 +98,7 @@ fclean: clean
 
 re: fclean all
 
-test: t\:envm t\:bultin t\:runner
+test: t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
 
 t\:envm: $(LIBFT)
 	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
@@ -85,24 +109,54 @@ t\:envm: $(LIBFT)
 		-o /tmp/minishell_envm_tests
 	/tmp/minishell_envm_tests
 
-t\:bultin: $(LIBFT)
+t\:builtin: $(LIBFT)
 	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/bultin.c \
 		$(SHARED_SRCS) \
-		$(BULTIN_SRCS) \
+		$(BUILTIN_SRCS) \
 		$(filter-out source/modules/envm/toarr.c,$(ENVM_SRCS)) \
 		$(LIBFT) \
-		-o /tmp/minishell_bultin_tests
-	/tmp/minishell_bultin_tests
+		-o /tmp/minishell_builtin_tests
+	/tmp/minishell_builtin_tests
 
 t\:runner: $(LIBFT)
 	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/runner.c \
 		$(RUNNER_SRCS) \
 		$(SHARED_SRCS) \
-		$(BULTIN_SRCS) \
+		$(BUILTIN_SRCS) \
 		$(ENVM_SRCS) \
 		$(LIBFT) -o /tmp/minishell_runner_tests
 	/tmp/minishell_runner_tests
 
-.PHONY: all clean fclean re test t\:envm t\:bultin t\:runner
+t\:core: $(LIBFT)
+	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+		tests/core.c \
+		source/core/init.c \
+		$(SHARED_SRCS) \
+		$(ENVM_SRCS) \
+		$(LIBFT) \
+		-o /tmp/minishell_core_tests
+	/tmp/minishell_core_tests
+
+t\:lexer: $(LIBFT)
+	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+		tests/lexer.c \
+		$(LEXER_SRCS) \
+		source/shared/error.c \
+		$(LIBFT) \
+		-o /tmp/minishell_lexer_tests
+	/tmp/minishell_lexer_tests
+
+t\:parser: $(LIBFT)
+	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+		tests/parser.c \
+		$(PARSER_SRCS) \
+		$(LEXER_SRCS) \
+		source/shared/error.c \
+		$(LIBFT) \
+		-o /tmp/minishell_parser_tests
+	/tmp/minishell_parser_tests
+
+.PHONY: all clean fclean re test \
+	t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser

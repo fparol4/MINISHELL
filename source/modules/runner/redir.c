@@ -192,35 +192,35 @@ static int	rn_redir_heredoc(char *target, t_env **env, int expand)
 	return (pfd[0]);
 }
 
-static char	*rn_redir_target(t_redir *redir, t_env **env)
+static char	*rn_redir_target(t_parser_redir *redir, t_env **env)
 {
 	char	*raw[2];
 	char	**expanded;
 	char	*target;
 
-	raw[0] = redir->target;
+	raw[0] = redir->file;
 	raw[1] = NULL;
 	expanded = rn_expand(raw, env);
 	if (!expanded)
 		return (NULL);
 	if (!expanded[0] || expanded[1])
-		return (sh_err2(NULL, redir->target, "ambiguous redirect"),
+		return (sh_err2(NULL, redir->file, "ambiguous redirect"),
 			sh_freeargs(expanded), NULL);
 	target = ft_strdup(expanded[0]);
 	sh_freeargs(expanded);
 	return (target);
 }
 
-static int	rn_redir_open(char *target, t_redir_type type)
+static int	rn_redir_open(char *target, t_parser_redir_type type)
 {
-	if (type == IN_F)
+	if (type == REDIR_IN)
 		return (open(target, O_RDONLY));
-	if (type == OUT_T)
+	if (type == REDIR_OUT)
 		return (open(target, O_WRONLY | O_CREAT | O_TRUNC, 0644));
 	return (open(target, O_WRONLY | O_CREAT | O_APPEND, 0644));
 }
 
-static int	rn_redir_fd(t_redir *redir, t_env **env)
+static int	rn_redir_fd(t_parser_redir *redir, t_env **env)
 {
 	char	*target;
 	int		fd;
@@ -228,40 +228,31 @@ static int	rn_redir_fd(t_redir *redir, t_env **env)
 	target = rn_redir_target(redir, env);
 	if (!target)
 		return (-1);
-	if (redir->type == IN_H)
+	if (redir->type == REDIR_HEREDOC)
 		fd = rn_redir_heredoc(target, env, redir->expand);
 	else
 		fd = rn_redir_open(target, redir->type);
-	if (fd == -1 && redir->type != IN_H)
+	if (fd == -1 && redir->type != REDIR_HEREDOC)
 		sh_err2(NULL, target, "open failed");
 	free(target);
 	return (fd);
 }
 
-static int	rn_redir_apply(t_redir *redir, t_env **env)
+static int	rn_redir_apply(t_parser_redir *redirs, unsigned int count,
+		t_env **env)
 {
-	t_redir		*cur;
-	t_redir_fd	*opened;
-	size_t		count;
-	size_t		i;
+	t_redir_fd		*opened;
+	unsigned int	i;
 
-	cur = redir;
-	count = 0;
-	while (cur)
-	{
-		count++;
-		cur = cur->next;
-	}
-	if (!count)
+	if (!redirs || !count)
 		return (0);
 	opened = malloc(sizeof(*opened) * count);
 	if (!opened)
 		return (1);
-	cur = redir;
 	i = 0;
-	while (cur)
+	while (i < count)
 	{
-		opened[i].fd = rn_redir_fd(cur, env);
+		opened[i].fd = rn_redir_fd(&redirs[i], env);
 		if (opened[i].fd == -1)
 		{
 			while (i > 0)
@@ -269,9 +260,8 @@ static int	rn_redir_apply(t_redir *redir, t_env **env)
 			return (free(opened), 1);
 		}
 		opened[i].stdio = STDIN_FILENO;
-		if (cur->type == OUT_T || cur->type == OUT_A)
+		if (redirs[i].type == REDIR_OUT || redirs[i].type == REDIR_APPEND)
 			opened[i].stdio = STDOUT_FILENO;
-		cur = cur->next;
 		i++;
 	}
 	i = 0;
@@ -305,7 +295,8 @@ int	rn_redir_restore(int saved[2])
 	return (0);
 }
 
-int	rn_redir_push(t_redir *redir, t_env **env, int saved[2])
+int	rn_redir_push(t_parser_redir *redirs, unsigned int count,
+		t_env **env, int saved[2])
 {
 	saved[0] = -1;
 	saved[1] = -1;
@@ -316,7 +307,7 @@ int	rn_redir_push(t_redir *redir, t_env **env, int saved[2])
 	if (fcntl(saved[0], F_SETFD, FD_CLOEXEC) == -1 || fcntl(saved[1], F_SETFD,
 			FD_CLOEXEC) == -1)
 		return (rn_redir_restore(saved), sh_err(NULL, "fcntl failed"), 1);
-	if (rn_redir_apply(redir, env))
+	if (rn_redir_apply(redirs, count, env))
 		return (rn_redir_restore(saved), 1);
 	return (0);
 }

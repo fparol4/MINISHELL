@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
+#include "../../../headers/env.h"
 
 static char	*f_toentry(const char *key, const char *value)
 {
@@ -58,14 +59,17 @@ char	**env_toarr(t_env **env)
 	i = 0;
 	while (node)
 	{
-		arr[i] = f_toentry(node->key, node->value);
-		if (!arr[i])
+		if (ft_strcmp(node->key, ENV_ERRCODE) != 0)
 		{
-			sh_freeargs(arr);
-			return (NULL);
+			arr[i] = f_toentry(node->key, node->value);
+			if (!arr[i])
+			{
+				sh_freeargs(arr);
+				return (NULL);
+			}
+			i++;
 		}
 		node = node->next;
-		i++;
 	}
 	return (arr);
 }

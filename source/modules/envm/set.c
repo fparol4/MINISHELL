@@ -27,11 +27,10 @@ int	env_set(t_env **env, const char *key, const char *value)
 	{
 		if (ft_strcmp(node->key, key) == 0)
 		{
-			if (value)
-				vdup = ft_strdup(value);
-			else
-				vdup = NULL;
-			if (value && !vdup)
+			if (!value)
+				return (0);
+			vdup = ft_strdup(value);
+			if (!vdup)
 				return (-1);
 			free(node->value);
 			node->value = vdup;

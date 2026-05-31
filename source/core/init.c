@@ -1,0 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/31 00:00:00 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/31 00:00:00 by fcardozo        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../headers/core.h"
+#include "../../headers/sh_signal.h"
+
+int	core_init(t_shell *shell, char **envp)
+{
+	if (!shell)
+		return (1);
+	shell->env = env_init(envp);
+	if (!shell->env)
+		return (sh_err(NULL, "environment initialization failed"), 1);
+	if (env_set(&shell->env, ENV_ERRCODE, "0") == -1)
+		return (env_free(&shell->env), sh_err(NULL, "status initialization failed"),
+			1);
+	shell->running = TRUE;
+	sh_sig_mode(SIG_INTERACTIVE);
+	return (0);
+}
+
+void	core_destroy(t_shell *shell)
+{
+	if (!shell)
+		return ;
+	env_free(&shell->env);
+	shell->running = FALSE;
+}

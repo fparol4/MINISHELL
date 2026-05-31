@@ -1,0 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   loop.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/31 00:00:00 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/03 00:00:00 by fcardozo        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../headers/core.h"
+#include "../../headers/runner.h"
+#include "../../headers/scanner.h"
+#include "../../headers/lexer.h"
+#include "../../headers/parser.h"
+#include "../../headers/sh_signal.h"
+#include <readline/history.h>
+#include <readline/readline.h>
+
+#define SH_PROMPT "minishell$ "
+
+static int	core_process_line(t_shell *shell, char *line)
+{
+	t_scanner	sc;
+	t_manager	*manager;
+	t_ast		*ast;
+
+	scanner_init(&sc, line);
+	manager = lexer_control(&sc);
+	if (!manager)
+		return (0);
+	ast = parser_controller(manager);
+	lexer_free(manager);
+	if (!ast)
+		return (0);
+	if (ast->error)
+	{
+		print_syntax_error(ast->error_type);
+		parser_free_ast(ast);
+		return (0);
+	}
+	rn_execute(ast->root, &shell->env);
+	parser_free_ast(ast);
+	return (0);
+}
+
+int	core_loop(t_shell *shell)
+{
+	char	*line;
+
+	if (!shell)
+		return (1);
+	while (shell->running)
+	{
+		line = readline(SH_PROMPT);
+		if (!line)
+		{
+			if (g_signal == SIGINT)
+			{
+				g_signal = 0;
+				continue ;
+			}
+			write(STDOUT_FILENO, "exit\n", 5);
+			break ;
+		}
+		g_signal = 0;
+		if (*line)
+			add_history(line);
+		if (core_process_line(shell, line))
+			shell->running = FALSE;
+		free(line);
+	}
+	return (0);
+}

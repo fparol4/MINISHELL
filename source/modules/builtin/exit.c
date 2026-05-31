@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
+#include "../../../headers/runner.h"
 
 int	bin_exit(char **args, t_env **env)
 {
@@ -18,10 +19,7 @@ int	bin_exit(char **args, t_env **env)
 
 	ft_putendl_fd("exit", 1);
 	if (!args || !args[0])
-	{
-		env_set(env, ENV_ERRCODE, "0");
-		exit(0);
-	}
+		exit(rn_status_get(env));
 	if (!ft_vatoi(args[0]))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
