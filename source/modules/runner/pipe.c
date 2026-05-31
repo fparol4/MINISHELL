@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/26 15:42:39 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/05/26 15:42:39 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/05/31 14:06:40 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/31 14:06:40 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ int	rn_pipe(t_exnode *node, t_env **env)
 	sh_sig_mode(SIG_EXEC);
 	left_pid = rn_pipe_fork(&left_ctx);
 	if (left_pid == -1)
-		return (rn_pipe_close(left_ctx.pipefd), sh_sig_mode(SIG_INTERACTIVE), 1);
+		return (rn_pipe_close(left_ctx.pipefd), sh_sig_mode(SIG_INTERACTIVE),
+			1);
 	right_pid = rn_pipe_fork(&right_ctx);
 	rn_pipe_close(left_ctx.pipefd);
 	if (right_pid == -1)

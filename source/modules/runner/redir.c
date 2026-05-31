@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/31 14:06:40 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/31 14:06:40 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../headers/runner.h"
 #include "../../../libraries/libft/lib/ft_gnline/get_next_line.h"
 #include <fcntl.h>
@@ -7,13 +19,13 @@ typedef enum e_heredoc_state
 	HEREDOC_DONE,
 	HEREDOC_EOF,
 	HEREDOC_FAIL
-}	t_heredoc_state;
+}						t_heredoc_state;
 
 typedef struct s_redir_fd
 {
-	int	fd;
-	int	stdio;
-}	t_redir_fd;
+	int					fd;
+	int					stdio;
+}						t_redir_fd;
 
 static int	rn_redir_append(char **buf, char *part)
 {
@@ -172,7 +184,8 @@ static int	rn_redir_heredoc(char *target, t_env **env, int expand)
 		return (sh_err(NULL, "pipe failed"), -1);
 	state = rn_redir_heredoc_fill(pfd[1], target, env, expand);
 	if (state == HEREDOC_FAIL)
-		return (close(pfd[0]), close(pfd[1]), sh_err(NULL, "heredoc failed"), -1);
+		return (close(pfd[0]), close(pfd[1]), sh_err(NULL, "heredoc failed"),
+			-1);
 	if (state == HEREDOC_EOF)
 		rn_redir_warn(target);
 	close(pfd[1]);
@@ -280,9 +293,11 @@ static int	rn_redir_apply(t_redir *redir, t_env **env)
 int	rn_redir_restore(int saved[2])
 {
 	if (saved[0] != -1 && dup2(saved[0], STDIN_FILENO) == -1)
-		return (close(saved[0]), close(saved[1]), sh_err(NULL, "dup2 failed"), 1);
+		return (close(saved[0]), close(saved[1]), sh_err(NULL, "dup2 failed"),
+			1);
 	if (saved[1] != -1 && dup2(saved[1], STDOUT_FILENO) == -1)
-		return (close(saved[0]), close(saved[1]), sh_err(NULL, "dup2 failed"), 1);
+		return (close(saved[0]), close(saved[1]), sh_err(NULL, "dup2 failed"),
+			1);
 	if (saved[0] != -1)
 		close(saved[0]);
 	if (saved[1] != -1)
@@ -298,8 +313,8 @@ int	rn_redir_push(t_redir *redir, t_env **env, int saved[2])
 	saved[1] = dup(STDOUT_FILENO);
 	if (saved[0] == -1 || saved[1] == -1)
 		return (rn_redir_restore(saved), sh_err(NULL, "dup failed"), 1);
-	if (fcntl(saved[0], F_SETFD, FD_CLOEXEC) == -1
-		|| fcntl(saved[1], F_SETFD, FD_CLOEXEC) == -1)
+	if (fcntl(saved[0], F_SETFD, FD_CLOEXEC) == -1 || fcntl(saved[1], F_SETFD,
+			FD_CLOEXEC) == -1)
 		return (rn_redir_restore(saved), sh_err(NULL, "fcntl failed"), 1);
 	if (rn_redir_apply(redir, env))
 		return (rn_redir_restore(saved), 1);
