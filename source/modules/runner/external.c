@@ -91,8 +91,24 @@ static int	rn_ext_resolve(char **args, t_env **env, char **path)
 
 static void	rn_ext_child(char *path, char **args, char **envp)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	execve(path, args, envp);
 	_exit(rn_ext_execfail(path));
+}
+
+static int	rn_ext_wait(pid_t pid)
+{
+	int	status;
+
+	if (waitpid(pid, &status, 0) == -1)
+		return (sh_sig_mode(SIG_INTERACTIVE), 1);
+	sh_sig_mode(SIG_INTERACTIVE);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
 }
 
 int	rn_exec_ext(char **args, t_env **env)
@@ -110,18 +126,13 @@ int	rn_exec_ext(char **args, t_env **env)
 	envp = env_toarr(env);
 	if (!envp)
 		return (free(path), 1);
+	sh_sig_mode(SIG_EXEC);
 	pid = fork();
 	if (pid == -1)
-		return (free(path), sh_freeargs(envp), 1);
+		return (free(path), sh_freeargs(envp), sh_sig_mode(SIG_INTERACTIVE), 1);
 	if (pid == 0)
 		rn_ext_child(path, args, envp);
 	free(path);
 	sh_freeargs(envp);
-	if (waitpid(pid, &status, 0) == -1)
-		return (1);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
+	return (rn_ext_wait(pid));
 }

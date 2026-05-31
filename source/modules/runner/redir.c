@@ -132,18 +132,34 @@ static t_heredoc_state	rn_redir_heredoc_fill(int fd, char *target, t_env **env,
 	char	*line;
 	char	*out;
 
+	g_signal = 0;
+	sh_sig_mode(SIG_HEREDOC);
 	line = get_next_line(STDIN_FILENO);
 	while (line)
 	{
+		if (g_signal == SIGINT)
+		{
+			free(line);
+			g_signal = 0;
+			sh_sig_mode(SIG_INTERACTIVE);
+			return (HEREDOC_EOF);
+		}
 		if (rn_redir_delim(line, target))
+		{
+			sh_sig_mode(SIG_INTERACTIVE);
 			return (free(line), HEREDOC_DONE);
+		}
 		out = rn_redir_line(line, env, expand);
 		free(line);
 		if (!out || write(fd, out, ft_strlen(out)) < 0)
+		{
+			sh_sig_mode(SIG_INTERACTIVE);
 			return (free(out), HEREDOC_FAIL);
+		}
 		free(out);
 		line = get_next_line(STDIN_FILENO);
 	}
+	sh_sig_mode(SIG_INTERACTIVE);
 	return (HEREDOC_EOF);
 }
 

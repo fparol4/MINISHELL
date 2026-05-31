@@ -11,7 +11,8 @@ TEST_FLAGS = -DSNOW_ENABLED
 
 SHARED_SRCS = source/shared/error.c \
 			  source/shared/free.c \
-			  source/shared/string.c
+			  source/shared/string.c \
+			  source/shared/signal.c
 
 CORE_SRCS = source/shared/general.c
 

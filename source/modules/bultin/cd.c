@@ -12,23 +12,38 @@
 
 #include "../../../headers/minishell.h"
 
+static char	*f_cd_path(char **args, t_env **env)
+{
+	char	*path;
+
+	if (!args[0])
+	{
+		path = env_get(env, PWD_HOME);
+		if (!path)
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+		return (path);
+	}
+	if (ft_strcmp(args[0], "-") == 0)
+	{
+		path = env_get(env, ENV_OPWD);
+		if (!path)
+			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+		else
+			ft_putendl_fd(path, 1);
+		return (path);
+	}
+	return (args[0]);
+}
+
 int	bin_cd(char **args, t_env **env)
 {
 	char	*path;
 	char	*path_old;
 	char	buffer[BUFFER_SIZE];
 
-	if (!args[1])
-	{
-		path = env_get(env, PWD_HOME);
-		if (!path)
-		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-			return (1);
-		}
-	}
-	else
-		path = args[1];
+	path = f_cd_path(args, env);
+	if (!path)
+		return (1);
 	path_old = env_get(env, ENV_PWD);
 	if (chdir(path) != 0)
 	{

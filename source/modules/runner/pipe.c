@@ -72,6 +72,8 @@ static pid_t	rn_pipe_fork(t_pipe_context *ctx)
 			_exit(1);
 		}
 		rn_pipe_close(ctx->pipefd);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		_exit(rn_execute(ctx->node, ctx->env));
 	}
 	return (pid);
@@ -104,13 +106,16 @@ int	rn_pipe(t_exnode *node, t_env **env)
 		STDOUT_FILENO);
 	right_ctx.pipefd[0] = left_ctx.pipefd[0];
 	right_ctx.pipefd[1] = left_ctx.pipefd[1];
+	sh_sig_mode(SIG_EXEC);
 	left_pid = rn_pipe_fork(&left_ctx);
 	if (left_pid == -1)
-		return (rn_pipe_close(left_ctx.pipefd), 1);
+		return (rn_pipe_close(left_ctx.pipefd), sh_sig_mode(SIG_INTERACTIVE), 1);
 	right_pid = rn_pipe_fork(&right_ctx);
 	rn_pipe_close(left_ctx.pipefd);
 	if (right_pid == -1)
-		return (rn_pipe_wait(left_pid), 1);
+		return (rn_pipe_wait(left_pid), sh_sig_mode(SIG_INTERACTIVE), 1);
 	rn_pipe_wait(left_pid);
-	return (rn_pipe_wait(right_pid));
+	right_pid = rn_pipe_wait(right_pid);
+	sh_sig_mode(SIG_INTERACTIVE);
+	return (right_pid);
 }

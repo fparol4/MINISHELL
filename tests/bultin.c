@@ -1,5 +1,26 @@
 #include "tester.h"
 
+static int	fork_exit(char **args, t_env **env)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		dup2(open("/dev/null", O_WRONLY), STDOUT_FILENO);
+		dup2(open("/dev/null", O_WRONLY), STDERR_FILENO);
+		bin_exit(args, env);
+		_exit(1);
+	}
+	if (pid == -1)
+		return (-1);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (-1);
+}
+
 static char	*capture_builtin(int (*fn)(char **, t_env **), char **args,
 		t_env **env, int *code)
 {
@@ -79,6 +100,25 @@ describe(bin_export)
 		asserteq(bin_export(args, &env), 1);
 		env_free(&env);
 	}
+
+	it("prints sorted declare -x output when no args")
+	{
+		char	*envp[] = {"Z=last", "A=first", NULL};
+		char	*args[] = {NULL};
+		t_env	*env;
+		char	*out;
+		int		code;
+
+		env = env_init(envp);
+		out = capture_builtin(bin_export, args, &env, &code);
+		asserteq(code, 0);
+		assert(out != NULL);
+		assert(strstr(out, "declare -x A=\"first\"") != NULL);
+		assert(strstr(out, "declare -x Z=\"last\"") != NULL);
+		assert(strstr(out, "declare -x A") < strstr(out, "declare -x Z"));
+		free(out);
+		env_free(&env);
+	}
 }
 
 describe(bin_unset)
@@ -142,6 +182,109 @@ describe(bin_exit)
 
 		env = NULL;
 		asserteq(bin_exit(args, &env), 1);
+		env_free(&env);
+	}
+
+	it("exits with 2 for non-numeric argument")
+	{
+		char	*args[] = {"notanumber", NULL};
+		t_env	*env;
+
+		env = NULL;
+		asserteq(fork_exit(args, &env), 2);
+		env_free(&env);
+	}
+
+	it("exits with the given numeric code")
+	{
+		char	*args[] = {"42", NULL};
+		t_env	*env;
+
+		env = NULL;
+		asserteq(fork_exit(args, &env), 42);
+		env_free(&env);
+	}
+}
+
+describe(bin_cd)
+{
+	it("changes to HOME when no argument given")
+	{
+		char	cwd[4096];
+		char	*envp[] = {"HOME=/tmp", NULL};
+		char	*args[] = {NULL};
+		t_env	*env;
+
+		assert(getcwd(cwd, sizeof(cwd)) != NULL);
+		env = env_init(envp);
+		asserteq(bin_cd(args, &env), 0);
+		asserteq_str(env_get(&env, "PWD"), "/tmp");
+		chdir(cwd);
+		env_free(&env);
+	}
+
+	it("returns 1 when HOME is not set")
+	{
+		char	*args[] = {NULL};
+		t_env	*env;
+
+		env = NULL;
+		asserteq(bin_cd(args, &env), 1);
+		env_free(&env);
+	}
+
+	it("changes to a given path and updates PWD")
+	{
+		char	cwd[4096];
+		char	*args[] = {"/tmp", NULL};
+		t_env	*env;
+
+		assert(getcwd(cwd, sizeof(cwd)) != NULL);
+		env = NULL;
+		asserteq(bin_cd(args, &env), 0);
+		asserteq_str(env_get(&env, "PWD"), "/tmp");
+		chdir(cwd);
+		env_free(&env);
+	}
+
+	it("returns 1 for a missing path")
+	{
+		char	*args[] = {"/tmp/__minishell_cd_missing__", NULL};
+		t_env	*env;
+
+		env = NULL;
+		asserteq(bin_cd(args, &env), 1);
+		env_free(&env);
+	}
+
+	it("cd - goes to OPWD and prints it")
+	{
+		char	cwd[4096];
+		char	*args[] = {"-", NULL};
+		char	*envp[] = {"OPWD=/tmp", NULL};
+		t_env	*env;
+		char	*out;
+		int		code;
+
+		assert(getcwd(cwd, sizeof(cwd)) != NULL);
+		env = env_init(envp);
+		out = capture_builtin(bin_cd, args, &env, &code);
+		asserteq(code, 0);
+		asserteq_str(env_get(&env, "PWD"), "/tmp");
+		assert(out != NULL);
+		assert(strstr(out, "/tmp") != NULL);
+		chdir(cwd);
+		free(out);
+		env_free(&env);
+	}
+
+	it("cd - returns 1 when OPWD is not set")
+	{
+		char	*args[] = {"-", NULL};
+		t_env	*env;
+
+		env = NULL;
+		asserteq(bin_cd(args, &env), 1);
 		env_free(&env);
 	}
 }

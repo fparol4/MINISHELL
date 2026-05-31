@@ -1,0 +1,58 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/26 15:42:39 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/05/26 15:42:39 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../headers/sh_signal.h"
+#include <unistd.h>
+
+volatile sig_atomic_t	g_signal = 0;
+
+static void	sh_sigint_interactive(int sig)
+{
+	(void)sig;
+	g_signal = SIGINT;
+	write(STDOUT_FILENO, "\n", 1);
+}
+
+static void	sh_sigint_heredoc(int sig)
+{
+	(void)sig;
+	g_signal = SIGINT;
+	write(STDOUT_FILENO, "\n", 1);
+}
+
+void	sh_sig_mode(t_sig_mode mode)
+{
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
+
+	sigemptyset(&sa_int.sa_mask);
+	sigemptyset(&sa_quit.sa_mask);
+	sa_int.sa_flags = 0;
+	sa_quit.sa_flags = 0;
+	if (mode == SIG_INTERACTIVE)
+	{
+		sa_int.sa_handler = sh_sigint_interactive;
+		sa_quit.sa_handler = SIG_IGN;
+	}
+	else if (mode == SIG_EXEC)
+	{
+		sa_int.sa_handler = SIG_IGN;
+		sa_quit.sa_handler = SIG_IGN;
+	}
+	else
+	{
+		sa_int.sa_handler = sh_sigint_heredoc;
+		sa_quit.sa_handler = SIG_IGN;
+	}
+	sigaction(SIGINT, &sa_int, NULL);
+	sigaction(SIGQUIT, &sa_quit, NULL);
+}

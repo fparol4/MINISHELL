@@ -2,6 +2,7 @@
 # define RUNNER_H
 
 # include "./minishell.h"
+# include "./sh_signal.h"
 
 char	**rn_expand(char **args, t_env **env);
 int		rn_execute(t_exnode *node, t_env **env);

@@ -6,5 +6,6 @@
 #include "runner/pipe.c"
 #include "runner/redir.c"
 #include "runner/status.c"
+#include "runner/signal.c"
 
 snow_main();
