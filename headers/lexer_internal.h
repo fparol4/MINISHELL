@@ -27,8 +27,8 @@ typedef struct s_rules
 	unsigned int	start_operator;
 }	t_rules;
 
-void			scanner_tablechar(t_scanner_table *table);
-void			scanner_tabletoken(t_scanner_table *table);
+void			scanner_table_char(t_scanner_table *table);
+void			scanner_table_token(t_scanner_table *table);
 void			scanner_advance(t_scanner *sc);
 int				scanner_isend(t_scanner *sc);
 size_t			scanner_markstart(t_scanner *sc);

@@ -12,7 +12,7 @@ void	rules_init(t_rules *rules)
 {
 	if (!rules)
 		return ;
-	scanner_tablechar(&rules->table);
-	scanner_tabletoken(&rules->table);
+	scanner_table_char(&rules->table);
+	scanner_table_token(&rules->table);
 	define_rules(rules);
 }

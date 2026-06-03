@@ -43,7 +43,7 @@ int				scanner_isend(t_scanner *sc);
 size_t			scanner_markstart(t_scanner *sc);
 void			scanner_until(t_scanner *sc, int (*f)(int));
 char			*scanner_extract(t_scanner *sc);
-void			scanner_tablechar(t_scanner_table *table);
-void			scanner_tabletoken(t_scanner_table *table);
+void			scanner_table_char(t_scanner_table *table);
+void			scanner_table_token(t_scanner_table *table);
 
 #endif

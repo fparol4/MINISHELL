@@ -99,16 +99,18 @@ re: fclean all
 test: t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
 
 t\:envm: $(LIBFT)
+	@mkdir -p tests/dist
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/envm.c \
 			$(SHARED_SRCS) \
 			$(ENVM_SRCS) \
 			$(LIBFT) \
 			-lreadline \
-			-o /tmp/minishell_envm_tests
-	@/tmp/minishell_envm_tests
+			-o tests/dist/envm
+	@tests/dist/envm
 
 t\:builtin: $(LIBFT)
+	@mkdir -p tests/dist
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/bultin.c \
 			$(SHARED_SRCS) \
@@ -117,20 +119,22 @@ t\:builtin: $(LIBFT)
 			$(filter-out source/modules/envm/toarr.c,$(ENVM_SRCS)) \
 			$(LIBFT) \
 			-lreadline \
-			-o /tmp/minishell_builtin_tests
-	@/tmp/minishell_builtin_tests
+			-o tests/dist/builtin
+	@tests/dist/builtin
 
 t\:runner: $(LIBFT)
+	@mkdir -p tests/dist
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/runner.c \
 		$(RUNNER_SRCS) \
 		$(SHARED_SRCS) \
 			$(BUILTIN_SRCS) \
 			$(ENVM_SRCS) \
-			$(LIBFT) -lreadline -o /tmp/minishell_runner_tests
-	@/tmp/minishell_runner_tests
+			$(LIBFT) -lreadline -o tests/dist/runner
+	@tests/dist/runner
 
 t\:core: $(LIBFT)
+	@mkdir -p tests/dist
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/core.c \
 		source/core/core.c \
@@ -138,20 +142,22 @@ t\:core: $(LIBFT)
 			$(ENVM_SRCS) \
 			$(LIBFT) \
 			-lreadline \
-			-o /tmp/minishell_core_tests
-	@/tmp/minishell_core_tests
+			-o tests/dist/core
+	@tests/dist/core
 
 t\:lexer: $(LIBFT)
+	@mkdir -p tests/dist
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 			tests/lexer.c \
 			$(LEXER_SRCS) \
 			source/shared/error.c \
 			source/shared/string.c \
 			$(LIBFT) \
-			-o /tmp/minishell_lexer_tests
-	@/tmp/minishell_lexer_tests
+			-o tests/dist/lexer
+	@tests/dist/lexer
 
 t\:parser: $(LIBFT)
+	@mkdir -p tests/dist
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/parser.c \
 			$(PARSER_SRCS) \
@@ -159,8 +165,8 @@ t\:parser: $(LIBFT)
 			source/shared/error.c \
 			source/shared/string.c \
 			$(LIBFT) \
-			-o /tmp/minishell_parser_tests
-	@/tmp/minishell_parser_tests
+			-o tests/dist/parser
+	@tests/dist/parser
 
 .PHONY: all clean fclean re test \
 	t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
