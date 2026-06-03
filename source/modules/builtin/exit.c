@@ -14,7 +14,7 @@
 #include "../../../headers/runner.h"
 #include <limits.h>
 
-static int	f_exit_value(char *arg, long long *out)
+static int	exit_value(char *arg, long long *out)
 {
 	unsigned long long	value;
 	unsigned long long	limit;
@@ -61,7 +61,7 @@ int	bin_exit(char **args, t_env **env)
 		ft_putendl_fd("exit", 1);
 	if (!args || !args[0])
 		exit(rn_status_get(env));
-	if (!f_exit_value(args[0], &code))
+	if (!exit_value(args[0], &code))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[0], 2);

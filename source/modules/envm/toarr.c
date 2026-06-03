@@ -13,7 +13,7 @@
 #include "../../../headers/minishell.h"
 #include "../../../headers/env.h"
 
-static char	*f_toentry(const char *key, const char *value)
+static char	*toentry(const char *key, const char *value)
 {
 	char	*tmp;
 	char	*entry;
@@ -29,7 +29,7 @@ static char	*f_toentry(const char *key, const char *value)
 	return (entry);
 }
 
-static int	f_envsize(t_env **env)
+static int	envsize(t_env **env)
 {
 	int		size;
 	t_env	*node;
@@ -51,7 +51,7 @@ char	**env_toarr(t_env **env)
 	char	**arr;
 	t_env	*node;
 
-	es = f_envsize(env);
+	es = envsize(env);
 	arr = calloc(es + 1, sizeof(char *));
 	if (!arr)
 		return (NULL);
@@ -61,7 +61,7 @@ char	**env_toarr(t_env **env)
 	{
 			if (node->value && ft_strcmp(node->key, ENV_ERRCODE) != 0)
 		{
-			arr[i] = f_toentry(node->key, node->value);
+			arr[i] = toentry(node->key, node->value);
 			if (!arr[i])
 			{
 				sh_freeargs(arr);

@@ -12,7 +12,7 @@
 
 #include "./common.h"
 
-static void	f_shlvl(t_env *env)
+static void	shlvl(t_env *env)
 {
 	int		shlvl;
 	t_env	*node;
@@ -34,7 +34,7 @@ static void	f_shlvl(t_env *env)
 	}
 }
 
-static t_env	*f_entryparse(const char *entry)
+static t_env	*entryparse(const char *entry)
 {
 	char	*eq;
 	char	*key;
@@ -61,7 +61,7 @@ static t_env	*f_entryparse(const char *entry)
 	return (node);
 }
 
-static char	**f_minenv(void)
+static char	**minenv(void)
 {
 	char	cwd[1024];
 	char	**env;
@@ -91,13 +91,13 @@ t_env	*env_init(char **env)
 	t_env	*node;
 
 	if (!env)
-		return (env_init(f_minenv()));
+		return (env_init(minenv()));
 	i = 0;
 	head = NULL;
 	tail = NULL;
 	while (env[i])
 	{
-		node = f_entryparse(env[i]);
+		node = entryparse(env[i]);
 		if (!node)
 		{
 			env_free(&head);
@@ -110,6 +110,6 @@ t_env	*env_init(char **env)
 		tail = node;
 		i++;
 	}
-	f_shlvl(head);
+	shlvl(head);
 	return (head);
 }

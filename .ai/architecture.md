@@ -112,26 +112,26 @@ source/
 ## Builtin Module
 
 - `source/modules/builtin/cd.c`
-  - `fgetpath` static
+  - `getpath` static
   - `bin_cd`
 
 - `source/modules/builtin/echo.c`
-  - `f_newline` static
+  - `newline` static
   - `bin_echo`
 
 - `source/modules/builtin/env.c`
   - `bin_env`
 
 - `source/modules/builtin/exit.c`
-  - `f_exit_value` static
+  - `exit_value` static
   - `bin_exit`
 
 - `source/modules/builtin/export.c`
-  - `f_vid` static
-  - `f_sortkeys` static
-  - `f_getkeys` static
-  - `f_printsize` static
-  - `f_print` static
+  - `vid` static
+  - `sortkeys` static
+  - `getkeys` static
+  - `printsize` static
+  - `print_export` static
   - `bin_export`
 
 - `source/modules/builtin/pwd.c`
@@ -153,9 +153,9 @@ source/
   - `env_get`
 
 - `source/modules/envm/init.c`
-  - `f_shlvl` static
-  - `f_entryparse` static
-  - `f_minenv` static
+  - `shlvl` static
+  - `entryparse` static
+  - `minenv` static
   - `env_init`
 
 - `source/modules/envm/set.c`
@@ -165,8 +165,8 @@ source/
   - `env_size`
 
 - `source/modules/envm/toarr.c`
-  - `f_toentry` static
-  - `f_envsize` static
+  - `toentry` static
+  - `envsize` static
   - `env_toarr`
 
 - `source/modules/envm/unset.c`
@@ -263,18 +263,18 @@ source/
   - `rn_execute`
 
 - `source/modules/runner/expander.c`
-  - `f_listgrow` static
-  - `f_listadd` static
-  - `f_wordgrow` static
-  - `f_wordchar` static
-  - `f_wordstr` static
-  - `f_flush_word` static
-  - `f_add_unquoted` static
-  - `f_varvalue` static
-  - `f_expand_var` static
-  - `f_expand_quoted` static
-  - `f_single` static
-  - `f_double` static
+  - `listgrow` static
+  - `listadd` static
+  - `wordgrow` static
+  - `wordchar` static
+  - `wordstr` static
+  - `flush_word` static
+  - `add_unquoted` static
+  - `varvalue` static
+  - `expand_var` static
+  - `expand_quoted` static
+  - `single` static
+  - `double_quote` static
   - `rn_argexpand` static
   - `rn_expand`
 

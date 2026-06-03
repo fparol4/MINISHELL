@@ -27,7 +27,7 @@ typedef struct s_word
 	int		active;
 }			t_word;
 
-static int	f_listgrow(t_arglist *list)
+static int	listgrow(t_arglist *list)
 {
 	char	**next;
 	int		i;
@@ -52,9 +52,9 @@ static int	f_listgrow(t_arglist *list)
 	return (0);
 }
 
-static int	f_listadd(t_arglist *list, char *item)
+static int	listadd(t_arglist *list, char *item)
 {
-	if (f_listgrow(list))
+	if (listgrow(list))
 	{
 		free(item);
 		return (1);
@@ -64,7 +64,7 @@ static int	f_listadd(t_arglist *list, char *item)
 	return (0);
 }
 
-static int	f_wordgrow(t_word *word, int add)
+static int	wordgrow(t_word *word, int add)
 {
 	char	*next;
 	int		cap;
@@ -87,9 +87,9 @@ static int	f_wordgrow(t_word *word, int add)
 	return (0);
 }
 
-static int	f_wordchar(t_word *word, char c)
+static int	wordchar(t_word *word, char c)
 {
-	if (f_wordgrow(word, 1))
+	if (wordgrow(word, 1))
 		return (1);
 	word->buf[word->len++] = c;
 	word->buf[word->len] = '\0';
@@ -97,14 +97,14 @@ static int	f_wordchar(t_word *word, char c)
 	return (0);
 }
 
-static int	f_wordstr(t_word *word, const char *str)
+static int	wordstr(t_word *word, const char *str)
 {
 	int	len;
 
 	if (!str)
 		return (0);
 	len = ft_strlen(str);
-	if (f_wordgrow(word, len))
+	if (wordgrow(word, len))
 		return (1);
 	ft_memcpy(word->buf + word->len, str, len);
 	word->len += len;
@@ -113,7 +113,7 @@ static int	f_wordstr(t_word *word, const char *str)
 	return (0);
 }
 
-static int	f_flush_word(t_arglist *list, t_word *word)
+static int	flush_word(t_arglist *list, t_word *word)
 {
 	char	*out;
 
@@ -122,7 +122,7 @@ static int	f_flush_word(t_arglist *list, t_word *word)
 	out = ft_strdup(word->buf);
 	if (!out)
 		return (1);
-	if (f_listadd(list, out))
+	if (listadd(list, out))
 		return (1);
 	word->len = 0;
 	word->active = 0;
@@ -131,7 +131,7 @@ static int	f_flush_word(t_arglist *list, t_word *word)
 	return (0);
 }
 
-static int	f_add_unquoted(t_arglist *list, t_word *word, const char *value)
+static int	add_unquoted(t_arglist *list, t_word *word, const char *value)
 {
 	int	i;
 
@@ -140,21 +140,21 @@ static int	f_add_unquoted(t_arglist *list, t_word *word, const char *value)
 	{
 		if (sh_isspace(value[i]))
 		{
-			if (f_flush_word(list, word))
+			if (flush_word(list, word))
 				return (1);
 			while (sh_isspace(value[i]))
 				i++;
 		}
 		else
 		{
-			if (f_wordchar(word, value[i++]))
+			if (wordchar(word, value[i++]))
 				return (1);
 		}
 	}
 	return (0);
 }
 
-static char	*f_varvalue(char *arg, int *i, t_env **env)
+static char	*varvalue(char *arg, int *i, t_env **env)
 {
 	char	*key;
 	char	*value;
@@ -184,34 +184,34 @@ static char	*f_varvalue(char *arg, int *i, t_env **env)
 	return (value);
 }
 
-static int	f_expand_var(t_arglist *list, t_word *word, char *arg, int *i,
+static int	expand_var(t_arglist *list, t_word *word, char *arg, int *i,
 		t_env **env)
 {
 	char	*value;
 
-	value = f_varvalue(arg, i, env);
+	value = varvalue(arg, i, env);
 	if (!value)
-		return (f_wordchar(word, '$'));
-	return (f_add_unquoted(list, word, value));
+		return (wordchar(word, '$'));
+	return (add_unquoted(list, word, value));
 }
 
-static int	f_expand_quoted(t_word *word, char *arg, int *i, t_env **env)
+static int	expand_quoted(t_word *word, char *arg, int *i, t_env **env)
 {
 	char	*value;
 
-	value = f_varvalue(arg, i, env);
+	value = varvalue(arg, i, env);
 	if (!value)
-		return (f_wordchar(word, '$'));
-	return (f_wordstr(word, value));
+		return (wordchar(word, '$'));
+	return (wordstr(word, value));
 }
 
-static int	f_single(t_word *word, char *arg, int *i)
+static int	single(t_word *word, char *arg, int *i)
 {
 	(*i)++;
 	word->active = 1;
 	while (arg[*i] && arg[*i] != '\'')
 	{
-		if (f_wordchar(word, arg[*i]))
+		if (wordchar(word, arg[*i]))
 			return (1);
 		(*i)++;
 	}
@@ -220,7 +220,7 @@ static int	f_single(t_word *word, char *arg, int *i)
 	return (0);
 }
 
-static int	f_double(t_word *word, char *arg, int *i, t_env **env)
+static int	double_quote(t_word *word, char *arg, int *i, t_env **env)
 {
 	(*i)++;
 	word->active = 1;
@@ -228,12 +228,12 @@ static int	f_double(t_word *word, char *arg, int *i, t_env **env)
 	{
 		if (arg[*i] == '$')
 		{
-			if (f_expand_quoted(word, arg, i, env))
+			if (expand_quoted(word, arg, i, env))
 				return (1);
 		}
 		else
 		{
-			if (f_wordchar(word, arg[*i]))
+			if (wordchar(word, arg[*i]))
 				return (1);
 			(*i)++;
 		}
@@ -254,30 +254,30 @@ static int	rn_argexpand(char *arg, t_arglist *out, t_env **env)
 	{
 		if (arg[i] == '\'')
 		{
-			if (f_single(&word, arg, &i))
+			if (single(&word, arg, &i))
 				return (free(word.buf), 1);
 		}
 		else if (arg[i] == '"')
 		{
-			if (f_double(&word, arg, &i, env))
+			if (double_quote(&word, arg, &i, env))
 				return (free(word.buf), 1);
 		}
 		else if (arg[i] == '$')
 		{
-			if (f_expand_var(out, &word, arg, &i, env))
+			if (expand_var(out, &word, arg, &i, env))
 				return (free(word.buf), 1);
 		}
 		else if (sh_isspace(arg[i]))
 		{
-			if (f_flush_word(out, &word))
+			if (flush_word(out, &word))
 				return (free(word.buf), 1);
 			while (sh_isspace(arg[i]))
 				i++;
 		}
-		else if (f_wordchar(&word, arg[i++]))
+		else if (wordchar(&word, arg[i++]))
 			return (free(word.buf), 1);
 	}
-	if (f_flush_word(out, &word))
+	if (flush_word(out, &word))
 		return (free(word.buf), 1);
 	free(word.buf);
 	return (0);
@@ -299,7 +299,7 @@ char	**rn_expand(char **args, t_env **env)
 		}
 		i++;
 	}
-	if (f_listgrow(&out))
+	if (listgrow(&out))
 	{
 		sh_freeargs(out.items);
 		return (NULL);

@@ -12,7 +12,7 @@
 
 #include "../../../headers/minishell.h"
 
-static int	f_vid(char *s)
+static int	vid(char *s)
 {
 	int	i;
 
@@ -28,7 +28,7 @@ static int	f_vid(char *s)
 	return (1);
 }
 
-static void	f_sortkeys(char **keys, int size)
+static void	sortkeys(char **keys, int size)
 {
 	int		i;
 	int		j;
@@ -52,7 +52,7 @@ static void	f_sortkeys(char **keys, int size)
 	}
 }
 
-static char	**f_getkeys(t_env **env, int size)
+static char	**getkeys(t_env **env, int size)
 {
 	int		i;
 	t_env	*node;
@@ -69,11 +69,11 @@ static char	**f_getkeys(t_env **env, int size)
 			keys[i++] = node->key;
 		node = node->next;
 	}
-	f_sortkeys(keys, i);
+	sortkeys(keys, i);
 	return (keys);
 }
 
-static int	f_printsize(t_env **env)
+static int	printsize(t_env **env)
 {
 	int		size;
 	t_env	*node;
@@ -89,15 +89,15 @@ static int	f_printsize(t_env **env)
 	return (size);
 }
 
-static int	f_print(t_env **env)
+static int	print_export(t_env **env)
 {
 	int		i;
 	int		k_size;
 	t_env	*node;
 	char	**keys;
 
-	k_size = f_printsize(env);
-	keys = f_getkeys(env, k_size);
+	k_size = printsize(env);
+	keys = getkeys(env, k_size);
 	if (!keys)
 		return (1);
 	i = 0;
@@ -130,11 +130,11 @@ int	bin_export(char **args, t_env **env)
 
 	code = 0;
 	if (!args[0])
-		return (f_print(env));
+		return (print_export(env));
 	i = 0;
 	while (args[i])
 	{
-		if (!f_vid(args[i]))
+		if (!vid(args[i]))
 		{
 			ft_putstr_fd("minishell: export: '", 2);
 			ft_putstr_fd(args[i], 2);

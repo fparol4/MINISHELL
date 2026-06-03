@@ -12,7 +12,7 @@
 
 #include "../../../headers/minishell.h"
 
-static int	f_newline(char *arg)
+static int	newline(char *arg)
 {
 	int	i;
 
@@ -38,7 +38,7 @@ int	bin_echo(char **args, t_env **env)
 	}
 	i = 0;
 	nl = 1;
-	while (args[i] && f_newline(args[i]))
+	while (args[i] && newline(args[i]))
 	{
 		nl = 0;
 		i++;

@@ -12,7 +12,7 @@
 
 #include "../../../headers/minishell.h"
 
-static char	*fgetpath(char **args, t_env **env)
+static char	*getpath(char **args, t_env **env)
 {
 	char	*path;
 
@@ -48,7 +48,7 @@ int	bin_cd(char **args, t_env **env)
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return (1);
 	}
-	path = f_cd_path(args, env);
+	path = getpath(args, env);
 	if (!path)
 		return (1);
 	path_old = env_get(env, ENV_PWD);
