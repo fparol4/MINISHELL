@@ -7,7 +7,7 @@ static t_manager	*lex(const char *input)
 	t_scanner	sc;
 
 	scanner_init(&sc, input);
-	return (lexer_control(&sc));
+	return (lexer(&sc));
 }
 
 static t_list_token	*nth_token(t_manager *m, unsigned int n)

@@ -1,6 +1,6 @@
 #include "../../headers/lexer_internal.h"
 
-static void	free_token(void *content)
+void	token_free(void *content)
 {
 	t_list_token	*token;
 
@@ -12,26 +12,7 @@ static void	free_token(void *content)
 	}
 }
 
-void	lexer_free(t_manager *manager)
-{
-	t_node	*current;
-	t_node	*next;
-
-	if (!manager)
-		return ;
-	current = manager->head;
-	while (current)
-	{
-		next = current->next;
-		free_token(current->content);
-		free(current);
-		current = next;
-	}
-	free(manager);
-}
-
-t_list_token	*add_token_to_list(t_manager *manager, char *value,
-					t_token_type type)
+t_list_token	*token_add(t_manager *manager, char *value, t_token_type type)
 {
 	t_node			*node;
 	t_list_token	*token;
@@ -50,4 +31,22 @@ t_list_token	*add_token_to_list(t_manager *manager, char *value,
 		return (free(token->value), free(token), NULL);
 	ft_dlist_add_tail(manager, node);
 	return (token);
+}
+
+void	lexer_free(t_manager *manager)
+{
+	t_node	*current;
+	t_node	*next;
+
+	if (!manager)
+		return ;
+	current = manager->head;
+	while (current)
+	{
+		next = current->next;
+		token_free(current->content);
+		free(current);
+		current = next;
+	}
+	free(manager);
 }

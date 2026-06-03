@@ -39,10 +39,11 @@ void			scanner_init(t_scanner *sc, const char *input);
 void			scanner_advance(t_scanner *sc);
 unsigned int	scanner_current(t_scanner *sc);
 char			scanner_peek(t_scanner *sc, size_t offset);
-int				scanner_is_end(t_scanner *sc);
-size_t			scanner_mark_start(t_scanner *sc);
-void			scanner_take_while(t_scanner *sc, int (*f)(int));
+int				scanner_isend(t_scanner *sc);
+size_t			scanner_markstart(t_scanner *sc);
+void			scanner_until(t_scanner *sc, int (*f)(int));
 char			*scanner_extract(t_scanner *sc);
-void			init_char_table(t_char_table *table);
+void			scanner_tablechar(t_char_table *table);
+void			scanner_tabletoken(t_char_table *table);
 
 #endif

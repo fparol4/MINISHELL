@@ -44,15 +44,15 @@ RUNNER_SRCS = source/modules/runner/path.c \
 			  source/modules/runner/external.c \
 			  source/modules/runner/expander.c
 
-LEXER_SRCS = source/modules/lexer/scanner/utils.c \
+LEXER_SRCS = source/modules/lexer/scanner/load.c \
+			 source/modules/lexer/scanner/move.c \
+			 source/modules/lexer/scanner/get.c \
+			 source/modules/lexer/scanner/table.c \
 			 source/modules/lexer/extract.c \
 			 source/modules/lexer/lexer.c \
-			 source/modules/lexer/lexer_init.c \
-			 source/modules/lexer/lexer_rules.c \
-			 source/modules/lexer/quote_state.c \
-			 source/modules/lexer/token.c \
-			 source/modules/lexer/token_table.c \
-			 source/modules/lexer/token_type.c
+			 source/modules/lexer/rules.c \
+			 source/modules/lexer/state.c \
+			 source/modules/lexer/token.c
 
 PARSER_SRCS = source/modules/parser/dynarray.c \
 			  source/modules/parser/parser.c \

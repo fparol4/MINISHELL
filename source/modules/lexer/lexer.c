@@ -1,37 +1,29 @@
 #include "../../headers/lexer_internal.h"
 
-static int	ft_state_machine(t_manager *manager, t_scanner *input,
-				t_rules *rules)
+static int	init_lexer_variable(t_manager **manager, t_rules **rules)
 {
-	unsigned int	props;
-
-	if (!input)
-		return (1);
-	while (!scanner_is_end(input))
+	*manager = ft_dlist_new(0, NULL);
+	if (!*manager)
+		return (0);
+	*rules = malloc(sizeof(t_rules));
+	if (!*rules)
 	{
-		props = rules->table.props[scanner_current(input)];
-		if (props & rules->start_operator)
-			get_operator(manager, input, rules);
-		else if (props & rules->start_word)
-		{
-			if (!get_word(manager, input, rules))
-				return (0);
-		}
-		else
-			scanner_advance(input);
+		free(*manager);
+		*manager = NULL;
+		return (0);
 	}
 	return (1);
 }
 
-t_manager	*lexer_control(t_scanner *input)
+t_manager	*lexer(t_scanner *input)
 {
 	t_manager	*manager;
 	t_rules		*rules;
 
 	if (!init_lexer_variable(&manager, &rules))
 		return (NULL);
-	define_rules(rules);
-	if (!ft_state_machine(manager, input, rules))
+	rules_init(rules);
+	if (!state_machine(manager, input, rules))
 	{
 		sh_stxerr(SNTX_UNCLOSED_QUOTE);
 		free(rules);

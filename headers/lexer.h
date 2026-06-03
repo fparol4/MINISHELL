@@ -25,7 +25,7 @@ typedef struct s_list_token
 	t_bool			quoted;
 }	t_list_token;
 
-t_manager	*lexer_control(t_scanner *scanner);
+t_manager	*lexer(t_scanner *scanner);
 void		lexer_free(t_manager *manager);
 
 #endif

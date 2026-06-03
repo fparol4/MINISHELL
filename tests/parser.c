@@ -9,7 +9,7 @@ static t_ast	*parse_input(const char *input)
 	t_ast		*ast;
 
 	scanner_init(&sc, input);
-	m = lexer_control(&sc);
+	m = lexer(&sc);
 	if (!m)
 		return (NULL);
 	ast = parser_controller(m);

@@ -6,6 +6,7 @@
 # include "./shared.h"
 
 # define OFFSET 8
+# define OPERATOR_MAX_LEN 2
 
 typedef enum e_lexer_table
 {
@@ -26,16 +27,30 @@ typedef struct s_rules
 	unsigned int	start_operator;
 }	t_rules;
 
-t_list_token	*add_token_to_list(t_manager *manager, char *value,
-					t_token_type type);
-void			update_quote_state(unsigned int props, unsigned int *state);
-void			init_token_table(t_char_table *table);
-int				init_lexer_variable(t_manager **manager, t_rules **rules);
-void			define_rules(t_rules *rules);
+void			scanner_tablechar(t_char_table *table);
+void			scanner_tabletoken(t_char_table *table);
+void			scanner_advance(t_scanner *sc);
+int				scanner_isend(t_scanner *sc);
+size_t			scanner_markstart(t_scanner *sc);
+void			scanner_until(t_scanner *sc, int (*f)(int));
+unsigned int	scanner_current(t_scanner *sc);
+char			scanner_peek(t_scanner *sc, size_t offset);
+char			*scanner_extract(t_scanner *sc);
+
+void			rules_init(t_rules *rules);
 t_token_type	define_type(char *type);
-t_list_token	*get_word(t_manager *manager, t_scanner *input,
+
+t_list_token	*extract_getword(t_manager *manager, t_scanner *input,
 					t_rules *rules);
-t_list_token	*get_operator(t_manager *manager, t_scanner *input,
+t_list_token	*extract_getoperator(t_manager *manager, t_scanner *input,
 					t_rules *rules);
+
+void			token_free(void *content);
+t_list_token	*token_add(t_manager *manager, char *value, t_token_type type);
+
+int				state_machine(t_manager *manager, t_scanner *input,
+					t_rules *rules);
+
+void			lexer_free(t_manager *manager);
 
 #endif

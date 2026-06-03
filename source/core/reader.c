@@ -28,7 +28,7 @@ static int	core_process_line(t_shell *shell, char *line)
 	t_ast		*ast;
 
 	scanner_init(&sc, line);
-	manager = lexer_control(&sc);
+	manager = lexer(&sc);
 	if (!manager)
 		return (rn_status_set(&shell->env, 2), 0);
 	ast = parser_controller(manager);
