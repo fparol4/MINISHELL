@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.c                                              :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,41 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./common.h"
+#include "./env.h"
 
-int	env_set(t_env **env, const char *key, const char *value)
+int	env_unset(t_env **env, const char *key)
 {
-	char	*vdup;
-	size_t	key_l;
+	t_env	*prev;
 	t_env	*node;
-	t_env	*tail;
 
-	if (!env || !key)
-		return (-1);
-	key_l = ft_strlen(key);
+	if (!env || !*env || !key)
+		return (0);
+	prev = NULL;
 	node = *env;
 	while (node)
 	{
 		if (ft_strcmp(node->key, key) == 0)
 		{
-			if (!value)
-				return (0);
-			vdup = ft_strdup(value);
-			if (!vdup)
-				return (-1);
-			free(node->value);
-			node->value = vdup;
+			if (prev)
+				prev->next = node->next;
+			else
+				*env = node->next;
+			f_freenode(node);
 			return (0);
 		}
-		tail = node;
+		prev = node;
 		node = node->next;
 	}
-	node = f_newnode(key, value);
-	if (!node)
-		return (-1);
-	if (!*env)
-		*env = node;
-	else
-		tail->next = node;
 	return (0);
 }

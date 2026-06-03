@@ -18,22 +18,22 @@ SHARED_SRCS = source/shared/error.c \
 CORE_SRCS = source/core/core.c \
 			source/core/reader.c
 
-BUILTIN_SRCS = source/modules/builtin/cd.c \
-			   source/modules/builtin/echo.c \
-			   source/modules/builtin/env.c \
-			   source/modules/builtin/exit.c \
-			   source/modules/builtin/export.c \
-			   source/modules/builtin/pwd.c \
-			   source/modules/builtin/unset.c
+BUILTIN_SRCS = source/modules/bin/cd.c \
+			   source/modules/bin/echo.c \
+			   source/modules/bin/env.c \
+			   source/modules/bin/exit.c \
+			   source/modules/bin/export.c \
+			   source/modules/bin/pwd.c \
+			   source/modules/bin/unset.c
 
-ENVM_SRCS = source/modules/envm/common.c \
-			source/modules/envm/free.c \
-			source/modules/envm/get.c \
-			source/modules/envm/init.c \
-			source/modules/envm/size.c \
-			source/modules/envm/set.c \
-			source/modules/envm/toarr.c \
-			source/modules/envm/unset.c
+ENVM_SRCS = source/modules/env/list.c \
+			source/modules/env/free.c \
+			source/modules/env/get.c \
+			source/modules/env/init.c \
+			source/modules/env/size.c \
+			source/modules/env/set.c \
+			source/modules/env/toarr.c \
+			source/modules/env/unset.c
 
 RUNNER_SRCS = source/modules/runner/path.c \
 			  source/modules/runner/pipe.c \
@@ -116,7 +116,7 @@ t\:builtin: $(LIBFT)
 			$(SHARED_SRCS) \
 			$(BUILTIN_SRCS) \
 			source/modules/runner/status.c \
-			$(filter-out source/modules/envm/toarr.c,$(ENVM_SRCS)) \
+			$(filter-out source/modules/env/toarr.c,$(ENVM_SRCS)) \
 			$(LIBFT) \
 			-lreadline \
 			-o tests/dist/builtin

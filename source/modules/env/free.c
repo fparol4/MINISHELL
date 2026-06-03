@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,30 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./common.h"
+#include "./env.h"
 
-int	env_unset(t_env **env, const char *key)
+int	env_free(t_env **env)
 {
-	t_env	*prev;
 	t_env	*node;
+	t_env	*next;
 
-	if (!env || !*env || !key)
-		return (0);
-	prev = NULL;
+	if (!env || !*env)
+		return (1);
 	node = *env;
 	while (node)
 	{
-		if (ft_strcmp(node->key, key) == 0)
-		{
-			if (prev)
-				prev->next = node->next;
-			else
-				*env = node->next;
-			f_freenode(node);
-			return (0);
-		}
-		prev = node;
-		node = node->next;
+		next = node->next;
+		f_freenode(node);
+		node = next;
 	}
-	return (0);
+	*env = NULL;
+	return (1);
 }

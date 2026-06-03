@@ -1,10 +1,10 @@
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "./scanner.h"
+# include "../libraries/libft/libft.h"
 
-typedef t_dlist_node	t_node;
-typedef t_dlist			t_manager;
+typedef struct s_dlist_node	t_node;
+typedef struct s_dlist			t_manager;
 
 typedef enum e_token_type
 {
@@ -25,7 +25,7 @@ typedef struct s_list_token
 	t_bool			quoted;
 }	t_list_token;
 
-t_manager	*lexer(t_scanner *scanner);
+t_manager	*lexer(const char *input);
 void		lexer_free(t_manager *manager);
 
 #endif
