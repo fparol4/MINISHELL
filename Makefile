@@ -101,17 +101,17 @@ re: fclean all
 test: t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
 
 t\:envm: $(LIBFT)
-	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/envm.c \
 			$(SHARED_SRCS) \
 			$(ENVM_SRCS) \
 			$(LIBFT) \
 			-lreadline \
 			-o /tmp/minishell_envm_tests
-	/tmp/minishell_envm_tests
+	@/tmp/minishell_envm_tests
 
 t\:builtin: $(LIBFT)
-	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/bultin.c \
 			$(SHARED_SRCS) \
 			$(BUILTIN_SRCS) \
@@ -120,20 +120,20 @@ t\:builtin: $(LIBFT)
 			$(LIBFT) \
 			-lreadline \
 			-o /tmp/minishell_builtin_tests
-	/tmp/minishell_builtin_tests
+	@/tmp/minishell_builtin_tests
 
 t\:runner: $(LIBFT)
-	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/runner.c \
 		$(RUNNER_SRCS) \
 		$(SHARED_SRCS) \
 			$(BUILTIN_SRCS) \
 			$(ENVM_SRCS) \
 			$(LIBFT) -lreadline -o /tmp/minishell_runner_tests
-	/tmp/minishell_runner_tests
+	@/tmp/minishell_runner_tests
 
 t\:core: $(LIBFT)
-	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/core.c \
 		source/core/init.c \
 			$(SHARED_SRCS) \
@@ -141,26 +141,28 @@ t\:core: $(LIBFT)
 			$(LIBFT) \
 			-lreadline \
 			-o /tmp/minishell_core_tests
-	/tmp/minishell_core_tests
+	@/tmp/minishell_core_tests
 
 t\:lexer: $(LIBFT)
-	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
-		tests/lexer.c \
-		$(LEXER_SRCS) \
-		source/shared/error.c \
-		$(LIBFT) \
-		-o /tmp/minishell_lexer_tests
-	/tmp/minishell_lexer_tests
+	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+			tests/lexer.c \
+			$(LEXER_SRCS) \
+			source/shared/error.c \
+			source/shared/string.c \
+			$(LIBFT) \
+			-o /tmp/minishell_lexer_tests
+	@/tmp/minishell_lexer_tests
 
 t\:parser: $(LIBFT)
-	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
+	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/parser.c \
-		$(PARSER_SRCS) \
-		$(LEXER_SRCS) \
-		source/shared/error.c \
-		$(LIBFT) \
-		-o /tmp/minishell_parser_tests
-	/tmp/minishell_parser_tests
+			$(PARSER_SRCS) \
+			$(LEXER_SRCS) \
+			source/shared/error.c \
+			source/shared/string.c \
+			$(LIBFT) \
+			-o /tmp/minishell_parser_tests
+	@/tmp/minishell_parser_tests
 
 .PHONY: all clean fclean re test \
 	t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
