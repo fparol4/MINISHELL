@@ -3,18 +3,8 @@
 
 # include "./scanner.h"
 
-typedef struct s_node
-{
-	void			*content;
-	struct s_node	*next;
-	struct s_node	*prev;
-}	t_node;
-
-typedef struct s_manager
-{
-	t_node	*head;
-	t_node	*tail;
-}	t_manager;
+typedef t_dlist_node	t_node;
+typedef t_dlist			t_manager;
 
 typedef enum e_token_type
 {

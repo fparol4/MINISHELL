@@ -12,7 +12,7 @@
 
 #include "../../../headers/minishell.h"
 
-static char	*f_cd_path(char **args, t_env **env)
+static char	*fgetpath(char **args, t_env **env)
 {
 	char	*path;
 

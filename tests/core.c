@@ -1,6 +1,12 @@
 #include "tester.h"
 #include "../headers/core.h"
 
+int	core_loop(t_shell *shell)
+{
+	(void)shell;
+	return (0);
+}
+
 describe(core_init)
 {
 	it("initializes shell env and status")

@@ -11,6 +11,6 @@ typedef enum e_syntax_error
 	SNTX_REDIR_NO_TARGET
 }	t_syntax_error;
 
-void	print_syntax_error(t_syntax_error type);
+void	sh_stxerr(t_syntax_error type);
 
 #endif

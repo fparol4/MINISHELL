@@ -53,7 +53,7 @@ void	sh_err2(char *scope, char *arg, char *msg)
 	ft_putstr_fd("\n", 2);
 }
 
-void	print_syntax_error(t_syntax_error type)
+void	sh_stxerr(t_syntax_error type)
 {
 	if (type == SNTX_UNCLOSED_QUOTE)
 		ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);

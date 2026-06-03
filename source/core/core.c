@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   core.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -34,4 +34,16 @@ void	core_destroy(t_shell *shell)
 		return ;
 	env_free(&shell->env);
 	shell->running = FALSE;
+}
+
+int	core_run(char **envp)
+{
+	t_shell	shell;
+	int		status;
+
+	if (core_init(&shell, envp))
+		return (1);
+	status = core_loop(&shell);
+	core_destroy(&shell);
+	return (status);
 }

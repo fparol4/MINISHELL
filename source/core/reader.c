@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loop.c                                             :+:      :+:    :+:   */
+/*   reader.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -37,7 +37,7 @@ static int	core_process_line(t_shell *shell, char *line)
 		return (0);
 	if (ast->error)
 	{
-		print_syntax_error(ast->error_type);
+		sh_stxerr(ast->error_type);
 		rn_status_set(&shell->env, 2);
 		parser_free_ast(ast);
 		return (0);

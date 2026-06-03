@@ -33,7 +33,7 @@ t_manager	*lexer_control(t_scanner *input)
 	define_rules(rules);
 	if (!ft_state_machine(manager, input, rules))
 	{
-		print_syntax_error(SNTX_UNCLOSED_QUOTE);
+		sh_stxerr(SNTX_UNCLOSED_QUOTE);
 		free(rules);
 		lexer_free(manager);
 		return (NULL);

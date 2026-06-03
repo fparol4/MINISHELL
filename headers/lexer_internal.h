@@ -33,8 +33,6 @@ void			init_token_table(t_char_table *table);
 int				init_lexer_variable(t_manager **manager, t_rules **rules);
 void			define_rules(t_rules *rules);
 t_token_type	define_type(char *type);
-t_node			*lx_node_new(void *content);
-void			lx_list_add_back(t_manager *manager, t_node *new_node);
 t_list_token	*get_word(t_manager *manager, t_scanner *input,
 					t_rules *rules);
 t_list_token	*get_operator(t_manager *manager, t_scanner *input,

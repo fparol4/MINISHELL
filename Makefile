@@ -15,9 +15,8 @@ SHARED_SRCS = source/shared/error.c \
 			  source/shared/string.c \
 			  source/shared/signal.c
 
-CORE_SRCS = source/core/init.c \
-			source/core/loop.c \
-			source/core/run.c
+CORE_SRCS = source/core/core.c \
+			source/core/reader.c
 
 BUILTIN_SRCS = source/modules/builtin/cd.c \
 			   source/modules/builtin/echo.c \
@@ -46,7 +45,6 @@ RUNNER_SRCS = source/modules/runner/path.c \
 			  source/modules/runner/expander.c
 
 LEXER_SRCS = source/modules/lexer/scanner/utils.c \
-			 source/modules/lexer/dlist.c \
 			 source/modules/lexer/extract.c \
 			 source/modules/lexer/lexer.c \
 			 source/modules/lexer/lexer_init.c \
@@ -135,7 +133,7 @@ t\:runner: $(LIBFT)
 t\:core: $(LIBFT)
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/core.c \
-		source/core/init.c \
+		source/core/core.c \
 			$(SHARED_SRCS) \
 			$(ENVM_SRCS) \
 			$(LIBFT) \

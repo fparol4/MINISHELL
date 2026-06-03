@@ -2,11 +2,9 @@
 
 int	init_lexer_variable(t_manager **manager, t_rules **rules)
 {
-	*manager = malloc(sizeof(t_manager));
+	*manager = ft_dlist_new(0, NULL);
 	if (!*manager)
 		return (0);
-	(*manager)->head = NULL;
-	(*manager)->tail = NULL;
 	*rules = malloc(sizeof(t_rules));
 	if (!*rules)
 	{
