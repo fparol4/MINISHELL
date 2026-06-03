@@ -16,11 +16,12 @@ int	bin_env(char **args, t_env **env)
 {
 	t_env	*item;
 
-	(void)args;
+	if (args && args[0])
+		return (sh_err2("env", args[0], "No such file or directory"), 127);
 	item = *env;
 	while (item)
 	{
-		if (item->value)
+		if (item->value && ft_strcmp(item->key, ENV_ERRCODE) != 0)
 		{
 			ft_putstr_fd(item->key, 1);
 			ft_putchar_fd('=', 1);

@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 
 #include "../../../headers/runner.h"
-#include "../../../libraries/libft/lib/ft_gnline/get_next_line.h"
 #include <fcntl.h>
 
 typedef enum e_heredoc_state
 {
 	HEREDOC_DONE,
 	HEREDOC_EOF,
+	HEREDOC_INTR,
 	HEREDOC_FAIL
 }						t_heredoc_state;
 
@@ -102,22 +102,13 @@ static char	*rn_redir_expand_line(char *line, t_env **env)
 
 static int	rn_redir_delim(char *line, char *target)
 {
-	size_t	len;
-
-	len = ft_strlen(line);
-	if (len && line[len - 1] == '\n')
-		len--;
-	return (ft_strlen(target) == len && ft_strncmp(line, target, len) == 0);
+	return (ft_strcmp(line, target) == 0);
 }
 
 static char	*rn_redir_line(char *line, t_env **env, int expand)
 {
 	char	*out;
-	size_t	len;
 
-	len = ft_strlen(line);
-	if (len && line[len - 1] == '\n')
-		line[--len] = '\0';
 	if (expand)
 		out = rn_redir_expand_line(line, env);
 	else
@@ -138,6 +129,57 @@ static void	rn_redir_warn(char *target)
 	ft_putstr_fd("')\n", STDERR_FILENO);
 }
 
+static int	rn_redir_linegrow(char **line, size_t *cap, size_t len)
+{
+	char	*next;
+
+	if (len + 1 < *cap)
+		return (0);
+	if (!*cap)
+		*cap = 32;
+	else
+		*cap *= 2;
+	next = malloc(sizeof(char) * *cap);
+	if (!next)
+		return (1);
+	if (*line)
+		ft_memcpy(next, *line, len);
+	free(*line);
+	*line = next;
+	return (0);
+}
+
+static char	*rn_redir_readline(void)
+{
+	char	*line;
+	size_t	len;
+	size_t	cap;
+	char	c;
+	ssize_t	readed;
+
+	ft_putstr_fd("> ", STDERR_FILENO);
+	line = NULL;
+	len = 0;
+	cap = 0;
+	while (TRUE)
+	{
+		readed = read(STDIN_FILENO, &c, 1);
+		if (readed <= 0)
+			break ;
+		if (c == '\n')
+			break ;
+		if (rn_redir_linegrow(&line, &cap, len))
+			return (free(line), NULL);
+		line[len++] = c;
+	}
+	if (!line && readed <= 0)
+		return (NULL);
+	if (rn_redir_linegrow(&line, &cap, len))
+		return (free(line), NULL);
+	line[len] = '\0';
+	return (line);
+}
+
 static t_heredoc_state	rn_redir_heredoc_fill(int fd, char *target, t_env **env,
 		int expand)
 {
@@ -146,7 +188,7 @@ static t_heredoc_state	rn_redir_heredoc_fill(int fd, char *target, t_env **env,
 
 	g_signal = 0;
 	sh_sig_mode(SIG_HEREDOC);
-	line = get_next_line(STDIN_FILENO);
+	line = rn_redir_readline();
 	while (line)
 	{
 		if (g_signal == SIGINT)
@@ -154,7 +196,7 @@ static t_heredoc_state	rn_redir_heredoc_fill(int fd, char *target, t_env **env,
 			free(line);
 			g_signal = 0;
 			sh_sig_mode(SIG_INTERACTIVE);
-			return (HEREDOC_EOF);
+			return (HEREDOC_INTR);
 		}
 		if (rn_redir_delim(line, target))
 		{
@@ -169,9 +211,11 @@ static t_heredoc_state	rn_redir_heredoc_fill(int fd, char *target, t_env **env,
 			return (free(out), HEREDOC_FAIL);
 		}
 		free(out);
-		line = get_next_line(STDIN_FILENO);
+		line = rn_redir_readline();
 	}
 	sh_sig_mode(SIG_INTERACTIVE);
+	if (g_signal == SIGINT)
+		return (g_signal = 0, HEREDOC_INTR);
 	return (HEREDOC_EOF);
 }
 
@@ -183,6 +227,8 @@ static int	rn_redir_heredoc(char *target, t_env **env, int expand)
 	if (pipe(pfd) == -1)
 		return (sh_err(NULL, "pipe failed"), -1);
 	state = rn_redir_heredoc_fill(pfd[1], target, env, expand);
+	if (state == HEREDOC_INTR)
+		return (close(pfd[0]), close(pfd[1]), -2);
 	if (state == HEREDOC_FAIL)
 		return (close(pfd[0]), close(pfd[1]), sh_err(NULL, "heredoc failed"),
 			-1);
@@ -198,6 +244,8 @@ static char	*rn_redir_target(t_parser_redir *redir, t_env **env)
 	char	**expanded;
 	char	*target;
 
+	if (redir->type == REDIR_HEREDOC)
+		return (sh_quote_remove(redir->file));
 	raw[0] = redir->file;
 	raw[1] = NULL;
 	expanded = rn_expand(raw, env);
@@ -238,11 +286,11 @@ static int	rn_redir_fd(t_parser_redir *redir, t_env **env)
 	return (fd);
 }
 
-static int	rn_redir_apply(t_parser_redir *redirs, unsigned int count,
+static int	rn_redir_apply(t_parser_redir *redirs, size_t count,
 		t_env **env)
 {
 	t_redir_fd		*opened;
-	unsigned int	i;
+	size_t			i;
 
 	if (!redirs || !count)
 		return (0);
@@ -253,8 +301,14 @@ static int	rn_redir_apply(t_parser_redir *redirs, unsigned int count,
 	while (i < count)
 	{
 		opened[i].fd = rn_redir_fd(&redirs[i], env);
-		if (opened[i].fd == -1)
+		if (opened[i].fd < 0)
 		{
+			if (opened[i].fd == -2)
+			{
+				while (i > 0)
+					close(opened[--i].fd);
+				return (free(opened), 130);
+			}
 			while (i > 0)
 				close(opened[--i].fd);
 			return (free(opened), 1);
@@ -295,9 +349,11 @@ int	rn_redir_restore(int saved[2])
 	return (0);
 }
 
-int	rn_redir_push(t_parser_redir *redirs, unsigned int count,
+int	rn_redir_push(t_parser_redir *redirs, size_t count,
 		t_env **env, int saved[2])
 {
+	int	status;
+
 	saved[0] = -1;
 	saved[1] = -1;
 	saved[0] = dup(STDIN_FILENO);
@@ -307,7 +363,8 @@ int	rn_redir_push(t_parser_redir *redirs, unsigned int count,
 	if (fcntl(saved[0], F_SETFD, FD_CLOEXEC) == -1 || fcntl(saved[1], F_SETFD,
 			FD_CLOEXEC) == -1)
 		return (rn_redir_restore(saved), sh_err(NULL, "fcntl failed"), 1);
-	if (rn_redir_apply(redirs, count, env))
-		return (rn_redir_restore(saved), 1);
+	status = rn_redir_apply(redirs, count, env);
+	if (status)
+		return (rn_redir_restore(saved), status);
 	return (0);
 }

@@ -3,6 +3,7 @@
 
 # include "./lexer.h"
 # include "./errors.h"
+# include "./shared.h"
 
 # define OFFSET 8
 

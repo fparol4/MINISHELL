@@ -12,15 +12,56 @@
 
 #include "../../../headers/minishell.h"
 #include "../../../headers/runner.h"
+#include <limits.h>
+
+static int	f_exit_value(char *arg, long long *out)
+{
+	unsigned long long	value;
+	unsigned long long	limit;
+	int					sign;
+
+	while (sh_isspace(*arg))
+		arg++;
+	sign = 1;
+	if (*arg == '-' || *arg == '+')
+	{
+		if (*arg++ == '-')
+			sign = -1;
+	}
+	if (!ft_isdigit(*arg))
+		return (0);
+	value = 0;
+	limit = (unsigned long long)LLONG_MAX;
+	if (sign < 0)
+		limit++;
+	while (ft_isdigit(*arg))
+	{
+		if (value > (limit - (*arg - '0')) / 10)
+			return (0);
+		value = value * 10 + (*arg++ - '0');
+	}
+	while (sh_isspace(*arg))
+		arg++;
+	if (*arg)
+		return (0);
+	if (sign < 0 && value == limit)
+		*out = LLONG_MIN;
+	else if (sign < 0)
+		*out = -(long long)value;
+	else
+		*out = (long long)value;
+	return (1);
+}
 
 int	bin_exit(char **args, t_env **env)
 {
-	int	code;
+	long long	code;
 
-	ft_putendl_fd("exit", 1);
+	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+		ft_putendl_fd("exit", 1);
 	if (!args || !args[0])
 		exit(rn_status_get(env));
-	if (!ft_vatoi(args[0]))
+	if (!f_exit_value(args[0], &code))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[0], 2);
@@ -34,6 +75,5 @@ int	bin_exit(char **args, t_env **env)
 		env_set(env, ENV_ERRCODE, "1");
 		return (1);
 	}
-	code = ft_atoi(args[0]) & 0xFF;
-	exit(code);
+	exit((unsigned char)code);
 }

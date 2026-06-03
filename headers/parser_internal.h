@@ -24,6 +24,7 @@ typedef struct s_parser_redir
 	t_parser_redir_type	type;
 	char				*file;
 	t_bool				expand;
+	t_bool				quoted;
 }	t_parser_redir;
 
 typedef struct s_simple
@@ -31,7 +32,7 @@ typedef struct s_simple
 	char				**args;
 	t_bool				expand;
 	t_parser_redir		*redirs;
-	unsigned int		redir_count;
+	size_t				redir_count;
 }	t_simple;
 
 typedef struct s_pipe
@@ -74,6 +75,6 @@ void			parser_start_command(t_parser *parser);
 void			parser_finish_command(t_parser *parser);
 void			parser_add_arg(t_parser *parser, char *arg, t_bool expand);
 void			parser_add_redir(t_parser *parser, t_parser_redir_type type,
-					char *word, t_bool expand);
+					t_list_token *token);
 
 #endif

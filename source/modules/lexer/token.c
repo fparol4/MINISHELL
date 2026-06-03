@@ -44,6 +44,7 @@ t_list_token	*add_token_to_list(t_manager *manager, char *value,
 		return (free(token), NULL);
 	token->type = type;
 	token->expand = (ft_strchr(value, '$') != NULL);
+	token->quoted = sh_has_quotes(value);
 	node = lx_node_new(token);
 	if (!node)
 		return (free(token->value), free(token), NULL);

@@ -65,7 +65,6 @@ static void	consume_redir(t_parser *parser)
 		parser_set_syntax_error(parser, SNTX_REDIR_NO_TARGET);
 		return ;
 	}
-	parser_add_redir(parser, type, ft_strdup(parser->token->value),
-		parser->token->expand);
+	parser_add_redir(parser, type, parser->token);
 	parser_next(parser);
 }

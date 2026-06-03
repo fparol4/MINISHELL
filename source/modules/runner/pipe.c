@@ -13,23 +13,6 @@
 #include "../../../headers/runner.h"
 #include <sys/wait.h>
 
-typedef struct s_pipe_context
-{
-	t_command	*node;
-	t_env		**env;
-	int			in_fd;
-	int			out_fd;
-	int			pipefd[2];
-}				t_pipe_context;
-
-static void	rn_pipe_close(int pipefd[2])
-{
-	if (pipefd[0] != -1)
-		close(pipefd[0]);
-	if (pipefd[1] != -1)
-		close(pipefd[1]);
-}
-
 static int	rn_pipe_status(int status)
 {
 	if (WIFEXITED(status))
@@ -39,86 +22,152 @@ static int	rn_pipe_status(int status)
 	return (1);
 }
 
-static void	rn_pipe_build(t_pipe_context *ctx, t_command *node, t_env **env,
-		int in_fd, int out_fd)
+static size_t	rn_pipe_count(t_command *node)
 {
-	ctx->node = node;
-	ctx->env = env;
-	ctx->in_fd = in_fd;
-	ctx->out_fd = out_fd;
+	if (!node)
+		return (0);
+	if (node->type == PNODE_PIPE)
+		return (rn_pipe_count(node->t_define.pipe.left)
+			+ rn_pipe_count(node->t_define.pipe.right));
+	return (1);
 }
 
-static pid_t	rn_pipe_fork(t_pipe_context *ctx)
+static void	rn_pipe_flatten(t_command *node, t_command **items, size_t *idx)
 {
-	pid_t	pid;
-	int		in_dup;
-	int		out_dup;
-
-	pid = fork();
-	if (pid == -1)
-		return (sh_err(NULL, "fork failed"), -1);
-	if (pid == 0)
+	if (!node)
+		return ;
+	if (node->type == PNODE_PIPE)
 	{
-		in_dup = 0;
-		out_dup = 0;
-		if (ctx->in_fd != STDIN_FILENO)
-			in_dup = dup2(ctx->in_fd, STDIN_FILENO);
-		if (ctx->out_fd != STDOUT_FILENO)
-			out_dup = dup2(ctx->out_fd, STDOUT_FILENO);
-		if (in_dup == -1 || out_dup == -1)
-		{
-			rn_pipe_close(ctx->pipefd);
-			sh_err(NULL, "dup2 failed");
-			_exit(1);
-		}
-		rn_pipe_close(ctx->pipefd);
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		_exit(rn_execute(ctx->node, ctx->env));
+		rn_pipe_flatten(node->t_define.pipe.left, items, idx);
+		rn_pipe_flatten(node->t_define.pipe.right, items, idx);
+		return ;
 	}
-	return (pid);
+	items[(*idx)++] = node;
 }
 
-static int	rn_pipe_wait(pid_t pid)
+static void	rn_pipe_close_all(int *fds, size_t pipe_count)
 {
-	int	status;
+	size_t	i;
 
-	if (waitpid(pid, &status, 0) == -1)
-		return (1);
-	return (rn_pipe_status(status));
+	i = 0;
+	while (i < pipe_count * 2)
+	{
+		if (fds[i] != -1)
+			close(fds[i]);
+		i++;
+	}
+}
+
+static int	rn_pipe_create(int *fds, size_t pipe_count)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < pipe_count * 2)
+		fds[i++] = -1;
+	i = 0;
+	while (i < pipe_count)
+	{
+		if (pipe(&fds[i * 2]) == -1)
+			return (rn_pipe_close_all(fds, pipe_count),
+				sh_err(NULL, "pipe failed"), 1);
+		i++;
+	}
+	return (0);
+}
+
+static void	rn_pipe_child(t_command **cmds, t_env **env, int *fds,
+		size_t pos, size_t pipe_count)
+{
+	if (pos > 0 && dup2(fds[(pos - 1) * 2], STDIN_FILENO) == -1)
+	{
+		rn_pipe_close_all(fds, pipe_count);
+		sh_err(NULL, "dup2 failed");
+		_exit(1);
+	}
+	if (cmds[pos + 1] && dup2(fds[pos * 2 + 1], STDOUT_FILENO) == -1)
+	{
+		rn_pipe_close_all(fds, pipe_count);
+		sh_err(NULL, "dup2 failed");
+		_exit(1);
+	}
+	rn_pipe_close_all(fds, pipe_count);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	_exit(rn_execute(cmds[pos], env));
+}
+
+static int	rn_pipe_wait(pid_t *pids, size_t count)
+{
+	size_t	i;
+	int		status;
+	int		last;
+
+	i = 0;
+	last = 1;
+	while (i < count)
+	{
+		if (waitpid(pids[i], &status, 0) != -1 && i == count - 1)
+			last = rn_pipe_status(status);
+		i++;
+	}
+	return (last);
+}
+
+static int	rn_pipe_fork_all(t_command **cmds, t_env **env, int *fds,
+		pid_t *pids, size_t pipe_count, size_t *forked)
+{
+	size_t	i;
+
+	i = 0;
+	while (cmds[i])
+	{
+		pids[i] = fork();
+			if (pids[i] == -1)
+				return (*forked = i, sh_err(NULL, "fork failed"), 1);
+			if (pids[i] == 0)
+				rn_pipe_child(cmds, env, fds, i, pipe_count);
+		i++;
+	}
+	*forked = i;
+	return (0);
 }
 
 int	rn_pipe(t_command *node, t_env **env)
 {
-	t_pipe_context	left_ctx;
-	t_pipe_context	right_ctx;
-	pid_t			left_pid;
-	pid_t			right_pid;
+	t_command	**cmds;
+	pid_t		*pids;
+	int			*fds;
+	size_t		count;
+	size_t		forked;
+	size_t		idx;
+	int			status;
 
-	if (!node || node->type != PNODE_PIPE
-		|| !node->t_define.pipe.left || !node->t_define.pipe.right)
+	count = rn_pipe_count(node);
+	if (count < 2)
 		return (sh_err(NULL, "invalid pipe node"), 1);
-	left_ctx.pipefd[0] = -1;
-	left_ctx.pipefd[1] = -1;
-	if (pipe(left_ctx.pipefd) == -1)
-		return (sh_err(NULL, "pipe failed"), 1);
-	rn_pipe_build(&left_ctx, node->t_define.pipe.left, env,
-		STDIN_FILENO, left_ctx.pipefd[1]);
-	rn_pipe_build(&right_ctx, node->t_define.pipe.right, env,
-		left_ctx.pipefd[0], STDOUT_FILENO);
-	right_ctx.pipefd[0] = left_ctx.pipefd[0];
-	right_ctx.pipefd[1] = left_ctx.pipefd[1];
+	cmds = ft_calloc(count + 1, sizeof(t_command *));
+	pids = ft_calloc(count, sizeof(pid_t));
+	fds = malloc(sizeof(int) * (count - 1) * 2);
+	if (!cmds || !pids || !fds)
+		return (free(cmds), free(pids), free(fds), 1);
+	idx = 0;
+	rn_pipe_flatten(node, cmds, &idx);
+	if (rn_pipe_create(fds, count - 1))
+		return (free(cmds), free(pids), free(fds), 1);
 	sh_sig_mode(SIG_EXEC);
-	left_pid = rn_pipe_fork(&left_ctx);
-	if (left_pid == -1)
-		return (rn_pipe_close(left_ctx.pipefd), sh_sig_mode(SIG_INTERACTIVE),
-			1);
-	right_pid = rn_pipe_fork(&right_ctx);
-	rn_pipe_close(left_ctx.pipefd);
-	if (right_pid == -1)
-		return (rn_pipe_wait(left_pid), sh_sig_mode(SIG_INTERACTIVE), 1);
-	rn_pipe_wait(left_pid);
-	right_pid = rn_pipe_wait(right_pid);
+	forked = 0;
+	if (rn_pipe_fork_all(cmds, env, fds, pids, count - 1, &forked))
+	{
+		rn_pipe_close_all(fds, count - 1);
+		rn_pipe_wait(pids, forked);
+		status = 1;
+	}
+	else
+	{
+		rn_pipe_close_all(fds, count - 1);
+		status = rn_pipe_wait(pids, count);
+	}
 	sh_sig_mode(SIG_INTERACTIVE);
-	return (right_pid);
+	return (free(cmds), free(pids), free(fds), status);
 }

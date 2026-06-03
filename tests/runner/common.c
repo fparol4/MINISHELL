@@ -1,16 +1,20 @@
 #include "../tester.h"
 
-static void	rn_test_node(t_exnode *node, t_node_type type, char **args,
-		t_exnode *left, t_exnode *right)
+static void	rn_test_node(t_command *node, t_pnode_type type, char **args,
+		t_command *left, t_command *right)
 {
 	ft_bzero(node, sizeof(*node));
 	node->type = type;
-	node->args = args;
-	node->left = left;
-	node->right = right;
+	if (type == PNODE_CMD)
+		node->t_define.simple.args = args;
+	else
+	{
+		node->t_define.pipe.left = left;
+		node->t_define.pipe.right = right;
+	}
 }
 
-static char	*rn_test_capture_execute(t_exnode *node, t_env **env, int *code)
+static char	*rn_test_capture_execute(t_command *node, t_env **env, int *code)
 {
 	char	buf[4096];
 	char	*out;
@@ -35,7 +39,7 @@ static char	*rn_test_capture_execute(t_exnode *node, t_env **env, int *code)
 	return (out);
 }
 
-static char	*rn_test_capture_fd(int target, t_exnode *node, t_env **env,
+static char	*rn_test_capture_fd(int target, t_command *node, t_env **env,
 		int *code)
 {
 	char	buf[4096];
@@ -63,21 +67,28 @@ static char	*rn_test_capture_fd(int target, t_exnode *node, t_env **env,
 	return (out);
 }
 
-static char	*rn_test_capture_error(t_exnode *node, t_env **env, int *code)
+static char	*rn_test_capture_error(t_command *node, t_env **env, int *code)
 {
 	return (rn_test_capture_fd(STDERR_FILENO, node, env, code));
 }
 
-static void	rn_test_redir(t_redir *redir, t_redir_type type, char *target,
-		int expand)
+static void	rn_test_redir(t_parser_redir *redir, t_parser_redir_type type,
+		char *target, int expand)
 {
 	redir->type = type;
-	redir->target = target;
+	redir->file = target;
 	redir->expand = expand;
-	redir->next = NULL;
+	redir->quoted = !expand;
 }
 
-static int	rn_test_with_stdin(char *input, t_exnode *node, t_env **env,
+static void	rn_test_attach_redirs(t_command *node, t_parser_redir *redirs,
+		size_t count)
+{
+	node->t_define.simple.redirs = redirs;
+	node->t_define.simple.redir_count = count;
+}
+
+static int	rn_test_with_stdin(char *input, t_command *node, t_env **env,
 		int *status, char **out)
 {
 	int		pfd[2];
@@ -99,7 +110,7 @@ static int	rn_test_with_stdin(char *input, t_exnode *node, t_env **env,
 	return (0);
 }
 
-static int	rn_test_with_stdin_capture(char *input, t_exnode *node, t_env **env,
+static int	rn_test_with_stdin_capture(char *input, t_command *node, t_env **env,
 		int *status, char **captured, int target)
 {
 	int		pfd[2];
@@ -121,7 +132,7 @@ static int	rn_test_with_stdin_capture(char *input, t_exnode *node, t_env **env,
 	return (0);
 }
 
-static int	rn_test_with_stdin_error(char *input, t_exnode *node, t_env **env,
+static int	rn_test_with_stdin_error(char *input, t_command *node, t_env **env,
 		int *status, char **err)
 {
 	return (rn_test_with_stdin_capture(input, node, env, status, err,

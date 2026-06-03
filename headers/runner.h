@@ -10,7 +10,7 @@ int		rn_execute(t_command *cmd, t_env **env);
 int		rn_exec_cmd(t_command *cmd, t_env **env);
 int		rn_exec_pipe(t_command *cmd, t_env **env);
 int		rn_pipe(t_command *cmd, t_env **env);
-int		rn_redir_push(t_parser_redir *redirs, unsigned int count,
+int		rn_redir_push(t_parser_redir *redirs, size_t count,
 			t_env **env, int saved[2]);
 int		rn_redir_restore(int saved[2]);
 char	*rn_path(char **args, t_env **env);

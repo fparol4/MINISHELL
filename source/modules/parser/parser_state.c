@@ -51,8 +51,13 @@ void	parser_add_arg(t_parser *parser, char *arg, t_bool expand)
 	size_t	count;
 	char	**new;
 
-	if (!parser || !arg)
+	if (!parser)
 		return ;
+	if (!arg)
+	{
+		parser->state = TRUE;
+		return ;
+	}
 	if (!parser->current_cmd)
 		parser_start_command(parser);
 	if (!parser->current_cmd)
@@ -62,30 +67,48 @@ void	parser_add_arg(t_parser *parser, char *arg, t_bool expand)
 	count = str_array_len(parser->current_cmd->args);
 	new = dynarray_append(parser->current_cmd->args, sizeof(char *), &count);
 	if (!new)
+	{
+		free(arg);
+		parser->state = TRUE;
 		return ;
+	}
 	new[count - 1] = arg;
 	new[count] = NULL;
 	parser->current_cmd->args = new;
 }
 
 void	parser_add_redir(t_parser *parser, t_parser_redir_type type,
-	char *word, t_bool expand)
+	t_list_token *token)
 {
 	t_parser_redir	*new;
+	char			*word;
+	size_t			count;
 
-	if (!parser || !word)
+	if (!parser || !token)
 		return ;
 	if (!parser->current_cmd)
 		parser_start_command(parser);
 	if (!parser->current_cmd)
 		return ;
-	new = dynarray_append(parser->current_cmd->redirs,
-			sizeof(t_parser_redir),
-			(size_t *)&parser->current_cmd->redir_count);
-	if (!new)
+	word = ft_strdup(token->value);
+	if (!word)
+	{
+		parser->state = TRUE;
 		return ;
-	new[parser->current_cmd->redir_count - 1].type = type;
-	new[parser->current_cmd->redir_count - 1].file = word;
-	new[parser->current_cmd->redir_count - 1].expand = expand;
+	}
+	count = parser->current_cmd->redir_count;
+	new = dynarray_append(parser->current_cmd->redirs,
+			sizeof(t_parser_redir), &count);
+	if (!new)
+	{
+		free(word);
+		parser->state = TRUE;
+		return ;
+	}
+	parser->current_cmd->redir_count = count;
+	new[count - 1].type = type;
+	new[count - 1].file = word;
+	new[count - 1].quoted = token->quoted;
+	new[count - 1].expand = !token->quoted;
 	parser->current_cmd->redirs = new;
 }

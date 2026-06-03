@@ -36,10 +36,10 @@ describe(rn_execute_cmd)
 		char	*raw[] = {"export", "FOO=$USER", NULL};
 		char	*envp[] = {"USER=bar", NULL};
 		t_env	*env;
-		t_exnode	node;
+		t_command	node;
 
 		env = env_init(envp);
-		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		asserteq(rn_execute(&node, &env), 0);
 		asserteq_str(env_get(&env, "FOO"), "bar");
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
@@ -51,10 +51,10 @@ describe(rn_execute_cmd)
 		char	*raw[] = {"true", NULL};
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		t_env	*env;
-		t_exnode	node;
+		t_command	node;
 
 		env = env_init(envp);
-		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		asserteq(rn_execute(&node, &env), 0);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
@@ -65,10 +65,10 @@ describe(rn_execute_cmd)
 		char	*raw[] = {"not_a_real_command_xyz", NULL};
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		t_env	*env;
-		t_exnode	node;
+		t_command	node;
 
 		env = env_init(envp);
-		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		asserteq(rn_execute(&node, &env), 127);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "127");
 		env_free(&env);
@@ -78,12 +78,12 @@ describe(rn_execute_cmd)
 	{
 		char	*raw[] = {"./__minishell_missing_exec__", NULL};
 		t_env	*env;
-		t_exnode	node;
+		t_command	node;
 		char	*err;
 		int		status;
 
 		env = NULL;
-		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 127);
@@ -98,13 +98,13 @@ describe(rn_execute_cmd)
 		char	path[] = "/tmp/minishell_exec_dir_XXXXXX";
 		char	*raw[] = {path, NULL};
 		t_env	*env;
-		t_exnode	node;
+		t_command	node;
 		char	*err;
 		int		status;
 
 		assert(mkdtemp(path) != NULL);
 		env = NULL;
-		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 126);
@@ -120,7 +120,7 @@ describe(rn_execute_cmd)
 		char	path[] = "/tmp/minishell_exec_noexec_XXXXXX";
 		char	*raw[] = {path, NULL};
 		t_env	*env;
-		t_exnode	node;
+		t_command	node;
 		char	*err;
 		int		fd;
 		int		status;
@@ -129,7 +129,7 @@ describe(rn_execute_cmd)
 		write(fd, "echo nope\n", 10);
 		close(fd);
 		env = NULL;
-		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 126);
@@ -145,7 +145,7 @@ describe(rn_execute_cmd)
 		char	path[] = "/tmp/minishell_exec_format_XXXXXX";
 		char	*raw[] = {path, NULL};
 		t_env	*env;
-		t_exnode	node;
+		t_command	node;
 		char	*err;
 		int		fd;
 		int		status;
@@ -155,7 +155,7 @@ describe(rn_execute_cmd)
 		close(fd);
 		assert(chmod(path, 0700) == 0);
 		env = NULL;
-		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 126);
@@ -176,7 +176,7 @@ describe(rn_execute_cmd)
 		char	*err;
 		char	*path_env;
 		t_env	*env;
-		t_exnode	node;
+		t_command	node;
 		int		fd;
 		int		status;
 
@@ -195,7 +195,7 @@ describe(rn_execute_cmd)
 		envp[0] = path_env;
 		envp[1] = NULL;
 		env = env_init(envp);
-		rn_test_node(&node, CMD, raw, NULL, NULL);
+		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 126);

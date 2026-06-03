@@ -65,11 +65,28 @@ static char	**f_getkeys(t_env **env, int size)
 	node = *env;
 	while (node)
 	{
-		keys[i++] = node->key;
+		if (ft_strcmp(node->key, ENV_ERRCODE) != 0)
+			keys[i++] = node->key;
 		node = node->next;
 	}
-	f_sortkeys(keys, size);
+	f_sortkeys(keys, i);
 	return (keys);
+}
+
+static int	f_printsize(t_env **env)
+{
+	int		size;
+	t_env	*node;
+
+	size = 0;
+	node = *env;
+	while (node)
+	{
+		if (ft_strcmp(node->key, ENV_ERRCODE) != 0)
+			size++;
+		node = node->next;
+	}
+	return (size);
 }
 
 static int	f_print(t_env **env)
@@ -79,7 +96,7 @@ static int	f_print(t_env **env)
 	t_env	*node;
 	char	**keys;
 
-	k_size = env_size(env);
+	k_size = f_printsize(env);
 	keys = f_getkeys(env, k_size);
 	if (!keys)
 		return (1);

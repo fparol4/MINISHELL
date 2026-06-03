@@ -59,7 +59,7 @@ char	**env_toarr(t_env **env)
 	i = 0;
 	while (node)
 	{
-		if (ft_strcmp(node->key, ENV_ERRCODE) != 0)
+			if (node->value && ft_strcmp(node->key, ENV_ERRCODE) != 0)
 		{
 			arr[i] = f_toentry(node->key, node->value);
 			if (!arr[i])

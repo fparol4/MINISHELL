@@ -103,20 +103,23 @@ test: t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
 t\:envm: $(LIBFT)
 	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/envm.c \
-		$(SHARED_SRCS) \
-		$(ENVM_SRCS) \
-		$(LIBFT) \
-		-o /tmp/minishell_envm_tests
+			$(SHARED_SRCS) \
+			$(ENVM_SRCS) \
+			$(LIBFT) \
+			-lreadline \
+			-o /tmp/minishell_envm_tests
 	/tmp/minishell_envm_tests
 
 t\:builtin: $(LIBFT)
 	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/bultin.c \
-		$(SHARED_SRCS) \
-		$(BUILTIN_SRCS) \
-		$(filter-out source/modules/envm/toarr.c,$(ENVM_SRCS)) \
-		$(LIBFT) \
-		-o /tmp/minishell_builtin_tests
+			$(SHARED_SRCS) \
+			$(BUILTIN_SRCS) \
+			source/modules/runner/status.c \
+			$(filter-out source/modules/envm/toarr.c,$(ENVM_SRCS)) \
+			$(LIBFT) \
+			-lreadline \
+			-o /tmp/minishell_builtin_tests
 	/tmp/minishell_builtin_tests
 
 t\:runner: $(LIBFT)
@@ -124,19 +127,20 @@ t\:runner: $(LIBFT)
 		tests/runner.c \
 		$(RUNNER_SRCS) \
 		$(SHARED_SRCS) \
-		$(BUILTIN_SRCS) \
-		$(ENVM_SRCS) \
-		$(LIBFT) -o /tmp/minishell_runner_tests
+			$(BUILTIN_SRCS) \
+			$(ENVM_SRCS) \
+			$(LIBFT) -lreadline -o /tmp/minishell_runner_tests
 	/tmp/minishell_runner_tests
 
 t\:core: $(LIBFT)
 	$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/core.c \
 		source/core/init.c \
-		$(SHARED_SRCS) \
-		$(ENVM_SRCS) \
-		$(LIBFT) \
-		-o /tmp/minishell_core_tests
+			$(SHARED_SRCS) \
+			$(ENVM_SRCS) \
+			$(LIBFT) \
+			-lreadline \
+			-o /tmp/minishell_core_tests
 	/tmp/minishell_core_tests
 
 t\:lexer: $(LIBFT)

@@ -30,7 +30,7 @@ static int	core_process_line(t_shell *shell, char *line)
 	scanner_init(&sc, line);
 	manager = lexer_control(&sc);
 	if (!manager)
-		return (0);
+		return (rn_status_set(&shell->env, 2), 0);
 	ast = parser_controller(manager);
 	lexer_free(manager);
 	if (!ast)
@@ -38,6 +38,7 @@ static int	core_process_line(t_shell *shell, char *line)
 	if (ast->error)
 	{
 		print_syntax_error(ast->error_type);
+		rn_status_set(&shell->env, 2);
 		parser_free_ast(ast);
 		return (0);
 	}
@@ -59,12 +60,15 @@ int	core_loop(t_shell *shell)
 		{
 			if (g_signal == SIGINT)
 			{
+				rn_status_set(&shell->env, 130);
 				g_signal = 0;
 				continue ;
 			}
 			write(STDOUT_FILENO, "exit\n", 5);
-			break ;
+			return (rn_status_get(&shell->env));
 		}
+		if (g_signal == SIGINT)
+			rn_status_set(&shell->env, 130);
 		g_signal = 0;
 		if (*line)
 			add_history(line);
@@ -72,5 +76,5 @@ int	core_loop(t_shell *shell)
 			shell->running = FALSE;
 		free(line);
 	}
-	return (0);
+	return (rn_status_get(&shell->env));
 }

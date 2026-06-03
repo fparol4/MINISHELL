@@ -10,5 +10,8 @@ void	sh_err2(char *scope, char *arg, char *msg);
 int		sh_isspace(char c);
 int		sh_varstart(char c);
 int		sh_varchar(char c);
+int		sh_isidentifier(char *s);
+int		sh_has_quotes(char *s);
+char	*sh_quote_remove(char *s);
 
 #endif

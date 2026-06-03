@@ -32,6 +32,7 @@ typedef struct s_list_token
 	char			*value;
 	t_token_type	type;
 	t_bool			expand;
+	t_bool			quoted;
 }	t_list_token;
 
 t_manager	*lexer_control(t_scanner *scanner);

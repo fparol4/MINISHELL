@@ -18,6 +18,7 @@ int	rn_exec_cmd(t_command *cmd, t_env **env)
 	char		**args;
 	int			saved[2];
 	int			status;
+	int			redir_status;
 
 	if (!cmd)
 		return (0);
@@ -25,9 +26,13 @@ int	rn_exec_cmd(t_command *cmd, t_env **env)
 	args = rn_expand(simple->args, env);
 	if (!args)
 		return (1);
-	if (simple->redir_count
-		&& rn_redir_push(simple->redirs, simple->redir_count, env, saved))
-		return (sh_freeargs(args), 1);
+	if (simple->redir_count)
+	{
+		redir_status = rn_redir_push(simple->redirs, simple->redir_count,
+				env, saved);
+		if (redir_status)
+			return (sh_freeargs(args), redir_status);
+	}
 	if (!args[0])
 		status = 0;
 	else if (!rn_exec_bin(args, env, &status))
