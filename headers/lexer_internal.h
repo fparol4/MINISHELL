@@ -38,7 +38,6 @@ char			scanner_peek(t_scanner *sc, size_t offset);
 char			*scanner_extract(t_scanner *sc);
 
 void			rules_init(t_rules *rules);
-t_token_type	define_type(char *type);
 
 t_list_token	*extract_getword(t_manager *manager, t_scanner *input,
 					t_rules *rules);
@@ -46,7 +45,8 @@ t_list_token	*extract_getoperator(t_manager *manager, t_scanner *input,
 					t_rules *rules);
 
 void			token_free(void *content);
-t_list_token	*token_add(t_manager *manager, char *value, t_token_type type);
+t_list_token	*token_add(t_manager *manager, const char *value,
+					t_token_type type);
 
 int				state_machine(t_manager *manager, t_scanner *input,
 					t_rules *rules);

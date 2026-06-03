@@ -27,6 +27,7 @@ static int	core_process_line(t_shell *shell, char *line)
 	t_manager	*manager;
 	t_ast		*ast;
 
+	// here move the scanner_init to inside the lexer itself
 	scanner_init(&sc, line);
 	manager = lexer(&sc);
 	if (!manager)

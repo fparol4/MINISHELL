@@ -1,6 +1,6 @@
 #include "../../headers/lexer_internal.h"
 
-static void	update_quote_state(unsigned int props, unsigned int *state)
+static void	quote_update(unsigned int props, unsigned int *state)
 {
 	if ((props & P_SQUOTE) && *state == P_NONE)
 		*state = P_SQUOTE;
@@ -12,7 +12,7 @@ static void	update_quote_state(unsigned int props, unsigned int *state)
 		*state = P_NONE;
 }
 
-static int	word_should_stop(unsigned int props, unsigned int state,
+static int	word_isend(unsigned int props, unsigned int state,
 				t_rules *rules)
 {
 	if (state != P_NONE)
@@ -20,7 +20,22 @@ static int	word_should_stop(unsigned int props, unsigned int state,
 	return ((props & P_SPACE) || (props & rules->start_operator));
 }
 
-t_list_token	*extract_getword(t_manager *manager, t_scanner *input,
+static t_token_type	operator_type(const char *type)
+{
+	if (ft_strncmp(type, ">>", 2) == 0)
+		return (TOKEN_APPEND);
+	if (ft_strncmp(type, "<<", 2) == 0)
+		return (TOKEN_HEREDOC);
+	if (ft_strncmp(type, "|", 1) == 0)
+		return (TOKEN_PIPE);
+	if (ft_strncmp(type, "<", 1) == 0)
+		return (TOKEN_REDIR_IN);
+	if (ft_strncmp(type, ">", 1) == 0)
+		return (TOKEN_REDIR_OUT);
+	return (TOKEN_NONE);
+}
+
+t_list_token	*extract_word(t_manager *manager, t_scanner *input,
 					t_rules *rules)
 {
 	unsigned int	state;
@@ -33,12 +48,14 @@ t_list_token	*extract_getword(t_manager *manager, t_scanner *input,
 	while (!scanner_isend(input))
 	{
 		props = rules->table.props[scanner_current(input)];
-		update_quote_state(props, &state);
-		if (word_should_stop(props, state, rules))
+		quote_update(props, &state);
+		if (word_isend(props, state, rules))
 			break ;
 		scanner_advance(input);
 	}
 	word = scanner_extract(input);
+	if (!input || input->cursor <= input->start)
+		return (free(word), NULL);
 	if (state != P_NONE)
 		return (free(word), NULL);
 	token = token_add(manager, word, TOKEN_WORD);
@@ -46,7 +63,7 @@ t_list_token	*extract_getword(t_manager *manager, t_scanner *input,
 	return (token);
 }
 
-t_list_token	*extract_getoperator(t_manager *manager, t_scanner *input,
+t_list_token	*extract_operator(t_manager *manager, t_scanner *input,
 					t_rules *rules)
 {
 	unsigned int	props;
@@ -65,7 +82,9 @@ t_list_token	*extract_getoperator(t_manager *manager, t_scanner *input,
 		count++;
 	}
 	type = scanner_extract(input);
-	token = token_add(manager, type, define_type(type));
+	if (!input || input->cursor <= input->start)
+		return (free(type), NULL);
+	token = token_add(manager, type, operator_type(type));
 	free(type);
 	return (token);
 }
