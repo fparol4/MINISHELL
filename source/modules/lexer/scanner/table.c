@@ -1,6 +1,6 @@
 #include "lexer_internal.h"
 
-void	scanner_tablechar(t_char_table *table)
+void	scanner_table_char(t_scanner_table *table)
 {
 	int	i;
 
@@ -30,7 +30,7 @@ void	scanner_tablechar(t_char_table *table)
 	}
 }
 
-void	scanner_tabletoken(t_char_table *table)
+void	scanner_table_token(t_scanner_table *table)
 {
 	int	i;
 

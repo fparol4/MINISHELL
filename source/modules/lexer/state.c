@@ -10,10 +10,10 @@ int	state_machine(t_manager *manager, t_scanner *input, t_rules *rules)
 	{
 		props = rules->table.props[scanner_current(input)];
 		if (props & rules->start_operator)
-			extract_getoperator(manager, input, rules);
+			extract_operator(manager, input, rules);
 		else if (props & rules->start_word)
 		{
-			if (!extract_getword(manager, input, rules))
+			if (!extract_word(manager, input, rules))
 				return (0);
 		}
 		else

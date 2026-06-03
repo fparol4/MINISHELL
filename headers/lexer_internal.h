@@ -22,13 +22,13 @@ typedef enum e_lexer_table
 
 typedef struct s_rules
 {
-	t_char_table	table;
+	t_scanner_table	table;
 	unsigned int	start_word;
 	unsigned int	start_operator;
 }	t_rules;
 
-void			scanner_tablechar(t_char_table *table);
-void			scanner_tabletoken(t_char_table *table);
+void			scanner_tablechar(t_scanner_table *table);
+void			scanner_tabletoken(t_scanner_table *table);
 void			scanner_advance(t_scanner *sc);
 int				scanner_isend(t_scanner *sc);
 size_t			scanner_markstart(t_scanner *sc);
@@ -39,9 +39,9 @@ char			*scanner_extract(t_scanner *sc);
 
 void			rules_init(t_rules *rules);
 
-t_list_token	*extract_getword(t_manager *manager, t_scanner *input,
+t_list_token	*extract_word(t_manager *manager, t_scanner *input,
 					t_rules *rules);
-t_list_token	*extract_getoperator(t_manager *manager, t_scanner *input,
+t_list_token	*extract_operator(t_manager *manager, t_scanner *input,
 					t_rules *rules);
 
 void			token_free(void *content);
