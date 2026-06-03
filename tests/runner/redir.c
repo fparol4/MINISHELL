@@ -147,17 +147,15 @@ describe(rn_redir)
 		char		*raw[] = {"cat", NULL};
 		t_env		*env;
 		t_command	node;
-		t_parser_redir		first;
-		t_parser_redir		second;
+		t_parser_redir	redirs[2];
 		char		*out;
 		int			status;
 
 		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
-		rn_test_redir(&first, REDIR_HEREDOC, "A", 1);
-		rn_test_redir(&second, REDIR_HEREDOC, "B", 1);
-		first.next = &second;
-		rn_test_attach_redirs(&node, &first, 1);
+		rn_test_redir(&redirs[0], REDIR_HEREDOC, "A", 1);
+		rn_test_redir(&redirs[1], REDIR_HEREDOC, "B", 1);
+		rn_test_attach_redirs(&node, redirs, 2);
 		asserteq(rn_test_with_stdin("first\nA\nsecond\nB\n", &node, &env, &status,
 				&out), 0);
 		assert(out != NULL);
@@ -173,8 +171,7 @@ describe(rn_redir)
 		char		*raw[] = {"cat", NULL};
 		t_env		*env;
 		t_command	node;
-		t_parser_redir		first;
-		t_parser_redir		second;
+		t_parser_redir	redirs[2];
 		char		*out;
 		int			fd;
 		int			status;
@@ -184,10 +181,9 @@ describe(rn_redir)
 		close(fd);
 		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
-		rn_test_redir(&first, REDIR_HEREDOC, "EOF", 1);
-		rn_test_redir(&second, REDIR_IN, path, 1);
-		first.next = &second;
-		rn_test_attach_redirs(&node, &first, 1);
+		rn_test_redir(&redirs[0], REDIR_HEREDOC, "EOF", 1);
+		rn_test_redir(&redirs[1], REDIR_IN, path, 1);
+		rn_test_attach_redirs(&node, redirs, 2);
 		asserteq(rn_test_with_stdin("heredoc\nEOF\n", &node, &env, &status, &out),
 			0);
 		assert(out != NULL);
@@ -204,8 +200,7 @@ describe(rn_redir)
 		char		*raw[] = {"cat", NULL};
 		t_env		*env;
 		t_command	node;
-		t_parser_redir		first;
-		t_parser_redir		second;
+		t_parser_redir	redirs[2];
 		char		*out;
 		int			fd;
 		int			status;
@@ -215,10 +210,9 @@ describe(rn_redir)
 		close(fd);
 		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
-		rn_test_redir(&first, REDIR_IN, path, 1);
-		rn_test_redir(&second, REDIR_HEREDOC, "EOF", 1);
-		first.next = &second;
-		rn_test_attach_redirs(&node, &first, 1);
+		rn_test_redir(&redirs[0], REDIR_IN, path, 1);
+		rn_test_redir(&redirs[1], REDIR_HEREDOC, "EOF", 1);
+		rn_test_attach_redirs(&node, redirs, 2);
 		asserteq(rn_test_with_stdin("heredoc\nEOF\n", &node, &env, &status, &out),
 			0);
 		assert(out != NULL);

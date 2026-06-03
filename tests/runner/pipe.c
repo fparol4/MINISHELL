@@ -225,8 +225,7 @@ describe(rn_pipe)
 		t_command	left;
 		t_command	right;
 		t_command	node;
-		t_parser_redir	first;
-		t_parser_redir	second;
+		t_parser_redir	redirs[2];
 		char	*out;
 		int		fd;
 		int		status;
@@ -239,10 +238,9 @@ describe(rn_pipe)
 		close(fd);
 		env = env_init(envp);
 		rn_test_node(&left, PNODE_CMD, left_args, NULL, NULL);
-		rn_test_redir(&first, REDIR_IN, path_a, 1);
-		rn_test_redir(&second, REDIR_IN, path_b, 1);
-		first.next = &second;
-		rn_test_attach_redirs(&left, &first, 1);
+		rn_test_redir(&redirs[0], REDIR_IN, path_a, 1);
+		rn_test_redir(&redirs[1], REDIR_IN, path_b, 1);
+		rn_test_attach_redirs(&left, redirs, 2);
 		rn_test_node(&right, PNODE_CMD, right_args, NULL, NULL);
 		rn_test_node(&node, PNODE_PIPE, NULL, &left, &right);
 		out = rn_test_capture_execute(&node, &env, &status);
@@ -266,8 +264,7 @@ describe(rn_pipe)
 		t_command	left;
 		t_command	right;
 		t_command	node;
-		t_parser_redir	first;
-		t_parser_redir	second;
+		t_parser_redir	redirs[2];
 		char	*out;
 		int		fd;
 		int		status;
@@ -279,10 +276,9 @@ describe(rn_pipe)
 		env = env_init(envp);
 		rn_test_node(&left, PNODE_CMD, left_args, NULL, NULL);
 		rn_test_node(&right, PNODE_CMD, right_args, NULL, NULL);
-		rn_test_redir(&first, REDIR_OUT, path_a, 1);
-		rn_test_redir(&second, REDIR_OUT, path_b, 1);
-		first.next = &second;
-		rn_test_attach_redirs(&right, &first, 1);
+		rn_test_redir(&redirs[0], REDIR_OUT, path_a, 1);
+		rn_test_redir(&redirs[1], REDIR_OUT, path_b, 1);
+		rn_test_attach_redirs(&right, redirs, 2);
 		rn_test_node(&node, PNODE_PIPE, NULL, &left, &right);
 		out = rn_test_capture_execute(&node, &env, &status);
 		assert(out != NULL);
@@ -312,8 +308,7 @@ describe(rn_pipe)
 		t_command	left;
 		t_command	right;
 		t_command	node;
-		t_parser_redir	first;
-		t_parser_redir	second;
+		t_parser_redir	redirs[2];
 		char	*out;
 		int		fd;
 		int		status;
@@ -323,10 +318,9 @@ describe(rn_pipe)
 		close(fd);
 		env = env_init(envp);
 		rn_test_node(&left, PNODE_CMD, left_args, NULL, NULL);
-		rn_test_redir(&first, REDIR_HEREDOC, "EOF", 1);
-		rn_test_redir(&second, REDIR_IN, path, 1);
-		first.next = &second;
-		rn_test_attach_redirs(&left, &first, 1);
+		rn_test_redir(&redirs[0], REDIR_HEREDOC, "EOF", 1);
+		rn_test_redir(&redirs[1], REDIR_IN, path, 1);
+		rn_test_attach_redirs(&left, redirs, 2);
 		rn_test_node(&right, PNODE_CMD, right_args, NULL, NULL);
 		rn_test_node(&node, PNODE_PIPE, NULL, &left, &right);
 		asserteq(rn_test_with_stdin("heredoc\nEOF\n", &node, &env, &status, &out),
