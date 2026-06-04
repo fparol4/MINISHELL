@@ -44,7 +44,7 @@ static t_env	*entryparse(const char *entry)
 
 	eq = ft_strchr(entry, '=');
 	if (!eq)
-		return (f_newnode(entry, NULL));
+		return (env_node_new(entry, NULL));
 	key_l = (size_t)(eq - entry);
 	key = ft_substr(entry, 0, key_l);
 	if (!key)
@@ -55,7 +55,7 @@ static t_env	*entryparse(const char *entry)
 		free(key);
 		return (NULL);
 	}
-	node = f_newnode(key, value);
+	node = env_node_new(key, value);
 	free(key);
 	free(value);
 	return (node);

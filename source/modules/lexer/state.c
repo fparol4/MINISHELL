@@ -1,4 +1,4 @@
-#include "../../headers/lexer_internal.h"
+#include "header.h"
 
 int	state_machine(t_manager *manager, t_scanner *input, t_rules *rules)
 {

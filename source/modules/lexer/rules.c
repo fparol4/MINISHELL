@@ -1,4 +1,4 @@
-#include "../../headers/lexer_internal.h"
+#include "header.h"
 
 static void	define_rules(t_rules *rules)
 {

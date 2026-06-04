@@ -1,4 +1,4 @@
-#include "../../headers/lexer_internal.h"
+#include "header.h"
 
 static void	quote_update(unsigned int props, unsigned int *state)
 {

@@ -1,4 +1,4 @@
-#include "lexer_internal.h"
+#include "../header.h"
 
 void	scanner_table_char(t_scanner_table *table)
 {

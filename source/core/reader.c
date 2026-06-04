@@ -12,7 +12,6 @@
 
 #include "../../headers/core.h"
 #include "../../headers/runner.h"
-#include "../../headers/scanner.h"
 #include "../../headers/lexer.h"
 #include "../../headers/parser.h"
 #include "../../headers/sh_signal.h"
@@ -21,21 +20,26 @@
 
 #define SH_PROMPT "minishell$ "
 
-static int	core_process_line(t_shell *shell, char *line)
+static t_ast	*core_parse(char *line)
 {
-	t_scanner	sc;
 	t_manager	*manager;
 	t_ast		*ast;
 
-	// here move the scanner_init to inside the lexer itself
-	scanner_init(&sc, line);
-	manager = lexer(&sc);
+	manager = lexer(line);
 	if (!manager)
-		return (rn_status_set(&shell->env, 2), 0);
+		return (NULL);
 	ast = parser_controller(manager);
 	lexer_free(manager);
+	return (ast);
+}
+
+static int	core_process_line(t_shell *shell, char *line)
+{
+	t_ast	*ast;
+
+	ast = core_parse(line);
 	if (!ast)
-		return (0);
+		return (rn_status_set(&shell->env, 2), 0);
 	if (ast->error)
 	{
 		sh_stxerr(ast->error_type);

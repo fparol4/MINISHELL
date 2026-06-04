@@ -1,6 +1,6 @@
 #include "./env.h"
 
-t_env	*f_newnode(const char *key, const char *value)
+t_env	*env_node_new(const char *key, const char *value)
 {
 	t_env	*node;
 
@@ -24,7 +24,7 @@ t_env	*f_newnode(const char *key, const char *value)
 	return (node);
 }
 
-int	f_freenode(t_env *node)
+int	env_node_free(t_env *node)
 {
 	if (!node)
 		return (0);

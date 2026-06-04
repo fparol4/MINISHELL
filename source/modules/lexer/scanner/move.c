@@ -1,4 +1,4 @@
-#include "scanner.h"
+#include "header.h"
 
 void	scanner_advance(t_scanner *sc)
 {

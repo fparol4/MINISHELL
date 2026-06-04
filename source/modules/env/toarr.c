@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/minishell.h"
-#include "../../../headers/env.h"
+#include "./env.h"
+
 
 static char	*toentry(const char *key, const char *value)
 {
@@ -29,21 +29,6 @@ static char	*toentry(const char *key, const char *value)
 	return (entry);
 }
 
-static int	envsize(t_env **env)
-{
-	int		size;
-	t_env	*node;
-
-	size = 0;
-	node = *env;
-	while (node)
-	{
-		size++;
-		node = node->next;
-	}
-	return (size);
-}
-
 char	**env_toarr(t_env **env)
 {
 	int		i;
@@ -51,7 +36,7 @@ char	**env_toarr(t_env **env)
 	char	**arr;
 	t_env	*node;
 
-	es = envsize(env);
+	es = env_size(env);
 	arr = calloc(es + 1, sizeof(char *));
 	if (!arr)
 		return (NULL);

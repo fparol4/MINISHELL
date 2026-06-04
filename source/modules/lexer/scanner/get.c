@@ -1,4 +1,4 @@
-#include "scanner.h"
+#include "header.h"
 
 unsigned int	scanner_current(t_scanner *sc)
 {

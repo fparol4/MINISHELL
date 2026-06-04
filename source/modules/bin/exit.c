@@ -63,9 +63,7 @@ int	bin_exit(char **args, t_env **env)
 		exit(rn_status_get(env));
 	if (!exit_value(args[0], &code))
 	{
-		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(args[0], 2);
-		ft_putendl_fd(": numeric argument required", 2);
+		sh_err2("exit", args[0], "numeric argument required");
 		env_set(env, ENV_ERRCODE, "2");
 		exit(2);
 	}

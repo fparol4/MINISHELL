@@ -29,7 +29,7 @@ int	env_unset(t_env **env, const char *key)
 				prev->next = node->next;
 			else
 				*env = node->next;
-			f_freenode(node);
+			env_node_free(node);
 			return (0);
 		}
 		prev = node;

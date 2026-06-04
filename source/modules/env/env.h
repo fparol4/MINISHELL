@@ -6,8 +6,8 @@
 # include "../../../headers/shared.h"
 
 /* list.c */
-t_env	*f_newnode(const char *key, const char *value);
-int		f_freenode(t_env *node);
+t_env	*env_node_new(const char *key, const char *value);
+int		env_node_free(t_env *node);
 
 /* free.c */
 int		env_free(t_env **env);

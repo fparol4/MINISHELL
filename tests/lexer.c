@@ -1,13 +1,9 @@
 #include "snow.h"
 #include "../headers/lexer.h"
-#include "../headers/scanner.h"
 
 static t_manager	*lex(const char *input)
 {
-	t_scanner	sc;
-
-	scanner_init(&sc, input);
-	return (lexer(&sc));
+	return (lexer(input));
 }
 
 static t_list_token	*nth_token(t_manager *m, unsigned int n)

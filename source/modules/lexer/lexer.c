@@ -1,4 +1,4 @@
-#include "../../headers/lexer_internal.h"
+#include "header.h"
 
 static int	lexer_init(t_manager **manager, t_rules **rules)
 {
@@ -40,15 +40,19 @@ static t_manager	*lexer_cleanup(t_manager *manager, t_rules *rules)
 	return (NULL);
 }
 
-t_manager	*lexer(t_scanner *input)
+t_manager	*lexer(const char *input)
 {
+	t_scanner	sc;
 	t_manager	*manager;
 	t_rules		*rules;
 
+	if (!input)
+		return (NULL);
+	scanner_init(&sc, input);
 	if (!lexer_init(&manager, &rules))
 		return (NULL);
 	rules_init(rules);
-	if (!state_machine(manager, input, rules))
+	if (!state_machine(manager, &sc, rules))
 	{
 		sh_stxerr(SNTX_UNCLOSED_QUOTE);
 		return (lexer_cleanup(manager, rules));

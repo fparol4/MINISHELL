@@ -12,22 +12,6 @@
 
 #include "../../../headers/minishell.h"
 
-static int	vid(char *s)
-{
-	int	i;
-
-	if (!s || (!ft_isalpha(s[0]) && s[0] != '_'))
-		return (0);
-	i = 1;
-	while (s[i] && s[i] != '=')
-	{
-		if (!ft_isalnum(s[i]) && s[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 static void	sortkeys(char **keys, int size)
 {
 	int		i;
@@ -52,12 +36,22 @@ static void	sortkeys(char **keys, int size)
 	}
 }
 
-static char	**getkeys(t_env **env, int size)
+static char	**getkeys(t_env **env, int *size_out)
 {
 	int		i;
+	int		size;
 	t_env	*node;
 	char	**keys;
 
+	size = 0;
+	node = *env;
+	while (node)
+	{
+		if (ft_strcmp(node->key, ENV_ERRCODE) != 0)
+			size++;
+		node = node->next;
+	}
+	*size_out = size;
 	keys = ft_calloc(size + 1, sizeof(char *));
 	if (!keys)
 		return (NULL);
@@ -69,24 +63,8 @@ static char	**getkeys(t_env **env, int size)
 			keys[i++] = node->key;
 		node = node->next;
 	}
-	sortkeys(keys, i);
+	sortkeys(keys, size);
 	return (keys);
-}
-
-static int	printsize(t_env **env)
-{
-	int		size;
-	t_env	*node;
-
-	size = 0;
-	node = *env;
-	while (node)
-	{
-		if (ft_strcmp(node->key, ENV_ERRCODE) != 0)
-			size++;
-		node = node->next;
-	}
-	return (size);
 }
 
 static int	print_export(t_env **env)
@@ -96,8 +74,7 @@ static int	print_export(t_env **env)
 	t_env	*node;
 	char	**keys;
 
-	k_size = printsize(env);
-	keys = getkeys(env, k_size);
+	keys = getkeys(env, &k_size);
 	if (!keys)
 		return (1);
 	i = 0;
@@ -134,7 +111,12 @@ int	bin_export(char **args, t_env **env)
 	i = 0;
 	while (args[i])
 	{
-		if (!vid(args[i]))
+		c_eq = ft_strchr(args[i], '=');
+		if (c_eq)
+			key = ft_substr(args[i], 0, c_eq - args[i]);
+		else
+			key = ft_strdup(args[i]);
+		if (!key || !sh_isidentifier(key))
 		{
 			ft_putstr_fd("minishell: export: '", 2);
 			ft_putstr_fd(args[i], 2);
@@ -143,16 +125,12 @@ int	bin_export(char **args, t_env **env)
 		}
 		else
 		{
-			c_eq = ft_strchr(args[i], '=');
 			if (c_eq)
-			{
-				key = ft_substr(args[i], 0, c_eq - args[i]);
 				env_set(env, key, c_eq + 1);
-				free(key);
-			}
 			else
-				env_set(env, args[i], NULL);
+				env_set(env, key, NULL);
 		}
+		free(key);
 		i++;
 	}
 	return (code);

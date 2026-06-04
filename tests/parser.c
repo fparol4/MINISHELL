@@ -1,15 +1,12 @@
 #include "snow.h"
 #include "../headers/parser_internal.h"
-#include "../headers/scanner.h"
 
 static t_ast	*parse_input(const char *input)
 {
-	t_scanner	sc;
 	t_manager	*m;
 	t_ast		*ast;
 
-	scanner_init(&sc, input);
-	m = lexer(&sc);
+	m = lexer(input);
 	if (!m)
 		return (NULL);
 	ast = parser_controller(m);

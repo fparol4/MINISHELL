@@ -15,13 +15,11 @@
 int	env_set(t_env **env, const char *key, const char *value)
 {
 	char	*vdup;
-	size_t	key_l;
 	t_env	*node;
 	t_env	*tail;
 
 	if (!env || !key)
 		return (-1);
-	key_l = ft_strlen(key);
 	node = *env;
 	while (node)
 	{
@@ -39,7 +37,7 @@ int	env_set(t_env **env, const char *key, const char *value)
 		tail = node;
 		node = node->next;
 	}
-	node = f_newnode(key, value);
+	node = env_node_new(key, value);
 	if (!node)
 		return (-1);
 	if (!*env)

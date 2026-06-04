@@ -23,7 +23,7 @@ int	env_free(t_env **env)
 	while (node)
 	{
 		next = node->next;
-		f_freenode(node);
+		env_node_free(node);
 		node = next;
 	}
 	*env = NULL;

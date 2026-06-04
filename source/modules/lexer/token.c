@@ -1,4 +1,4 @@
-#include "../../headers/lexer_internal.h"
+#include "header.h"
 
 void	token_free(void *content)
 {
