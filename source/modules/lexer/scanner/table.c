@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 20:21:50 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/04 20:21:50 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/06/05 09:27:31 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	scanner_table_char(t_scanner_table *table)
 
 	if (!table)
 		return ;
-	i = 0;
-	while (i < 256)
-		table->props[i++] = 0;
+	ft_memset(table, 0, 256);
 	i = 0;
 	while (i < 256)
 	{
