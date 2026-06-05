@@ -40,11 +40,11 @@
 
 ### f) `source/core/reader.c`
 
-- [ ] f.1 — `core_loop` (30 linhas)
+- [x] f.1 — `core_loop` (30 linhas)
 
 ### g) `source/shared/signal.c`
 
-- [ ] g.1 — `sh_sig_mode` (26 linhas)
+- [x] g.1 — `sh_sig_mode` (26 linhas)
 
 ### h) `source/modules/env/init.c`
 

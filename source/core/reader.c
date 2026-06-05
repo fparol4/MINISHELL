@@ -50,34 +50,43 @@ static int	core_process_line(t_shell *shell, char *line)
 	return (0);
 }
 
-int	core_loop(t_shell *shell)
+static int	core_iteration(t_shell *shell)
 {
 	char	*line;
+
+	line = readline("GA&Fabricio:minishell$ ");
+	if (!line)
+	{
+		if (g_signal == SIGINT)
+		{
+			rn_status_set(&shell->env, 130);
+			g_signal = 0;
+			return (1);
+		}
+		write(STDOUT_FILENO, "exit\n", 5);
+		return (-1);
+	}
+	if (g_signal == SIGINT)
+		rn_status_set(&shell->env, 130);
+	g_signal = 0;
+	if (*line)
+		add_history(line);
+	core_process_line(shell, line);
+	free(line);
+	return (0);
+}
+
+int	core_loop(t_shell *shell)
+{
+	int	ret;
 
 	if (!shell)
 		return (1);
 	while (shell->running)
 	{
-		line = readline("GA&Fabricio:minishell$ ");
-		if (!line)
-		{
-			if (g_signal == SIGINT)
-			{
-				rn_status_set(&shell->env, 130);
-				g_signal = 0;
-				continue ;
-			}
-			write(STDOUT_FILENO, "exit\n", 5);
+		ret = core_iteration(shell);
+		if (ret == -1)
 			return (rn_status_get(&shell->env));
-		}
-		if (g_signal == SIGINT)
-			rn_status_set(&shell->env, 130);
-		g_signal = 0;
-		if (*line)
-			add_history(line);
-		if (core_process_line(shell, line))
-			shell->running = FALSE;
-		free(line);
 	}
 	return (rn_status_get(&shell->env));
 }
