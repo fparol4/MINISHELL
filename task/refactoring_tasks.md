@@ -60,7 +60,7 @@
 
 ### k) `source/modules/bin/echo.c`
 
-- [ ] k.1 — `bin_echo` (28 linhas)
+- [x] k.1 — `bin_echo` (28 linhas)
 
 ### l) `source/modules/bin/exit.c`
 
