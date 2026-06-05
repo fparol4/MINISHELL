@@ -28,6 +28,17 @@ static char	*toentry(const char *key, const char *value)
 	return (entry);
 }
 
+static int	env_fill_entry(t_env *node, char **arr, int i)
+{
+	arr[i] = toentry(node->key, node->value);
+	if (!arr[i])
+	{
+		sh_freeargs(arr);
+		return (1);
+	}
+	return (0);
+}
+
 char	**env_toarr(t_env **env)
 {
 	int		i;
@@ -45,12 +56,9 @@ char	**env_toarr(t_env **env)
 	{
 		if (node->value && ft_strcmp(node->key, ENV_ERRCODE) != 0)
 		{
-			arr[i] = toentry(node->key, node->value);
-			if (!arr[i++])
-			{
-				sh_freeargs(arr);
+			if (env_fill_entry(node, arr, i))
 				return (NULL);
-			}
+			i++;
 		}
 		node = node->next;
 	}

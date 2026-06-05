@@ -48,15 +48,15 @@
 
 ### h) `source/modules/env/init.c`
 
-- [ ] h.1 — `env_init` (29 linhas)
+- [x] h.1 — `env_init` (29 linhas)
 
 ### i) `source/modules/env/set.c`
 
-- [ ] i.1 — `env_set` (33 linhas)
+- [x] i.1 — `env_set` (33 linhas)
 
 ### j) `source/modules/env/toarr.c`
 
-- [ ] j.1 — `env_toarr` (27 linhas)
+- [x] j.1 — `env_toarr` (27 linhas)
 
 ### k) `source/modules/bin/echo.c`
 
