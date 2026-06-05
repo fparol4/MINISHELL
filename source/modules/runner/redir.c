@@ -11,21 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../../headers/runner.h"
-#include <fcntl.h>
-
-typedef enum e_heredoc_state
-{
-	HEREDOC_DONE,
-	HEREDOC_EOF,
-	HEREDOC_INTR,
-	HEREDOC_FAIL
-}						t_heredoc_state;
-
-typedef struct s_redir_fd
-{
-	int					fd;
-	int					stdio;
-}						t_redir_fd;
 
 static int	rn_redir_append(char **buf, char *part)
 {

@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:53:20 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/05 09:44:05 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/06/05 11:54:43 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,21 @@
 # include "./minishell.h"
 # include "./parser_internal.h"
 # include "./sh_signal.h"
+# include <fcntl.h>
+
+typedef enum e_heredoc_state
+{
+	HEREDOC_DONE,
+	HEREDOC_EOF,
+	HEREDOC_INTR,
+	HEREDOC_FAIL
+}	t_heredoc_state;
+
+typedef struct s_redir_fd
+{
+	int	fd;
+	int	stdio;
+}	t_redir_fd;
 
 typedef enum e_ext_kind
 {

@@ -162,6 +162,7 @@ int	rn_pipe(t_command *node, t_env **env)
 	int			*fds;
 	size_t		count;
 	size_t		idx;
+	int			status;
 
 	count = rn_pipe_count(node);
 	if (count < 2)
@@ -174,6 +175,8 @@ int	rn_pipe(t_command *node, t_env **env)
 	rn_pipe_flatten(node, cmds, &idx);
 	if (rn_pipe_create(fds, count - 1))
 		return (free(cmds), free(fds), 1);
-	return (free(cmds), free(fds),
-		pipe_fork_and_wait(cmds, env, fds, count));
+	status = pipe_fork_and_wait(cmds, env, fds, count);
+	free(cmds);
+	free(fds);
+	return (status);
 }
