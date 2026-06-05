@@ -14,42 +14,61 @@
 #include "../../../headers/runner.h"
 #include <limits.h>
 
-static int	exit_value(char *arg, long long *out)
+static int	exit_parse_prefix(char **arg, int *sign)
 {
-	unsigned long long	value;
-	unsigned long long	limit;
-	int					sign;
-
-	while (sh_isspace(*arg))
-		arg++;
-	sign = 1;
-	if (*arg == '-' || *arg == '+')
+	while (sh_isspace(**arg))
+		(*arg)++;
+	*sign = 1;
+	if (**arg == '-' || **arg == '+')
 	{
-		if (*arg++ == '-')
-			sign = -1;
+		if (*(*arg)++ == '-')
+			*sign = -1;
 	}
-	if (!ft_isdigit(*arg))
+	if (!ft_isdigit(**arg))
 		return (0);
-	value = 0;
+	return (1);
+}
+
+static int	exit_parse_digits(char **arg, unsigned long long *value, int sign)
+{
+	unsigned long long	limit;
+
+	*value = 0;
 	limit = (unsigned long long)LLONG_MAX;
 	if (sign < 0)
 		limit++;
-	while (ft_isdigit(*arg))
+	while (ft_isdigit(**arg))
 	{
-		if (value > (limit - (*arg - '0')) / 10)
+		if (*value > (limit - (**arg - '0')) / 10)
 			return (0);
-		value = value * 10 + (*arg++ - '0');
+		*value = *value * 10 + (*(*arg)++ - '0');
 	}
-	while (sh_isspace(*arg))
-		arg++;
-	if (*arg)
+	while (sh_isspace(**arg))
+		(*arg)++;
+	if (**arg)
 		return (0);
-	if (sign < 0 && value == limit)
-		*out = LLONG_MIN;
-	else if (sign < 0)
-		*out = -(long long)value;
-	else
-		*out = (long long)value;
+	return (1);
+}
+
+static long long	exit_apply_sign(unsigned long long value, int sign)
+{
+	if (sign < 0 && value == (unsigned long long)LLONG_MAX + 1)
+		return (LLONG_MIN);
+	if (sign < 0)
+		return (-(long long)value);
+	return ((long long)value);
+}
+
+static int	exit_value(char *arg, long long *out)
+{
+	int					sign;
+	unsigned long long	value;
+
+	if (!exit_parse_prefix(&arg, &sign))
+		return (0);
+	if (!exit_parse_digits(&arg, &value, sign))
+		return (0);
+	*out = exit_apply_sign(value, sign);
 	return (1);
 }
 

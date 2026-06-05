@@ -64,7 +64,7 @@
 
 ### l) `source/modules/bin/exit.c`
 
-- [ ] l.1 — `exit_value` (37 linhas)
+- [x] l.1 — `exit_value` (37 linhas)
 
 ### m) `source/modules/bin/export.c`
 
