@@ -133,41 +133,47 @@ static int	rn_pipe_fork_all(t_command **cmds, t_env **env, int *fds,
 	return (0);
 }
 
+static int	pipe_fork_and_wait(t_command **cmds, t_env **env, int *fds,
+		size_t count)
+{
+	pid_t	*pids;
+	size_t	forked;
+	int		status;
+
+	pids = ft_calloc(count, sizeof(pid_t));
+	if (!pids)
+		return (1);
+	sh_sig_mode(SIG_EXEC);
+	forked = 0;
+	status = rn_pipe_fork_all(cmds, env, fds, pids, count - 1, &forked);
+	rn_pipe_close_all(fds, count - 1);
+	if (status)
+		rn_pipe_wait(pids, forked);
+	else
+		status = rn_pipe_wait(pids, count);
+	sh_sig_mode(SIG_INTERACTIVE);
+	free(pids);
+	return (status);
+}
+
 int	rn_pipe(t_command *node, t_env **env)
 {
 	t_command	**cmds;
-	pid_t		*pids;
 	int			*fds;
 	size_t		count;
-	size_t		forked;
 	size_t		idx;
-	int			status;
 
 	count = rn_pipe_count(node);
 	if (count < 2)
 		return (sh_err(NULL, "invalid pipe node"), 1);
 	cmds = ft_calloc(count + 1, sizeof(t_command *));
-	pids = ft_calloc(count, sizeof(pid_t));
 	fds = malloc(sizeof(int) * (count - 1) * 2);
-	if (!cmds || !pids || !fds)
-		return (free(cmds), free(pids), free(fds), 1);
+	if (!cmds || !fds)
+		return (free(cmds), free(fds), 1);
 	idx = 0;
 	rn_pipe_flatten(node, cmds, &idx);
 	if (rn_pipe_create(fds, count - 1))
-		return (free(cmds), free(pids), free(fds), 1);
-	sh_sig_mode(SIG_EXEC);
-	forked = 0;
-	if (rn_pipe_fork_all(cmds, env, fds, pids, count - 1, &forked))
-	{
-		rn_pipe_close_all(fds, count - 1);
-		rn_pipe_wait(pids, forked);
-		status = 1;
-	}
-	else
-	{
-		rn_pipe_close_all(fds, count - 1);
-		status = rn_pipe_wait(pids, count);
-	}
-	sh_sig_mode(SIG_INTERACTIVE);
-	return (free(cmds), free(pids), free(fds), status);
+		return (free(cmds), free(fds), 1);
+	return (free(cmds), free(fds),
+		pipe_fork_and_wait(cmds, env, fds, count));
 }

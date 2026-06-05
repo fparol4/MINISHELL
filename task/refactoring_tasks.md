@@ -21,14 +21,14 @@
 
 ### b) `source/modules/runner/redir.c`
 
-- [ ] b.1 — `rn_redir_value` (27 linhas)
-- [ ] b.2 — `rn_redir_readline` (29 linhas)
-- [ ] b.3 — `rn_redir_heredoc_fill` (36 linhas)
-- [ ] b.4 — `rn_redir_apply` (45 linhas)
+- [x] b.1 — `rn_redir_value` (27 linhas)
+- [x] b.2 — `rn_redir_readline` (29 linhas)
+- [x] b.3 — `rn_redir_heredoc_fill` (36 linhas)
+- [x] b.4 — `rn_redir_apply` (45 linhas)
 
 ### c) `source/modules/runner/pipe.c`
 
-- [ ] c.1 — `rn_pipe` (37 linhas)
+- [x] c.1 — `rn_pipe` (37 linhas)
 
 ### d) `source/modules/runner/external.c`
 
