@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../headers/sh_signal.h"
-#include <readline/readline.h>
-#include <unistd.h>
 
 volatile sig_atomic_t	g_signal = 0;
 

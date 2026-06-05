@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:53:20 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/04 20:46:08 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/06/05 09:44:05 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 # include "./minishell.h"
 # include "./parser_internal.h"
 # include "./sh_signal.h"
+
+typedef enum e_ext_kind
+{
+	EXT_READY,
+	EXT_NOT_FOUND,
+	EXT_DENIED,
+	EXT_DIR
+}	t_ext_kind;
 
 typedef struct s_arglist
 {

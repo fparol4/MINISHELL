@@ -139,6 +139,17 @@ static int	add_unquoted(t_arglist *list, t_word *word, const char *value)
 	return (0);
 }
 
+static char	*var_special(int *i, t_env **env)
+{
+	char	*value;
+
+	(*i)++;
+	value = env_get(env, ENV_ERRCODE);
+	if (!value)
+		return ("");
+	return (value);
+}
+
 static char	*varvalue(char *arg, int *i, t_env **env)
 {
 	char	*key;
@@ -147,13 +158,7 @@ static char	*varvalue(char *arg, int *i, t_env **env)
 
 	(*i)++;
 	if (arg[*i] == '?')
-	{
-		(*i)++;
-		value = env_get(env, ENV_ERRCODE);
-		if (!value)
-			return ("");
-		return (value);
-	}
+		return (var_special(i, env));
 	if (!sh_varstart(arg[*i]))
 		return (NULL);
 	start = *i;
@@ -228,6 +233,26 @@ static int	double_quote(t_word *word, char *arg, int *i, t_env **env)
 	return (0);
 }
 
+static int	argexpand_char(t_arglist *out, t_word *word, char *arg, int *i,
+		t_env **env)
+{
+	if (arg[*i] == '\'')
+		return (single(word, arg, i));
+	if (arg[*i] == '"')
+		return (double_quote(word, arg, i, env));
+	if (arg[*i] == '$')
+		return (expand_var(out, word, arg, i, env));
+	if (sh_isspace(arg[*i]))
+	{
+		if (flush_word(out, word))
+			return (1);
+		while (sh_isspace(arg[*i]))
+			(*i)++;
+		return (0);
+	}
+	return (wordchar(word, arg[(*i)++]));
+}
+
 static int	rn_argexpand(char *arg, t_arglist *out, t_env **env)
 {
 	t_word	word;
@@ -237,29 +262,7 @@ static int	rn_argexpand(char *arg, t_arglist *out, t_env **env)
 	i = 0;
 	while (arg && arg[i])
 	{
-		if (arg[i] == '\'')
-		{
-			if (single(&word, arg, &i))
-				return (free(word.buf), 1);
-		}
-		else if (arg[i] == '"')
-		{
-			if (double_quote(&word, arg, &i, env))
-				return (free(word.buf), 1);
-		}
-		else if (arg[i] == '$')
-		{
-			if (expand_var(out, &word, arg, &i, env))
-				return (free(word.buf), 1);
-		}
-		else if (sh_isspace(arg[i]))
-		{
-			if (flush_word(out, &word))
-				return (free(word.buf), 1);
-			while (sh_isspace(arg[i]))
-				i++;
-		}
-		else if (wordchar(&word, arg[i++]))
+		if (argexpand_char(out, &word, arg, &i, env))
 			return (free(word.buf), 1);
 	}
 	if (flush_word(out, &word))

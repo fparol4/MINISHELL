@@ -123,10 +123,10 @@ static int	rn_pipe_fork_all(t_command **cmds, t_env **env, int *fds,
 	while (cmds[i])
 	{
 		pids[i] = fork();
-			if (pids[i] == -1)
-				return (*forked = i, sh_err(NULL, "fork failed"), 1);
-			if (pids[i] == 0)
-				rn_pipe_child(cmds, env, fds, i, pipe_count);
+		if (pids[i] == -1)
+			return (*forked = i, sh_err(NULL, "fork failed"), 1);
+		if (pids[i] == 0)
+			rn_pipe_child(cmds, env, fds, i, pipe_count);
 		i++;
 	}
 	*forked = i;

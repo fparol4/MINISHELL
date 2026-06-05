@@ -6,7 +6,7 @@
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:53:35 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/04 18:53:35 by g-alves-         ###   ########.fr       */
+/*   Updated: 2026/06/05 09:47:50 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define SH_SIGNAL_H
 
 # include <signal.h>
+# include <readline/readline.h>
+# include <unistd.h>
 
 extern volatile sig_atomic_t	g_signal;
 

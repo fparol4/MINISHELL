@@ -16,14 +16,6 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-typedef enum e_ext_kind
-{
-	EXT_READY,
-	EXT_NOT_FOUND,
-	EXT_DENIED,
-	EXT_DIR
-}					t_ext_kind;
-
 static int	rn_ext_slash(char *cmd)
 {
 	return (cmd && ft_strchr(cmd, '/'));
