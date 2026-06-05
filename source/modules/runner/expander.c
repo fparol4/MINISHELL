@@ -12,21 +12,6 @@
 
 #include "../../../headers/runner.h"
 
-typedef struct s_arglist
-{
-	char	**items;
-	int		size;
-	int		cap;
-}			t_arglist;
-
-typedef struct s_word
-{
-	char	*buf;
-	int		len;
-	int		cap;
-	int		active;
-}			t_word;
-
 static int	listgrow(t_arglist *list)
 {
 	char	**next;

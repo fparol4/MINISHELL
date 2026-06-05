@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./env.h"
-
+#include "./modules_env.h"
 
 static char	*toentry(const char *key, const char *value)
 {
@@ -44,15 +43,14 @@ char	**env_toarr(t_env **env)
 	i = 0;
 	while (node)
 	{
-			if (node->value && ft_strcmp(node->key, ENV_ERRCODE) != 0)
+		if (node->value && ft_strcmp(node->key, ENV_ERRCODE) != 0)
 		{
 			arr[i] = toentry(node->key, node->value);
-			if (!arr[i])
+			if (!arr[i++])
 			{
 				sh_freeargs(arr);
 				return (NULL);
 			}
-			i++;
 		}
 		node = node->next;
 	}

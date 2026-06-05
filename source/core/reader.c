@@ -18,8 +18,6 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
-#define SH_PROMPT "minishell$ "
-
 static t_ast	*core_parse(char *line)
 {
 	t_manager	*manager;
@@ -60,7 +58,7 @@ int	core_loop(t_shell *shell)
 		return (1);
 	while (shell->running)
 	{
-		line = readline(SH_PROMPT);
+		line = readline("GA&Fabricio:minishell$ ");
 		if (!line)
 		{
 			if (g_signal == SIGINT)
