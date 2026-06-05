@@ -36,7 +36,7 @@
 
 ### e) `source/shared/string.c`
 
-- [ ] e.1 — `sh_quote_remove` (26 linhas)
+- [x] e.1 — `sh_quote_remove` (26 linhas)
 
 ### f) `source/core/reader.c`
 

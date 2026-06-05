@@ -57,6 +57,21 @@ int	sh_has_quotes(char *s)
 	return (0);
 }
 
+static int	quote_should_copy(char c, char *quote)
+{
+	if (!*quote && (c == '\'' || c == '"'))
+	{
+		*quote = c;
+		return (0);
+	}
+	if (*quote && c == *quote)
+	{
+		*quote = '\0';
+		return (0);
+	}
+	return (1);
+}
+
 char	*sh_quote_remove(char *s)
 {
 	char	*out;
@@ -72,14 +87,11 @@ char	*sh_quote_remove(char *s)
 	i = 0;
 	j = 0;
 	quote = '\0';
-	while (s && s[i])
+	while (s[i])
 	{
-		if (!quote && (s[i] == '\'' || s[i] == '"'))
-			quote = s[i++];
-		else if (quote && s[i] == quote)
-			quote = (i++, '\0');
-		else
-			out[j++] = s[i++];
+		if (quote_should_copy(s[i], &quote))
+			out[j++] = s[i];
+		i++;
 	}
 	out[j] = '\0';
 	return (out);
