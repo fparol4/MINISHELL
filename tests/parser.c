@@ -1,5 +1,5 @@
 #include "snow.h"
-#include "../headers/parser_internal.h"
+#include "../headers/parser.h"
 
 static t_ast	*parse_input(const char *input)
 {
@@ -26,8 +26,8 @@ describe(parser_simple_command)
 		asserteq(ast->error, 0);
 		asserteq(ast->root->type, PNODE_CMD);
 		simple = &ast->root->t_define.simple;
-		asserteq_str(simple->args[0], "ls");
-		assert(simple->args[1] == NULL);
+		asserteq_str(((char **)simple->args.items)[0], "ls");
+		assert(((char **)simple->args.items)[1] == NULL);
 		parser_free_ast(ast);
 	}
 
@@ -40,10 +40,10 @@ describe(parser_simple_command)
 		assert(ast != NULL);
 		asserteq(ast->error, 0);
 		simple = &ast->root->t_define.simple;
-		asserteq_str(simple->args[0], "echo");
-		asserteq_str(simple->args[1], "hello");
-		asserteq_str(simple->args[2], "world");
-		assert(simple->args[3] == NULL);
+		asserteq_str(((char **)simple->args.items)[0], "echo");
+		asserteq_str(((char **)simple->args.items)[1], "hello");
+		asserteq_str(((char **)simple->args.items)[2], "world");
+		assert(((char **)simple->args.items)[3] == NULL);
 		parser_free_ast(ast);
 	}
 
@@ -71,9 +71,9 @@ describe(parser_redirections)
 		assert(ast != NULL);
 		asserteq(ast->error, 0);
 		simple = &ast->root->t_define.simple;
-		asserteq(simple->redir_count, 1);
-		asserteq(simple->redirs[0].type, REDIR_OUT);
-		asserteq_str(simple->redirs[0].file, "out");
+		asserteq(simple->redirs.length, 1);
+		asserteq(((t_parser_redir *)simple->redirs.items)[0].type, REDIR_OUT);
+		asserteq_str(((t_parser_redir *)simple->redirs.items)[0].file, "out");
 		parser_free_ast(ast);
 	}
 
@@ -85,8 +85,8 @@ describe(parser_redirections)
 		ast = parse_input("cat < file");
 		assert(ast != NULL);
 		simple = &ast->root->t_define.simple;
-		asserteq(simple->redirs[0].type, REDIR_IN);
-		asserteq_str(simple->redirs[0].file, "file");
+		asserteq(((t_parser_redir *)simple->redirs.items)[0].type, REDIR_IN);
+		asserteq_str(((t_parser_redir *)simple->redirs.items)[0].file, "file");
 		parser_free_ast(ast);
 	}
 
@@ -98,7 +98,8 @@ describe(parser_redirections)
 		ast = parse_input("echo hi >> log");
 		assert(ast != NULL);
 		simple = &ast->root->t_define.simple;
-		asserteq(simple->redirs[0].type, REDIR_APPEND);
+		asserteq(((t_parser_redir *)simple->redirs.items)[0].type,
+			REDIR_APPEND);
 		parser_free_ast(ast);
 	}
 
@@ -110,8 +111,9 @@ describe(parser_redirections)
 		ast = parse_input("cat << EOF");
 		assert(ast != NULL);
 		simple = &ast->root->t_define.simple;
-		asserteq(simple->redirs[0].type, REDIR_HEREDOC);
-		asserteq_str(simple->redirs[0].file, "EOF");
+		asserteq(((t_parser_redir *)simple->redirs.items)[0].type,
+			REDIR_HEREDOC);
+		asserteq_str(((t_parser_redir *)simple->redirs.items)[0].file, "EOF");
 		parser_free_ast(ast);
 	}
 
@@ -123,9 +125,9 @@ describe(parser_redirections)
 		ast = parse_input("cmd > o1 > o2");
 		assert(ast != NULL);
 		simple = &ast->root->t_define.simple;
-		asserteq(simple->redir_count, 2);
-		asserteq_str(simple->redirs[0].file, "o1");
-		asserteq_str(simple->redirs[1].file, "o2");
+		asserteq(simple->redirs.length, 2);
+		asserteq_str(((t_parser_redir *)simple->redirs.items)[0].file, "o1");
+		asserteq_str(((t_parser_redir *)simple->redirs.items)[1].file, "o2");
 		parser_free_ast(ast);
 	}
 
@@ -137,8 +139,8 @@ describe(parser_redirections)
 		ast = parse_input("< infile grep foo");
 		assert(ast != NULL);
 		simple = &ast->root->t_define.simple;
-		asserteq(simple->redirs[0].type, REDIR_IN);
-		asserteq_str(simple->args[0], "grep");
+		asserteq(((t_parser_redir *)simple->redirs.items)[0].type, REDIR_IN);
+		asserteq_str(((char **)simple->args.items)[0], "grep");
 		parser_free_ast(ast);
 	}
 }
@@ -159,8 +161,8 @@ describe(parser_pipe)
 		right = ast->root->t_define.pipe.right;
 		asserteq(left->type, PNODE_CMD);
 		asserteq(right->type, PNODE_CMD);
-		asserteq_str(left->t_define.simple.args[0], "ls");
-		asserteq_str(right->t_define.simple.args[0], "cat");
+		asserteq_str(((char **)left->t_define.simple.args.items)[0], "ls");
+		asserteq_str(((char **)right->t_define.simple.args.items)[0], "cat");
 		parser_free_ast(ast);
 	}
 
@@ -190,8 +192,8 @@ describe(parser_pipe)
 		asserteq(ast->error, 0);
 		left = ast->root->t_define.pipe.left;
 		right = ast->root->t_define.pipe.right;
-		asserteq(left->t_define.simple.redir_count, 0);
-		asserteq(right->t_define.simple.redir_count, 1);
+		asserteq(left->t_define.simple.redirs.length, 0);
+		asserteq(right->t_define.simple.redirs.length, 1);
 		parser_free_ast(ast);
 	}
 }

@@ -58,7 +58,9 @@ SRC     = util/ft_isalpha.c \
           ds/d-list/ft_dlist.c \
           ds/d-list/ft_dlist_add.c \
           ds/d-list/ft_dlist_pop.c \
-          ds/d-list/ft_dlist_mov.c
+          ds/d-list/ft_dlist_mov.c \
+          ds/d-array/ft_array.c \
+          ds/d-array/ft_array_append.c
 
 OBJS = $(SRC:.c=.o)
 

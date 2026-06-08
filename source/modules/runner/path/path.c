@@ -5,51 +5,37 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/31 14:06:40 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/05/31 14:06:40 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 00:00:00 by fcardozo          #+#    #+#             */
+/*   Updated: 2026/06/08 00:00:00 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/runner.h"
-#include <sys/stat.h>
-#include <unistd.h>
+#include "_path.h"
 
-static void	rn_path_free(char **dirs)
+static char	*path_search_dirs(char **dirs, char *cmd)
 {
-	sh_freeargs(dirs);
-}
-
-static char	*rn_path_join(char *dir, char *cmd)
-{
-	char	*tmp;
 	char	*full;
+	char	*fallback;
+	int		i;
 
-	tmp = ft_strjoin(dir, "/");
-	if (!tmp)
-		return (NULL);
-	full = ft_strjoin(tmp, cmd);
-	free(tmp);
-	return (full);
-}
-
-static int	rn_path_match(char *full)
-{
-	struct stat	st;
-
-	if (stat(full, &st) == -1)
-		return (0);
-	if (S_ISDIR(st.st_mode))
-		return (0);
-	return (access(full, X_OK) == 0);
+	fallback = NULL;
+	i = 0;
+	while (dirs[i])
+	{
+		full = rn_path_join(dirs[i++], cmd);
+		if (!full)
+			return (free(fallback), NULL);
+		if (rn_path_candidate(full, &fallback))
+			return (free(fallback), full);
+	}
+	return (fallback);
 }
 
 static char	*rn_path_search(char **args, t_env **env)
 {
 	char	**dirs;
 	char	*path;
-	char	*full;
-	char	*fallback;
-	int		i;
+	char	*found;
 
 	if (ft_strchr(args[0], '/'))
 		return (ft_strdup(args[0]));
@@ -59,22 +45,9 @@ static char	*rn_path_search(char **args, t_env **env)
 	dirs = ft_split(path, ':');
 	if (!dirs)
 		return (NULL);
-	fallback = NULL;
-	i = 0;
-	while (dirs[i])
-	{
-		full = rn_path_join(dirs[i++], args[0]);
-		if (!full)
-			return (free(fallback), rn_path_free(dirs), NULL);
-		if (rn_path_match(full))
-			return (free(fallback), rn_path_free(dirs), full);
-		if (!fallback && access(full, F_OK) == 0)
-			fallback = full;
-		else
-			free(full);
-	}
+	found = path_search_dirs(dirs, args[0]);
 	rn_path_free(dirs);
-	return (fallback);
+	return (found);
 }
 
 char	*rn_path(char **args, t_env **env)

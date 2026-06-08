@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/parser_internal.h"
+#include "_parser.h"
 
 void	parser_init(t_parser *parser, t_manager *manager)
 {
@@ -23,7 +23,7 @@ void	parser_init(t_parser *parser, t_manager *manager)
 	if (manager)
 	{
 		parser->current = manager->head;
-		parser->token = get_token(parser->current);
+		parser->token = parser_get_token(parser->current);
 	}
 }
 
@@ -33,7 +33,7 @@ void	parser_next(t_parser *parser)
 		return ;
 	parser->last_type = parser->token->type;
 	parser->current = parser->current->next;
-	parser->token = get_token(parser->current);
+	parser->token = parser_get_token(parser->current);
 }
 
 t_bool	parser_is_end(t_parser *parser)
@@ -43,7 +43,7 @@ t_bool	parser_is_end(t_parser *parser)
 	return (FALSE);
 }
 
-unsigned int	token_class(t_token_type type)
+unsigned int	parser_get_class(t_token_type type)
 {
 	if (type == TOKEN_WORD)
 		return (C_WORD);
@@ -55,7 +55,7 @@ unsigned int	token_class(t_token_type type)
 	return (C_NONE);
 }
 
-t_list_token	*get_token(t_node *current_node)
+t_list_token	*parser_get_token(t_node *current_node)
 {
 	if (!current_node)
 		return (NULL);

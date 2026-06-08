@@ -12,33 +12,44 @@
 
 #include "../../../headers/runner.h"
 
+static int	rn_cmd_redir_push(t_simple *simple, t_env **env, int saved[2])
+{
+	if (!simple->redirs.length)
+		return (0);
+	return (rn_redir_push((t_parser_redir *)simple->redirs.items,
+			simple->redirs.length, env, saved));
+}
+
+static int	rn_cmd_run(char **args, t_env **env)
+{
+	int	status;
+
+	if (!args[0])
+		return (0);
+	if (rn_exec_bin(args, env, &status))
+		return (status);
+	return (rn_exec_ext(args, env));
+}
+
 int	rn_exec_cmd(t_command *cmd, t_env **env)
 {
 	t_simple	*simple;
 	char		**args;
 	int			saved[2];
 	int			status;
-	int			redir_status;
 
 	if (!cmd)
 		return (0);
 	simple = &cmd->t_define.simple;
-	args = rn_expand(simple->args, env);
+	args = rn_expand((char **)simple->args.items, env);
 	if (!args)
 		return (1);
-	if (simple->redir_count)
-	{
-		redir_status = rn_redir_push(simple->redirs, simple->redir_count,
-				env, saved);
-		if (redir_status)
-			return (sh_freeargs(args), redir_status);
-	}
-	if (!args[0])
-		status = 0;
-	else if (!rn_exec_bin(args, env, &status))
-		status = rn_exec_ext(args, env);
+	status = rn_cmd_redir_push(simple, env, saved);
+	if (status)
+		return (sh_freeargs(args), status);
+	status = rn_cmd_run(args, env);
 	sh_freeargs(args);
-	if (simple->redir_count && rn_redir_restore(saved))
+	if (simple->redirs.length && rn_redir_restore(saved))
 		status = 1;
 	return (status);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./module.h"
+#include "./_env.h"
 
 t_env	*env_node_new(const char *key, const char *value)
 {

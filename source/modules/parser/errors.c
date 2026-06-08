@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dynarray.c                                         :+:      :+:    :+:   */
+/*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 20:43:38 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/04 20:43:38 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/06/04 20:43:51 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/06/04 20:43:51 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/parser_internal.h"
+#include "_parser.h"
 
-void	*dynarray_append(void *arr, size_t elem_size, size_t *count)
+void	parser_set_syntax_error(t_parser *parser, t_syntax_error type)
 {
-	void	*new;
-	size_t	old;
-
-	old = 0;
-	if (count)
-		old = *count;
-	new = ft_calloc(old + 2, elem_size);
-	if (!new)
-		return (NULL);
-	if (arr)
-	{
-		ft_memcpy(new, arr, old * elem_size);
-		free(arr);
-	}
-	if (count)
-		(*count)++;
-	return (new);
+	if (!parser)
+		return ;
+	parser->state = TRUE;
+	if (parser->ast)
+		parser->ast->error_type = type;
 }

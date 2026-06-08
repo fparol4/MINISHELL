@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_cleanup.c                                   :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,29 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/parser_internal.h"
+#include "_parser.h"
 
-static void	free_simple_data(t_simple *simple);
+static void	parser_cleanup(t_simple *simple);
 
 void	parser_free_ast(t_ast *ast)
 {
 	if (!ast)
 		return ;
-	parser_free_command(ast->root);
+	parser_free_cmd(ast->root);
 	free(ast);
 }
 
-void	parser_free_command(t_command *cmd)
+void	parser_free_cmd(t_command *cmd)
 {
 	if (!cmd)
 		return ;
 	if (cmd->type == PNODE_PIPE)
 	{
-		parser_free_command(cmd->t_define.pipe.left);
-		parser_free_command(cmd->t_define.pipe.right);
+		parser_free_cmd(cmd->t_define.pipe.left);
+		parser_free_cmd(cmd->t_define.pipe.right);
 	}
 	else if (cmd->type == PNODE_CMD)
-		free_simple_data(&cmd->t_define.simple);
+		parser_cleanup(&cmd->t_define.simple);
 	free(cmd);
 }
 
@@ -40,26 +40,30 @@ void	parser_free_simple(t_simple *simple)
 {
 	if (!simple)
 		return ;
-	free_simple_data(simple);
+	parser_cleanup(simple);
 	free(simple);
 }
 
-static void	free_simple_data(t_simple *simple)
+static void	parser_cleanup(t_simple *simple)
 {
-	unsigned int	i;
+	char			**args;
+	t_parser_redir	*redirs;
+	size_t			i;
 
 	i = 0;
-	while (simple->args && simple->args[i])
+	args = (char **)simple->args.items;
+	while (args && i < simple->args.length)
 	{
-		free(simple->args[i]);
+		free(args[i]);
 		i++;
 	}
-	free(simple->args);
+	ft_array_free(&simple->args);
 	i = 0;
-	while (i < simple->redir_count)
+	redirs = (t_parser_redir *)simple->redirs.items;
+	while (redirs && i < simple->redirs.length)
 	{
-		free(simple->redirs[i].file);
+		free(redirs[i].file);
 		i++;
 	}
-	free(simple->redirs);
+	ft_array_free(&simple->redirs);
 }

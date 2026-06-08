@@ -46,6 +46,14 @@ typedef struct s_dlist
 	size_t				size;
 }						t_dlist;
 
+typedef struct s_array
+{
+	void				*items;
+	size_t				length;
+	size_t				capacity;
+	size_t				elem_size;
+}						t_array;
+
 /** util **/
 int						ft_isalpha(int c);
 int						ft_isdigit(int c);
@@ -131,5 +139,11 @@ void					ft_dlist_revrot(t_dlist *list);
 void					ft_dlist_swap(t_dlist *list);
 t_dlist_node			*ft_dlist_pop_head(t_dlist *list);
 t_dlist_node			*ft_dlist_pop_tail(t_dlist *list);
+
+/** ds/d-array **/
+int						ft_array_init(t_array *array, size_t elem_size);
+void					ft_array_free(t_array *array);
+void					*ft_array_get(t_array *array, size_t index);
+void					*ft_array_append(t_array *array, void *elem);
 
 #endif

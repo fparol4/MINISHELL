@@ -54,8 +54,6 @@ typedef struct s_scanner_table
 	unsigned int	props[256];
 }	t_scanner_table;
 
-
-
 void			scanner_init(t_scanner *sc, const char *input);
 void			scanner_advance(t_scanner *sc);
 void			scanner_until(t_scanner *sc, int (*f)(int));

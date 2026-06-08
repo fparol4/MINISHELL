@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_state.c                                     :+:      :+:    :+:   */
+/*   state.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,18 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/parser_internal.h"
-
-static size_t	str_array_len(char **arr)
-{
-	size_t	count;
-
-	count = 0;
-	if (arr)
-		while (arr[count])
-			count++;
-	return (count);
-}
+#include "_parser.h"
 
 void	parser_start_command(t_parser *parser)
 {
@@ -34,8 +23,10 @@ void	parser_start_command(t_parser *parser)
 		parser->state = TRUE;
 		return ;
 	}
-	parser->current_cmd->args = NULL;
-	parser->current_cmd->redirs = NULL;
+	if (ft_array_init(&parser->current_cmd->args, sizeof(char *))
+		|| ft_array_init(&parser->current_cmd->redirs,
+			sizeof(t_parser_redir)))
+		parser->state = TRUE;
 }
 
 void	parser_finish_command(t_parser *parser)
@@ -48,7 +39,7 @@ void	parser_finish_command(t_parser *parser)
 		parser->current_cmd = NULL;
 		return ;
 	}
-	if (!parser->current_cmd->args && !parser->current_cmd->redirs)
+	if (!parser->current_cmd->args.length && !parser->current_cmd->redirs.length)
 	{
 		parser_set_syntax_error(parser, SNTX_EMPTY_CMD);
 		parser_free_simple(parser->current_cmd);
@@ -60,8 +51,7 @@ void	parser_finish_command(t_parser *parser)
 
 void	parser_add_arg(t_parser *parser, char *arg, t_bool expand)
 {
-	size_t	count;
-	char	**new;
+	char	**args;
 
 	if (!parser)
 		return ;
@@ -76,25 +66,21 @@ void	parser_add_arg(t_parser *parser, char *arg, t_bool expand)
 		return ;
 	if (expand)
 		parser->current_cmd->expand = TRUE;
-	count = str_array_len(parser->current_cmd->args);
-	new = dynarray_append(parser->current_cmd->args, sizeof(char *), &count);
-	if (!new)
+	if (!ft_array_append(&parser->current_cmd->args, &arg))
 	{
 		free(arg);
 		parser->state = TRUE;
 		return ;
 	}
-	new[count - 1] = arg;
-	new[count] = NULL;
-	parser->current_cmd->args = new;
+	args = (char **)parser->current_cmd->args.items;
+	args[parser->current_cmd->args.length] = NULL;
 }
 
 void	parser_add_redir(t_parser *parser, t_parser_redir_type type,
 	t_list_token *token)
 {
-	t_parser_redir	*new;
+	t_parser_redir	redir;
 	char			*word;
-	size_t			count;
 
 	if (!parser || !token)
 		return ;
@@ -108,19 +94,14 @@ void	parser_add_redir(t_parser *parser, t_parser_redir_type type,
 		parser->state = TRUE;
 		return ;
 	}
-	count = parser->current_cmd->redir_count;
-	new = dynarray_append(parser->current_cmd->redirs,
-			sizeof(t_parser_redir), &count);
-	if (!new)
+	redir.type = type;
+	redir.file = word;
+	redir.quoted = token->quoted;
+	redir.expand = !token->quoted;
+	if (!ft_array_append(&parser->current_cmd->redirs, &redir))
 	{
 		free(word);
 		parser->state = TRUE;
 		return ;
 	}
-	parser->current_cmd->redir_count = count;
-	new[count - 1].type = type;
-	new[count - 1].file = word;
-	new[count - 1].quoted = token->quoted;
-	new[count - 1].expand = !token->quoted;
-	parser->current_cmd->redirs = new;
 }

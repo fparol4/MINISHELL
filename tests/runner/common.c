@@ -6,7 +6,14 @@ static void	rn_test_node(t_command *node, t_pnode_type type, char **args,
 	ft_bzero(node, sizeof(*node));
 	node->type = type;
 	if (type == PNODE_CMD)
-		node->t_define.simple.args = args;
+	{
+		node->t_define.simple.args.items = args;
+		node->t_define.simple.args.elem_size = sizeof(char *);
+		while (args && args[node->t_define.simple.args.length])
+			node->t_define.simple.args.length++;
+		node->t_define.simple.args.capacity
+			= node->t_define.simple.args.length + 1;
+	}
 	else
 	{
 		node->t_define.pipe.left = left;
@@ -84,8 +91,10 @@ static void	rn_test_redir(t_parser_redir *redir, t_parser_redir_type type,
 static void	rn_test_attach_redirs(t_command *node, t_parser_redir *redirs,
 		size_t count)
 {
-	node->t_define.simple.redirs = redirs;
-	node->t_define.simple.redir_count = count;
+	node->t_define.simple.redirs.items = redirs;
+	node->t_define.simple.redirs.length = count;
+	node->t_define.simple.redirs.capacity = count;
+	node->t_define.simple.redirs.elem_size = sizeof(t_parser_redir);
 }
 
 static int	rn_test_with_stdin(char *input, t_command *node, t_env **env,
