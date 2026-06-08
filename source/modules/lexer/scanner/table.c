@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scanner.h"
+#include "_scanner.h"
 
 void	scanner_table_char(t_scanner_table *table)
 {

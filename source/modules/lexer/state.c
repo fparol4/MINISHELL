@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
+#include "_lexer.h"
 
 int	state_machine(t_manager *manager, t_scanner *input, t_rules *rules)
 {
@@ -18,7 +18,7 @@ int	state_machine(t_manager *manager, t_scanner *input, t_rules *rules)
 
 	if (!input)
 		return (1);
-	while (!scanner_isend(input))
+	while (!scanner_is_end(input))
 	{
 		props = rules->table.props[scanner_current(input)];
 		if (props & rules->start_operator)

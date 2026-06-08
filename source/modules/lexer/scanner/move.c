@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scanner.h"
+#include "_scanner.h"
 
 void	scanner_advance(t_scanner *sc)
 {
@@ -18,14 +18,14 @@ void	scanner_advance(t_scanner *sc)
 		sc->cursor++;
 }
 
-int	scanner_isend(t_scanner *sc)
+int	scanner_is_end(t_scanner *sc)
 {
 	if (!sc || !sc->input)
 		return (1);
 	return (sc->cursor >= sc->len);
 }
 
-size_t	scanner_markstart(t_scanner *sc)
+size_t	scanner_mark_start(t_scanner *sc)
 {
 	if (!sc || !sc->input)
 		return (0);
@@ -37,6 +37,6 @@ void	scanner_until(t_scanner *sc, int (*f)(int))
 {
 	if (!sc || !sc->input || !f)
 		return ;
-	while (!scanner_isend(sc) && f(scanner_current(sc)))
+	while (!scanner_is_end(sc) && f(scanner_current(sc)))
 		scanner_advance(sc);
 }

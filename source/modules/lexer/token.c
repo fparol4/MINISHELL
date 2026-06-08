@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
+#include "_lexer.h"
 
 void	token_free(void *content)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scanner.h"
+#include "_scanner.h"
 
 void	scanner_init(t_scanner *sc, const char *input)
 {

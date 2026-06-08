@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scanner.h"
+#include "_scanner.h"
 
 size_t	scanner_current(t_scanner *sc)
 {

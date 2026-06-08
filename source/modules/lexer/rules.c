@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
+#include "_lexer.h"
 
 static void	define_rules(t_rules *rules)
 {

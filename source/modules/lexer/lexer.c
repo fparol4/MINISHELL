@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
+#include "_lexer.h"
 
 static int	lexer_init(t_manager **manager, t_rules **rules)
 {
