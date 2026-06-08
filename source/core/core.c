@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/31 00:00:00 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/05/31 00:00:00 by fcardozo        ###   ########.fr       */
+/*   Created: 2026/06/08 12:55:14 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 12:55:14 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/core.h"
-#include "../../headers/sh_signal.h"
+#include "_core.h"
 
 int	core_init(t_shell *shell, char **envp)
 {
@@ -21,8 +20,8 @@ int	core_init(t_shell *shell, char **envp)
 	if (!shell->env)
 		return (sh_err(NULL, "environment initialization failed"), 1);
 	if (env_set(&shell->env, ENV_ERRCODE, "0") == -1)
-		return (env_free(&shell->env),
-			sh_err(NULL, "status initialization failed"), 1);
+		return (env_free(&shell->env), sh_err(NULL,
+				"status initialization failed"), 1);
 	shell->running = TRUE;
 	sh_sig_mode(SIG_INTERACTIVE);
 	return (0);

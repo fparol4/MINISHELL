@@ -1,5 +1,5 @@
 #include "tester.h"
-#include "../headers/core.h"
+#include "../headers/minishell.h"
 
 int	core_loop(t_shell *shell)
 {
@@ -11,7 +11,7 @@ describe(core_init)
 {
 	it("initializes shell env and status")
 	{
-		char	*envp[] = {"PWD=/tmp", "SHLVL=1", NULL};
+		char	*envp[] = {"PWD=tests/_tmp", "SHLVL=1", NULL};
 		t_shell	shell;
 
 		shell.env = NULL;
@@ -42,7 +42,7 @@ describe(core_destroy)
 {
 	it("frees env and marks shell as stopped")
 	{
-		char	*envp[] = {"PWD=/tmp", NULL};
+		char	*envp[] = {"PWD=tests/_tmp", NULL};
 		t_shell	shell;
 
 		shell.env = NULL;

@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/31 14:06:40 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/05/31 14:06:40 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 12:55:14 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 12:55:14 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/shared.h"
+#include "_shared.h"
 
 void	sh_freesec(void **items)
 {

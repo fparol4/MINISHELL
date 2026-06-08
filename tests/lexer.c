@@ -1,37 +1,7 @@
-#include "snow.h"
-#include "../headers/lexer.h"
+#include "tester.h"
 
-static t_manager	*lex(const char *input)
-{
-	return (lexer(input));
-}
-
-static t_list_token	*nth_token(t_manager *m, unsigned int n)
-{
-	t_node	*cur;
-
-	cur = m->head;
-	while (n-- && cur)
-		cur = cur->next;
-	if (!cur)
-		return (NULL);
-	return ((t_list_token *)cur->content);
-}
-
-static unsigned int	token_count(t_manager *m)
-{
-	t_node			*cur;
-	unsigned int	n;
-
-	n = 0;
-	cur = m->head;
-	while (cur)
-	{
-		n++;
-		cur = cur->next;
-	}
-	return (n);
-}
+#define TEST_SHARED_LEXER
+#include "shared.c"
 
 describe(lexer_words)
 {
@@ -57,6 +27,31 @@ describe(lexer_words)
 		assert(m != NULL);
 		asserteq(token_count(m), 2);
 		asserteq_str(nth_token(m, 1)->value, "'hello world'");
+		lexer_free(m);
+	}
+
+	it("keeps mixed quotes in one word")
+	{
+		t_manager	*m;
+
+		m = lex("echo 'one'\"two\"three");
+		assert(m != NULL);
+		asserteq(token_count(m), 2);
+		asserteq_str(nth_token(m, 1)->value, "'one'\"two\"three");
+		asserteq(nth_token(m, 1)->quoted, TRUE);
+		lexer_free(m);
+	}
+
+	it("keeps quoted pipe characters inside words")
+	{
+		t_manager	*m;
+
+		m = lex("echo '|' | cat");
+		assert(m != NULL);
+		asserteq(token_count(m), 4);
+		asserteq_str(nth_token(m, 1)->value, "'|'");
+		asserteq(nth_token(m, 1)->type, TOKEN_WORD);
+		asserteq(nth_token(m, 2)->type, TOKEN_PIPE);
 		lexer_free(m);
 	}
 
@@ -154,6 +149,16 @@ describe(lexer_operators)
 		asserteq(token_count(m), 6);
 		asserteq(nth_token(m, 2)->type, TOKEN_PIPE);
 		asserteq(nth_token(m, 5)->type, TOKEN_WORD);
+		lexer_free(m);
+	}
+
+	it("marks consecutive pipe operators as invalid tokens")
+	{
+		t_manager	*m;
+
+		m = lex("echo || cat");
+		assert(m != NULL);
+		asserteq(nth_token(m, 1)->type, TOKEN_NONE);
 		lexer_free(m);
 	}
 }

@@ -1,6 +1,7 @@
 #include "tester.h"
 
-#include "runner/common.c"
+#define TEST_SHARED_RUNNER
+#include "shared.c"
 #include "runner/expand.c"
 #include "runner/command.c"
 #include "runner/pipe.c"

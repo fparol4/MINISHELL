@@ -3,31 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   runner.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 18:53:20 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/05 11:54:43 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/06/08 12:43:07 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 12:43:07 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RUNNER_H
 # define RUNNER_H
 
-# include "./minishell.h"
+# include "./bin.h"
 # include "./parser.h"
-# include "./sh_signal.h"
 
-char	**rn_expand(char **args, t_env **env);
 int		rn_execute(t_command *cmd, t_env **env);
-int		rn_exec_cmd(t_command *cmd, t_env **env);
-int		rn_exec_pipe(t_command *cmd, t_env **env);
-int		rn_pipe(t_command *cmd, t_env **env);
-int		rn_redir_push(t_parser_redir *redirs, size_t count,
-			t_env **env, int saved[2]);
-int		rn_redir_restore(int saved[2]);
-char	*rn_path(char **args, t_env **env);
-int		rn_exec_bin(char **args, t_env **env, int *status);
-int		rn_exec_ext(char **args, t_env **env);
 int		rn_status_set(t_env **env, int status);
 int		rn_status_get(t_env **env);
 

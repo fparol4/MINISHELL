@@ -1,0 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/08 12:55:11 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 12:55:11 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "_expander.h"
+
+static int	rn_argexpand(char *arg, t_arglist *out, t_env **env)
+{
+	t_exp_ctx	ctx;
+	t_word		word;
+	int			i;
+
+	ft_bzero(&word, sizeof(t_word));
+	ctx.list = out;
+	ctx.word = &word;
+	ctx.arg = arg;
+	ctx.i = &i;
+	ctx.env = env;
+	i = 0;
+	while (arg && arg[i])
+	{
+		if (exp_arg_char(&ctx))
+			return (free(word.buf), 1);
+	}
+	if (exp_flush_word(out, &word))
+		return (free(word.buf), 1);
+	free(word.buf);
+	return (0);
+}
+
+char	**rn_expand(char **args, t_env **env)
+{
+	t_arglist	out;
+	int			i;
+
+	ft_bzero(&out, sizeof(t_arglist));
+	i = 0;
+	while (args && args[i])
+	{
+		if (rn_argexpand(args[i], &out, env))
+		{
+			sh_freeargs(out.items);
+			return (NULL);
+		}
+		i++;
+	}
+	if (exp_listgrow(&out))
+		return (sh_freeargs(out.items), NULL);
+	out.items[out.size] = NULL;
+	return (out.items);
+}

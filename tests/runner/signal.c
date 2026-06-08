@@ -1,5 +1,5 @@
 #include "../tester.h"
-#include "../../headers/sh_signal.h"
+#include "../../headers/minishell.h"
 
 describe(sh_sig_mode)
 {

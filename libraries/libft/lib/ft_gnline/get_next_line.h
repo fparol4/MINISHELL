@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/18 16:13:48 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/04 16:47:19 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/06/08 12:43:04 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 12:43:04 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 #  define BUFFER_SIZE 1
 # endif
 
-# include <stdio.h>
-# include <unistd.h>
-# include <stdarg.h>
-# include <stdlib.h>
 # include <fcntl.h>
+# include <stdarg.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 char	*get_next_line(int fd);
 void	ft_read_line(int fd, char **full_string);

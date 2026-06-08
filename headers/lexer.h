@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 18:53:47 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/04 18:54:10 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/06/08 12:43:07 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 12:43:07 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ typedef enum e_token_type
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
 	TOKEN_WORD
-}	t_token_type;
+}							t_token_type;
 
 typedef struct s_list_token
 {
-	char			*value;
-	t_token_type	type;
-	t_bool			expand;
-	t_bool			quoted;
-}	t_list_token;
+	char					*value;
+	t_token_type			type;
+	t_bool					expand;
+	t_bool					quoted;
+}							t_list_token;
 
-t_manager	*lexer(const char *input);
-void		lexer_free(t_manager *manager);
+t_manager					*lexer(const char *input);
+void						lexer_free(t_manager *manager);
 
 #endif

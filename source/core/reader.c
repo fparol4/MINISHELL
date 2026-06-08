@@ -5,16 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/31 00:00:00 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/03 00:00:00 by fcardozo        ###   ########.fr       */
+/*   Created: 2026/06/08 12:55:14 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 12:55:14 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/core.h"
-#include "../../headers/runner.h"
-#include "../../headers/lexer.h"
-#include "../../headers/parser.h"
-#include "../../headers/sh_signal.h"
+#include "_core.h"
 #include <readline/history.h>
 #include <readline/readline.h>
 

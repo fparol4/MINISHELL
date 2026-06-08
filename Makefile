@@ -3,104 +3,115 @@ NAME = minishell
 CC = cc
 CFLAGS = -g3 -Wall -Wextra -Werror
 
-LIBFT_DIR = libraries/libft
-LIBFT = $(LIBFT_DIR)/libft.a
-
 INCLUDES = -I. -Iheaders -Ilibraries -Ilibraries/libft
 TEST_FLAGS = -DSNOW_ENABLED
 
 SHARED_SRCS = source/shared/error.c \
 			  source/shared/free.c \
 			  source/shared/general.c \
+			  source/shared/quote.c \
 			  source/shared/string.c \
 			  source/shared/signal.c
 
 CORE_SRCS = source/core/core.c \
 			source/core/reader.c
 
-BUILTIN_SRCS = source/modules/bin/cd.c \
-			   source/modules/bin/echo.c \
-			   source/modules/bin/env.c \
-			   source/modules/bin/exit.c \
-			   source/modules/bin/export.c \
-			   source/modules/bin/pwd.c \
-			   source/modules/bin/unset.c
+BIN_SRCS = source/bin/cd.c \
+		   source/bin/echo.c \
+		   source/bin/env.c \
+		   source/bin/exit.c \
+		   source/bin/export/export.c \
+		   source/bin/export/keys.c \
+		   source/bin/export/print.c \
+		   source/bin/pwd.c \
+		   source/bin/unset.c
 
-ENVM_SRCS = source/modules/env/list.c \
-			source/modules/env/free.c \
-			source/modules/env/get.c \
-			source/modules/env/init.c \
-			source/modules/env/size.c \
-			source/modules/env/set.c \
-			source/modules/env/toarr.c \
-			source/modules/env/unset.c
+ENVM_SRCS = source/env/list.c \
+			source/env/free.c \
+			source/env/get.c \
+			source/env/init.c \
+			source/env/size.c \
+			source/env/set.c \
+			source/env/toarr.c \
+			source/env/unset.c
 
-EXPANDER_SRCS = source/modules/runner/expander/expand.c \
-				source/modules/runner/expander/list.c \
-				source/modules/runner/expander/quotes.c \
-				source/modules/runner/expander/variable.c \
-				source/modules/runner/expander/word.c
+ENVM_NO_TOARR_SRCS = source/env/list.c \
+					 source/env/free.c \
+					 source/env/get.c \
+					 source/env/init.c \
+					 source/env/size.c \
+					 source/env/set.c \
+					 source/env/unset.c
 
-RUNNER_PATH_SRCS = source/modules/runner/path/path.c \
-				  source/modules/runner/path/parts.c
+RUNNER_PATH_SRCS = source/runner/path/path.c \
+				   source/runner/path/parts.c
 
-RUNNER_PIPE_SRCS = source/modules/runner/pipe/fd.c \
-				  source/modules/runner/pipe/pipe.c \
-				  source/modules/runner/pipe/process.c \
-				  source/modules/runner/pipe/tree.c
+RUNNER_PIPE_SRCS = source/runner/pipe/fd.c \
+				   source/runner/pipe/pipe.c \
+				   source/runner/pipe/process.c \
+				   source/runner/pipe/tree.c
 
-RUNNER_REDIR_SRCS = source/modules/runner/redir/apply.c \
-				   source/modules/runner/redir/buffer.c \
-				   source/modules/runner/redir/expand.c \
-				   source/modules/runner/redir/heredoc.c \
-				   source/modules/runner/redir/heredoc_read.c \
-				   source/modules/runner/redir/push.c \
-				   source/modules/runner/redir/target.c
+RUNNER_REDIR_SRCS = source/runner/redir/apply.c \
+					source/runner/redir/buffer.c \
+					source/runner/redir/expand.c \
+					source/runner/redir/heredoc.c \
+					source/runner/redir/heredoc_read.c \
+					source/runner/redir/push.c \
+					source/runner/redir/target.c
 
-RUNNER_EXTERNAL_SRCS = source/modules/runner/external/process.c \
-					   source/modules/runner/external/resolve.c
+RUNNER_EXTERNAL_SRCS = source/runner/external/process.c \
+					   source/runner/external/resolve.c
+
+EXPANDER_SRCS = source/runner/expander/expand.c \
+				source/runner/expander/list.c \
+				source/runner/expander/quotes.c \
+				source/runner/expander/variable.c \
+				source/runner/expander/word.c
 
 RUNNER_SRCS = $(RUNNER_PATH_SRCS) \
 			  $(RUNNER_PIPE_SRCS) \
 			  $(RUNNER_REDIR_SRCS) \
-			  source/modules/runner/status.c \
-			  source/modules/runner/control.c \
-			  source/modules/runner/builtin.c \
+			  source/runner/status.c \
+			  source/runner/control.c \
+			  source/runner/builtin.c \
 			  $(RUNNER_EXTERNAL_SRCS) \
 			  $(EXPANDER_SRCS)
 
-LEXER_SRCS = source/modules/lexer/scanner/load.c \
-			 source/modules/lexer/scanner/move.c \
-			 source/modules/lexer/scanner/get.c \
-			 source/modules/lexer/scanner/table.c \
-			 source/modules/lexer/extract.c \
-			 source/modules/lexer/lexer.c \
-			 source/modules/lexer/rules.c \
-			 source/modules/lexer/state.c \
-			 source/modules/lexer/token.c
+LEXER_SRCS = source/lexer/scanner/load.c \
+			 source/lexer/scanner/move.c \
+			 source/lexer/scanner/get.c \
+			 source/lexer/scanner/table.c \
+			 source/lexer/extract.c \
+			 source/lexer/lexer.c \
+			 source/lexer/rules.c \
+			 source/lexer/state.c \
+			 source/lexer/token.c
 
-PARSER_SRCS = source/modules/parser/parser.c \
-			  source/modules/parser/cleanup.c \
-			  source/modules/parser/command.c \
-			  source/modules/parser/errors.c \
-			  source/modules/parser/state.c \
-			  source/modules/parser/utils.c
+PARSER_SRCS = source/parser/parser.c \
+			  source/parser/cleanup.c \
+			  source/parser/command.c \
+			  source/parser/errors.c \
+			  source/parser/state.c \
+			  source/parser/utils.c
 
-SRCS = source/main.c \
-	   $(CORE_SRCS) \
-	   $(SHARED_SRCS) \
-	   $(BUILTIN_SRCS) \
-	   $(ENVM_SRCS) \
-	   $(RUNNER_SRCS) \
-	   $(LEXER_SRCS) \
-	   $(PARSER_SRCS)
+SOURCES = source/main.c \
+		  $(CORE_SRCS) \
+		  $(SHARED_SRCS) \
+		  $(BIN_SRCS) \
+		  $(ENVM_SRCS) \
+		  $(RUNNER_SRCS) \
+		  $(LEXER_SRCS) \
+		  $(PARSER_SRCS)
 
 OBJ_DIR = build
-OBJS = $(SRCS:source/%.c=$(OBJ_DIR)/%.o)
+OBJS = $(SOURCES:source/%.c=$(OBJ_DIR)/%.o)
+
+LIBFT_DIR = libraries/libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
 all: $(LIBFT) $(NAME)
 
-$(LIBFT): force
+$(LIBFT):
 	$(MAKE) -sC $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT)
@@ -123,42 +134,42 @@ re: fclean all
 test: t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
 
 t\:envm: $(LIBFT)
-	@mkdir -p tests/dist
+	@mkdir -p tests/build
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/envm.c \
 			$(SHARED_SRCS) \
 			$(ENVM_SRCS) \
 			$(LIBFT) \
 			-lreadline \
-			-o tests/dist/envm
-	@tests/dist/envm
+			-o tests/build/envm
+	@tests/build/envm
 
 t\:builtin: $(LIBFT)
-	@mkdir -p tests/dist
+	@mkdir -p tests/build
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
-		tests/bultin.c \
+		tests/bin.c \
 			$(SHARED_SRCS) \
-			$(BUILTIN_SRCS) \
-			source/modules/runner/status.c \
-			$(filter-out source/modules/env/toarr.c,$(ENVM_SRCS)) \
+			$(BIN_SRCS) \
+			source/runner/status.c \
+			$(ENVM_NO_TOARR_SRCS) \
 			$(LIBFT) \
 			-lreadline \
-			-o tests/dist/builtin
-	@tests/dist/builtin
+			-o tests/build/builtin
+	@tests/build/builtin
 
 t\:runner: $(LIBFT)
-	@mkdir -p tests/dist
+	@mkdir -p tests/build
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/runner.c \
-		$(RUNNER_SRCS) \
-		$(SHARED_SRCS) \
-			$(BUILTIN_SRCS) \
+			$(RUNNER_SRCS) \
+			$(SHARED_SRCS) \
+			$(BIN_SRCS) \
 			$(ENVM_SRCS) \
-			$(LIBFT) -lreadline -o tests/dist/runner
-	@tests/dist/runner
+			$(LIBFT) -lreadline -o tests/build/runner
+	@tests/build/runner
 
 t\:core: $(LIBFT)
-	@mkdir -p tests/dist
+	@mkdir -p tests/build
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/core.c \
 		source/core/core.c \
@@ -166,31 +177,33 @@ t\:core: $(LIBFT)
 			$(ENVM_SRCS) \
 			$(LIBFT) \
 			-lreadline \
-			-o tests/dist/core
-	@tests/dist/core
+			-o tests/build/core
+	@tests/build/core
 
 t\:lexer: $(LIBFT)
-	@mkdir -p tests/dist
+	@mkdir -p tests/build
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 			tests/lexer.c \
 			$(LEXER_SRCS) \
 			source/shared/error.c \
+			source/shared/quote.c \
 			source/shared/string.c \
 			$(LIBFT) \
-			-o tests/dist/lexer
-	@tests/dist/lexer
+			-o tests/build/lexer
+	@tests/build/lexer
 
 t\:parser: $(LIBFT)
-	@mkdir -p tests/dist
+	@mkdir -p tests/build
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/parser.c \
 			$(PARSER_SRCS) \
 			$(LEXER_SRCS) \
 			source/shared/error.c \
+			source/shared/quote.c \
 			source/shared/string.c \
 			$(LIBFT) \
-			-o tests/dist/parser
-	@tests/dist/parser
+			-o tests/build/parser
+	@tests/build/parser
 
 .PHONY: all clean fclean re test force \
 	t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser

@@ -50,7 +50,7 @@ describe(rn_pipe)
 
 	it("reads left input redirection before piping")
 	{
-		char	path[] = "/tmp/minishell_pipe_in_XXXXXX";
+		char	path[] = "tests/_tmp/minishell_pipe_in_XXXXXX";
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		char	*left_args[] = {"cat", NULL};
 		char	*right_args[] = {"wc", "-c", NULL};
@@ -83,7 +83,7 @@ describe(rn_pipe)
 
 	it("writes right output redirection after reading from the pipe")
 	{
-		char	path[] = "/tmp/minishell_pipe_out_XXXXXX";
+		char	path[] = "tests/_tmp/minishell_pipe_out_XXXXXX";
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		char	*left_args[] = {"echo", "hi", NULL};
 		char	*right_args[] = {"cat", NULL};
@@ -119,7 +119,7 @@ describe(rn_pipe)
 
 	it("lets left output redirection override the pipe stdout")
 	{
-		char	path[] = "/tmp/minishell_pipe_left_out_XXXXXX";
+		char	path[] = "tests/_tmp/minishell_pipe_left_out_XXXXXX";
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		char	*left_args[] = {"echo", "hi", NULL};
 		char	*right_args[] = {"wc", "-c", NULL};
@@ -156,7 +156,7 @@ describe(rn_pipe)
 
 	it("lets right input redirection override the pipe stdin")
 	{
-		char	path[] = "/tmp/minishell_pipe_right_in_XXXXXX";
+		char	path[] = "tests/_tmp/minishell_pipe_right_in_XXXXXX";
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		char	*left_args[] = {"echo", "pipe", NULL};
 		char	*right_args[] = {"cat", NULL};
@@ -216,8 +216,8 @@ describe(rn_pipe)
 
 	it("keeps the last input redirection inside a piped command")
 	{
-		char	path_a[] = "/tmp/minishell_pipe_in_a_XXXXXX";
-		char	path_b[] = "/tmp/minishell_pipe_in_b_XXXXXX";
+		char	path_a[] = "tests/_tmp/minishell_pipe_in_a_XXXXXX";
+		char	path_b[] = "tests/_tmp/minishell_pipe_in_b_XXXXXX";
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		char	*left_args[] = {"cat", NULL};
 		char	*right_args[] = {"cat", NULL};
@@ -255,8 +255,8 @@ describe(rn_pipe)
 
 	it("keeps the last output redirection inside a piped command")
 	{
-		char	path_a[] = "/tmp/minishell_pipe_out_a_XXXXXX";
-		char	path_b[] = "/tmp/minishell_pipe_out_b_XXXXXX";
+		char	path_a[] = "tests/_tmp/minishell_pipe_out_a_XXXXXX";
+		char	path_b[] = "tests/_tmp/minishell_pipe_out_b_XXXXXX";
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		char	*left_args[] = {"echo", "pipe", NULL};
 		char	*right_args[] = {"cat", NULL};
@@ -300,7 +300,7 @@ describe(rn_pipe)
 
 	it("lets a later file input override a heredoc inside a pipe")
 	{
-		char	path[] = "/tmp/minishell_pipe_hd_override_XXXXXX";
+		char	path[] = "tests/_tmp/minishell_pipe_hd_override_XXXXXX";
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		char	*left_args[] = {"cat", NULL};
 		char	*right_args[] = {"cat", NULL};
@@ -364,7 +364,7 @@ describe(rn_pipe)
 
 	it("returns a failing branch status when pipe redirection setup fails")
 	{
-		char	path[] = "/tmp/minishell_pipe_missing_input_XXXXXX";
+		char	path[] = "tests/_tmp/minishell_pipe_missing_input_XXXXXX";
 		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
 		char	*left_args[] = {"echo", "hi", NULL};
 		char	*right_args[] = {"cat", NULL};

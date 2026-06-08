@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/31 14:06:40 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/05/31 14:06:40 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 12:55:14 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 12:55:14 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/sh_signal.h"
+#include "_shared.h"
 
 volatile sig_atomic_t	g_signal = 0;
 
@@ -31,27 +31,6 @@ static void	sh_sigint_heredoc(int sig)
 	write(STDOUT_FILENO, "\n", 1);
 }
 
-static void	sig_mode_interactive(struct sigaction *sa_int,
-		struct sigaction *sa_quit)
-{
-	sa_int->sa_handler = sh_sigint_interactive;
-	sa_quit->sa_handler = SIG_IGN;
-}
-
-static void	sig_mode_exec(struct sigaction *sa_int,
-		struct sigaction *sa_quit)
-{
-	sa_int->sa_handler = SIG_IGN;
-	sa_quit->sa_handler = SIG_IGN;
-}
-
-static void	sig_mode_heredoc(struct sigaction *sa_int,
-		struct sigaction *sa_quit)
-{
-	sa_int->sa_handler = sh_sigint_heredoc;
-	sa_quit->sa_handler = SIG_IGN;
-}
-
 void	sh_sig_mode(t_sig_mode mode)
 {
 	struct sigaction	sa_int;
@@ -62,11 +41,12 @@ void	sh_sig_mode(t_sig_mode mode)
 	sa_int.sa_flags = 0;
 	sa_quit.sa_flags = 0;
 	if (mode == SIG_INTERACTIVE)
-		sig_mode_interactive(&sa_int, &sa_quit);
+		sa_int.sa_handler = sh_sigint_interactive;
 	else if (mode == SIG_EXEC)
-		sig_mode_exec(&sa_int, &sa_quit);
+		sa_int.sa_handler = SIG_IGN;
 	else
-		sig_mode_heredoc(&sa_int, &sa_quit);
+		sa_int.sa_handler = sh_sigint_heredoc;
+	sa_quit.sa_handler = SIG_IGN;
 	sigaction(SIGINT, &sa_int, NULL);
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
