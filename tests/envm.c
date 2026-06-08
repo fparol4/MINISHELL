@@ -1,24 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envm.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "tester.h"
 
 describe(env_init)
 {
+		char *envp[] = {"USER=fcardozo", "HOME=tests/_tmp", NULL};
+		t_env *env;
+		char *envp[] = {"EMPTY", NULL};
+		t_env *env;
+
 	it("parses entries into a linked list")
 	{
-		char	*envp[] = {"USER=fcardozo", "HOME=tests/_tmp", NULL};
-		t_env	*env;
-
 		env = env_init(envp);
 		assert(env != NULL);
 		asserteq_str(env_get(&env, "USER"), "fcardozo");
 		asserteq_str(env_get(&env, "HOME"), "tests/_tmp");
 		env_free(&env);
 	}
-
 	it("keeps entries without value")
 	{
-		char	*envp[] = {"EMPTY", NULL};
-		t_env	*env;
-
 		env = env_init(envp);
 		assert(env != NULL);
 		assert(env_get(&env, "EMPTY") == NULL);
@@ -28,11 +38,11 @@ describe(env_init)
 
 describe(env_get)
 {
+		char *envp[] = {"A=1", NULL};
+		t_env *env;
+
 	it("returns NULL for missing keys")
 	{
-		char	*envp[] = {"A=1", NULL};
-		t_env	*env;
-
 		env = env_init(envp);
 		assert(env_get(&env, "B") == NULL);
 		env_free(&env);
@@ -41,11 +51,11 @@ describe(env_get)
 
 describe(env_size)
 {
+		char *envp[] = {"A=1", "B=2", NULL};
+		t_env *env;
+
 	it("counts nodes")
 	{
-		char	*envp[] = {"A=1", "B=2", NULL};
-		t_env	*env;
-
 		env = env_init(envp);
 		asserteq(env_size(&env), 2);
 		env_free(&env);
@@ -54,21 +64,19 @@ describe(env_size)
 
 describe(env_set)
 {
+		t_env *env;
+		char *envp[] = {"A=1", NULL};
+		t_env *env;
+
 	it("adds a new key")
 	{
-		t_env	*env;
-
 		env = NULL;
 		asserteq(env_set(&env, "A", "1"), 0);
 		asserteq_str(env_get(&env, "A"), "1");
 		env_free(&env);
 	}
-
 	it("updates an existing key")
 	{
-		char	*envp[] = {"A=1", NULL};
-		t_env	*env;
-
 		env = env_init(envp);
 		asserteq(env_set(&env, "A", "2"), 0);
 		asserteq_str(env_get(&env, "A"), "2");
@@ -78,11 +86,11 @@ describe(env_set)
 
 describe(env_unset)
 {
+		char *envp[] = {"A=1", "B=2", NULL};
+		t_env *env;
+
 	it("removes a key")
 	{
-		char	*envp[] = {"A=1", "B=2", NULL};
-		t_env	*env;
-
 		env = env_init(envp);
 		asserteq(env_unset(&env, "A"), 0);
 		assert(env_get(&env, "A") == NULL);
@@ -93,12 +101,12 @@ describe(env_unset)
 
 describe(env_toarr)
 {
+		char *envp[] = {"A=1", "B=2", NULL};
+		t_env *env;
+		char **arr;
+
 	it("creates KEY=VALUE strings")
 	{
-		char	*envp[] = {"A=1", "B=2", NULL};
-		t_env	*env;
-		char	**arr;
-
 		env = env_init(envp);
 		arr = env_toarr(&env);
 		assert(arr != NULL);

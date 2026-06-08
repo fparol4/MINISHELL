@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tester.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TESTER_H
 # define TESTER_H
 
-# include "snow.h"
 # include "../headers/bin.h"
 # include "../headers/env.h"
 # include "../headers/minishell.h"
 # include "../headers/runner.h"
 # include "../source/runner/_runner.h"
+# include "snow.h"
 # include <fcntl.h>
 # include <stdlib.h>
 # include <string.h>

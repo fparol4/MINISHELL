@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shared.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "tester.h"
 
 #ifdef TEST_SHARED_LEXER
@@ -133,8 +145,8 @@ static void	rn_test_node(t_command *node, t_pnode_type type, char **args,
 		node->t_define.simple.args.elem_size = sizeof(char *);
 		while (args && args[node->t_define.simple.args.length])
 			node->t_define.simple.args.length++;
-		node->t_define.simple.args.capacity
-			= node->t_define.simple.args.length + 1;
+		node->t_define.simple.args.capacity = node->t_define.simple.args.length
+			+ 1;
 	}
 	else
 	{
@@ -222,8 +234,8 @@ static void	rn_test_attach_redirs(t_command *node, t_parser_redir *redirs,
 static int	rn_test_with_stdin(char *input, t_command *node, t_env **env,
 		int *status, char **out)
 {
-	int		pfd[2];
-	int		saved;
+	int	pfd[2];
+	int	saved;
 
 	if (pipe(pfd) == -1)
 		return (1);
@@ -241,11 +253,11 @@ static int	rn_test_with_stdin(char *input, t_command *node, t_env **env,
 	return (0);
 }
 
-static int	rn_test_with_stdin_capture(char *input, t_command *node, t_env **env,
-		int *status, char **captured, int target)
+static int	rn_test_with_stdin_capture(char *input, t_command *node,
+		t_env **env, int *status, char **captured, int target)
 {
-	int		pfd[2];
-	int		saved;
+	int	pfd[2];
+	int	saved;
 
 	if (pipe(pfd) == -1)
 		return (1);

@@ -1,13 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../tester.h"
 
 describe(rn_exec_bin)
 {
+		char *args[] = {"export", "FOO=bar", NULL};
+		t_env *env;
+		int status;
+		char *args[] = {"ls", NULL};
+		t_env *env;
+		int status;
+
 	it("handles builtin commands")
 	{
-		char	*args[] = {"export", "FOO=bar", NULL};
-		t_env	*env;
-		int		status;
-
 		env = NULL;
 		status = 42;
 		asserteq(rn_exec_bin(args, &env, &status), 1);
@@ -15,13 +30,8 @@ describe(rn_exec_bin)
 		asserteq_str(env_get(&env, "FOO"), "bar");
 		env_free(&env);
 	}
-
 	it("returns 0 for external commands")
 	{
-		char	*args[] = {"ls", NULL};
-		t_env	*env;
-		int		status;
-
 		env = NULL;
 		status = 42;
 		asserteq(rn_exec_bin(args, &env, &status), 0);
@@ -31,13 +41,57 @@ describe(rn_exec_bin)
 
 describe(rn_execute_cmd)
 {
+		char *raw[] = {"export", "FOO=$USER", NULL};
+		char *envp[] = {"USER=bar", NULL};
+		t_env *env;
+		t_command node;
+		char *raw[] = {"true", NULL};
+		char *envp[] = {"PATH=/usr/bin:/bin", NULL};
+		t_env *env;
+		t_command node;
+		char *raw[] = {"not_a_real_command_xyz", NULL};
+		char *envp[] = {"PATH=/usr/bin:/bin", NULL};
+		t_env *env;
+		t_command node;
+		char *raw[] = {"./__minishell_missing_exec__", NULL};
+		t_env *env;
+		t_command node;
+		char *err;
+		int status;
+		char path[] = "tests/_tmp/minishell_exec_dir_XXXXXX";
+		char *raw[] = {path, NULL};
+		t_env *env;
+		t_command node;
+		char *err;
+		int status;
+		char path[] = "tests/_tmp/minishell_exec_noexec_XXXXXX";
+		char *raw[] = {path, NULL};
+		t_env *env;
+		t_command node;
+		char *err;
+		int fd;
+		int status;
+		char path[] = "tests/_tmp/minishell_exec_format_XXXXXX";
+		char *raw[] = {path, NULL};
+		t_env *env;
+		t_command node;
+		char *err;
+		int fd;
+		int status;
+		char dir[] = "tests/_tmp/minishell_path_dir_XXXXXX";
+		char *raw[] = {"blocked", NULL};
+		char *envp[2];
+		char *path;
+		char *tmp;
+		char *err;
+		char *path_env;
+		t_env *env;
+		t_command node;
+		int fd;
+		int status;
+
 	it("expands args and runs builtin command")
 	{
-		char	*raw[] = {"export", "FOO=$USER", NULL};
-		char	*envp[] = {"USER=bar", NULL};
-		t_env	*env;
-		t_command	node;
-
 		env = env_init(envp);
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		asserteq(rn_execute(&node, &env), 0);
@@ -45,43 +99,24 @@ describe(rn_execute_cmd)
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
 	}
-
 	it("runs external commands")
 	{
-		char	*raw[] = {"true", NULL};
-		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
-		t_env	*env;
-		t_command	node;
-
 		env = env_init(envp);
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		asserteq(rn_execute(&node, &env), 0);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
 	}
-
 	it("returns 127 and updates status for missing external commands")
 	{
-		char	*raw[] = {"not_a_real_command_xyz", NULL};
-		char	*envp[] = {"PATH=/usr/bin:/bin", NULL};
-		t_env	*env;
-		t_command	node;
-
 		env = env_init(envp);
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		asserteq(rn_execute(&node, &env), 127);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "127");
 		env_free(&env);
 	}
-
 	it("returns 127 for direct paths that do not exist")
 	{
-		char	*raw[] = {"./__minishell_missing_exec__", NULL};
-		t_env	*env;
-		t_command	node;
-		char	*err;
-		int		status;
-
 		env = NULL;
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		err = rn_test_capture_error(&node, &env, &status);
@@ -92,16 +127,8 @@ describe(rn_execute_cmd)
 		free(err);
 		env_free(&env);
 	}
-
 	it("returns 126 for direct directory paths")
 	{
-		char	path[] = "tests/_tmp/minishell_exec_dir_XXXXXX";
-		char	*raw[] = {path, NULL};
-		t_env	*env;
-		t_command	node;
-		char	*err;
-		int		status;
-
 		assert(rn_test_mkdtemp(path) != NULL);
 		env = NULL;
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
@@ -114,17 +141,8 @@ describe(rn_execute_cmd)
 		free(err);
 		env_free(&env);
 	}
-
 	it("returns 126 for direct files without execute permission")
 	{
-		char	path[] = "tests/_tmp/minishell_exec_noexec_XXXXXX";
-		char	*raw[] = {path, NULL};
-		t_env	*env;
-		t_command	node;
-		char	*err;
-		int		fd;
-		int		status;
-
 		fd = rn_test_temp(path);
 		write(fd, "echo nope\n", 10);
 		close(fd);
@@ -139,17 +157,8 @@ describe(rn_execute_cmd)
 		free(err);
 		env_free(&env);
 	}
-
 	it("returns 126 for executable files with invalid format")
 	{
-		char	path[] = "tests/_tmp/minishell_exec_format_XXXXXX";
-		char	*raw[] = {path, NULL};
-		t_env	*env;
-		t_command	node;
-		char	*err;
-		int		fd;
-		int		status;
-
 		fd = rn_test_temp(path);
 		write(fd, "plain text\n", 11);
 		close(fd);
@@ -165,21 +174,8 @@ describe(rn_execute_cmd)
 		free(err);
 		env_free(&env);
 	}
-
 	it("returns 126 for PATH entries without execute permission")
 	{
-		char	dir[] = "tests/_tmp/minishell_path_dir_XXXXXX";
-		char	*raw[] = {"blocked", NULL};
-		char	*envp[2];
-		char	*path;
-		char	*tmp;
-		char	*err;
-		char	*path_env;
-		t_env	*env;
-		t_command	node;
-		int		fd;
-		int		status;
-
 		assert(rn_test_mkdtemp(dir) != NULL);
 		tmp = ft_strjoin(dir, "/");
 		assert(tmp != NULL);
