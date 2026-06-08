@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 19:25:13 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:25:13 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 describe(env_init)
 {
-		char *envp[] = {"USER=fcardozo", "HOME=tests/_tmp", NULL};
-		t_env *env;
-		char *envp[] = {"EMPTY", NULL};
-		t_env *env;
+	char	*envp[] = {"USER=fcardozo", "HOME=tests/_tmp", NULL};
+	t_env	*env;
+	char	*envp[] = {"EMPTY", NULL};
+	t_env	*env;
 
 	it("parses entries into a linked list")
 	{
@@ -38,8 +38,8 @@ describe(env_init)
 
 describe(env_get)
 {
-		char *envp[] = {"A=1", NULL};
-		t_env *env;
+	char	*envp[] = {"A=1", NULL};
+	t_env	*env;
 
 	it("returns NULL for missing keys")
 	{
@@ -51,8 +51,8 @@ describe(env_get)
 
 describe(env_size)
 {
-		char *envp[] = {"A=1", "B=2", NULL};
-		t_env *env;
+	char	*envp[] = {"A=1", "B=2", NULL};
+	t_env	*env;
 
 	it("counts nodes")
 	{
@@ -64,9 +64,9 @@ describe(env_size)
 
 describe(env_set)
 {
-		t_env *env;
-		char *envp[] = {"A=1", NULL};
-		t_env *env;
+	t_env	*env;
+	char	*envp[] = {"A=1", NULL};
+	t_env	*env;
 
 	it("adds a new key")
 	{
@@ -86,8 +86,8 @@ describe(env_set)
 
 describe(env_unset)
 {
-		char *envp[] = {"A=1", "B=2", NULL};
-		t_env *env;
+	char	*envp[] = {"A=1", "B=2", NULL};
+	t_env	*env;
 
 	it("removes a key")
 	{
@@ -101,9 +101,9 @@ describe(env_unset)
 
 describe(env_toarr)
 {
-		char *envp[] = {"A=1", "B=2", NULL};
-		t_env *env;
-		char **arr;
+	char	*envp[] = {"A=1", "B=2", NULL};
+	t_env	*env;
+	char	**arr;
 
 	it("creates KEY=VALUE strings")
 	{

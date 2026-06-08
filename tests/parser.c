@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 19:25:13 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:25:13 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 
 describe(parser_simple_command)
 {
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
+	t_ast		*ast;
+	t_simple	*simple;
+	t_ast		*ast;
+	t_simple	*simple;
+	t_ast		*ast;
+	t_simple	*simple;
+	t_ast		*ast;
+	t_simple	*simple;
+	t_ast		*ast;
+	t_simple	*simple;
 
 	it("parses a single word")
 	{
@@ -83,29 +83,29 @@ describe(parser_simple_command)
 
 describe(parser_redirections)
 {
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_parser_redir *redir;
-		t_ast *ast;
-		t_simple *simple;
-		t_parser_redir *redir;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_ast *ast;
-		t_simple *simple;
-		t_parser_redir *redir;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_parser_redir	*redir;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_parser_redir	*redir;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_ast			*ast;
+	t_simple		*simple;
+	t_parser_redir	*redir;
 
 	it("parses redirect out")
 	{
@@ -219,17 +219,17 @@ describe(parser_redirections)
 
 describe(parser_pipe)
 {
-		t_ast *ast;
-		t_command *left;
-		t_command *right;
-		t_ast *ast;
-		t_command *root;
-		t_ast *ast;
-		t_command *left;
-		t_command *right;
-		t_ast *ast;
-		t_command *left;
-		t_command *right;
+	t_ast		*ast;
+	t_command	*left;
+	t_command	*right;
+	t_ast		*ast;
+	t_command	*root;
+	t_ast		*ast;
+	t_command	*left;
+	t_command	*right;
+	t_ast		*ast;
+	t_command	*left;
+	t_command	*right;
 
 	it("parses a simple pipe")
 	{
@@ -283,15 +283,15 @@ describe(parser_pipe)
 
 describe(parser_errors)
 {
-		t_ast *ast;
-		t_ast *ast;
-		t_ast *ast;
-		t_ast *ast;
-		t_ast *ast;
-		t_ast *ast;
-		t_ast *ast;
-		t_ast *ast;
-		t_ast *ast;
+	t_ast	*ast;
+	t_ast	*ast;
+	t_ast	*ast;
+	t_ast	*ast;
+	t_ast	*ast;
+	t_ast	*ast;
+	t_ast	*ast;
+	t_ast	*ast;
+	t_ast	*ast;
 
 	it("returns error on pipe at start")
 	{

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 19:25:13 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:25:13 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	core_loop(t_shell *shell)
 
 describe(core_init)
 {
-		char *envp[] = {"PWD=tests/_tmp", "SHLVL=1", NULL};
-		t_shell shell;
-		t_shell shell;
+	char	*envp[] = {"PWD=tests/_tmp", "SHLVL=1", NULL};
+	t_shell	shell;
+	t_shell	shell;
 
 	it("initializes shell env and status")
 	{
@@ -50,8 +50,8 @@ describe(core_init)
 
 describe(core_destroy)
 {
-		char *envp[] = {"PWD=tests/_tmp", NULL};
-		t_shell shell;
+	char	*envp[] = {"PWD=tests/_tmp", NULL};
+	t_shell	shell;
 
 	it("frees env and marks shell as stopped")
 	{

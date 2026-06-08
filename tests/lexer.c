@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 19:25:13 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:25:13 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 
 describe(lexer_words)
 {
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
 
 	it("tokenizes a simple command into words")
 	{
@@ -88,13 +88,13 @@ describe(lexer_words)
 
 describe(lexer_operators)
 {
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
 
 	it("tokenizes pipe")
 	{
@@ -153,9 +153,9 @@ describe(lexer_operators)
 
 describe(lexer_errors)
 {
-		t_manager *m;
-		t_manager *m;
-		t_manager *m;
+	t_manager	*m;
+	t_manager	*m;
+	t_manager	*m;
 
 	it("returns NULL on unclosed single quote")
 	{

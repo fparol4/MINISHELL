@@ -5,18 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 12:43:07 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 12:43:07 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 19:25:17 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:25:17 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-# include <readline/readline.h>
-# include <signal.h>
-# include <stdio.h>
-# include <unistd.h>
 
 # include "../libraries/libft/libft.h"
 # include "./bin.h"
@@ -24,6 +19,10 @@
 # include "./lexer.h"
 # include "./parser.h"
 # include "./runner.h"
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdio.h>
+# include <unistd.h>
 
 # define BUFFER_SIZE 4096
 # define MSG_MINISHELL "minishell:"

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 19:25:13 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:25:13 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 describe(rn_exec_bin)
 {
-		char *args[] = {"export", "FOO=bar", NULL};
-		t_env *env;
-		int status;
-		char *args[] = {"ls", NULL};
-		t_env *env;
-		int status;
+	char	*args[] = {"export", "FOO=bar", NULL};
+	t_env	*env;
+	int		status;
+	char	*args[] = {"ls", NULL};
+	t_env	*env;
+	int		status;
 
 	it("handles builtin commands")
 	{
@@ -41,54 +41,54 @@ describe(rn_exec_bin)
 
 describe(rn_execute_cmd)
 {
-		char *raw[] = {"export", "FOO=$USER", NULL};
-		char *envp[] = {"USER=bar", NULL};
-		t_env *env;
-		t_command node;
-		char *raw[] = {"true", NULL};
-		char *envp[] = {"PATH=/usr/bin:/bin", NULL};
-		t_env *env;
-		t_command node;
-		char *raw[] = {"not_a_real_command_xyz", NULL};
-		char *envp[] = {"PATH=/usr/bin:/bin", NULL};
-		t_env *env;
-		t_command node;
-		char *raw[] = {"./__minishell_missing_exec__", NULL};
-		t_env *env;
-		t_command node;
-		char *err;
-		int status;
-		char path[] = "tests/_tmp/minishell_exec_dir_XXXXXX";
-		char *raw[] = {path, NULL};
-		t_env *env;
-		t_command node;
-		char *err;
-		int status;
-		char path[] = "tests/_tmp/minishell_exec_noexec_XXXXXX";
-		char *raw[] = {path, NULL};
-		t_env *env;
-		t_command node;
-		char *err;
-		int fd;
-		int status;
-		char path[] = "tests/_tmp/minishell_exec_format_XXXXXX";
-		char *raw[] = {path, NULL};
-		t_env *env;
-		t_command node;
-		char *err;
-		int fd;
-		int status;
-		char dir[] = "tests/_tmp/minishell_path_dir_XXXXXX";
-		char *raw[] = {"blocked", NULL};
-		char *envp[2];
-		char *path;
-		char *tmp;
-		char *err;
-		char *path_env;
-		t_env *env;
-		t_command node;
-		int fd;
-		int status;
+	char		*raw[] = {"export", "FOO=$USER", NULL};
+	char		*envp[] = {"USER=bar", NULL};
+	t_env		*env;
+	t_command	node;
+	char		*raw[] = {"true", NULL};
+	char		*envp[] = {"PATH=/usr/bin:/bin", NULL};
+	t_env		*env;
+	t_command	node;
+	char		*raw[] = {"not_a_real_command_xyz", NULL};
+	char		*envp[] = {"PATH=/usr/bin:/bin", NULL};
+	t_env		*env;
+	t_command	node;
+	char		*raw[] = {"./__minishell_missing_exec__", NULL};
+	t_env		*env;
+	t_command	node;
+	char		*err;
+	int			status;
+	char		path[] = "tests/_tmp/minishell_exec_dir_XXXXXX";
+	char		*raw[] = {path, NULL};
+	t_env		*env;
+	t_command	node;
+	char		*err;
+	int			status;
+	char		path[] = "tests/_tmp/minishell_exec_noexec_XXXXXX";
+	char		*raw[] = {path, NULL};
+	t_env		*env;
+	t_command	node;
+	char		*err;
+	int			fd;
+	int			status;
+	char		path[] = "tests/_tmp/minishell_exec_format_XXXXXX";
+	char		*raw[] = {path, NULL};
+	t_env		*env;
+	t_command	node;
+	char		*err;
+	int			fd;
+	int			status;
+	char		dir[] = "tests/_tmp/minishell_path_dir_XXXXXX";
+	char		*raw[] = {"blocked", NULL};
+	char		*envp[2];
+	char		*path;
+	char		*tmp;
+	char		*err;
+	char		*path_env;
+	t_env		*env;
+	t_command	node;
+	int			fd;
+	int			status;
 
 	it("expands args and runs builtin command")
 	{

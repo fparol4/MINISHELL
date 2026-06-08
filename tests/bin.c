@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:23:50 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:23:50 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 19:25:13 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:25:13 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@
 
 describe(bin_echo)
 {
-		char *args[] = {"hello", "world", NULL};
-		t_env *env;
-		char *out;
-		int code;
-		char *args[] = {"-n", "hello", NULL};
-		t_env *env;
-		char *out;
-		int code;
-		char *args[] = {"-n", "-nn", "-nnn", "hello", NULL};
-		t_env *env;
-		char *out;
-		int code;
+	char	*args[] = {"hello", "world", NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
+	char	*args[] = {"-n", "hello", NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
+	char	*args[] = {"-n", "-nn", "-nnn", "hello", NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
 
 	it("prints arguments with newline")
 	{
@@ -58,25 +58,25 @@ describe(bin_echo)
 
 describe(bin_export)
 {
-		char *args[] = {"FOO=bar", NULL};
-		t_env *env;
-		char *args[] = {"KEY", NULL};
-		t_env *env;
-		t_env *node;
-		char *args[] = {"KEY=", NULL};
-		t_env *env;
-		t_env *node;
-		char *args[] = {"_A1=value", NULL};
-		t_env *env;
-		char *args[] = {"A+=value", NULL};
-		t_env *env;
-		char *args[] = {"1BAD=value", NULL};
-		t_env *env;
-		char *envp[] = {"Z=last", "A=first", NULL};
-		char *args[] = {NULL};
-		t_env *env;
-		char *out;
-		int code;
+	char	*args[] = {"FOO=bar", NULL};
+	t_env	*env;
+	char	*args[] = {"KEY", NULL};
+	t_env	*env;
+	t_env	*node;
+	char	*args[] = {"KEY=", NULL};
+	t_env	*env;
+	t_env	*node;
+	char	*args[] = {"_A1=value", NULL};
+	t_env	*env;
+	char	*args[] = {"A+=value", NULL};
+	t_env	*env;
+	char	*args[] = {"1BAD=value", NULL};
+	t_env	*env;
+	char	*envp[] = {"Z=last", "A=first", NULL};
+	char	*args[] = {NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
 
 	it("sets a value")
 	{
@@ -139,12 +139,12 @@ describe(bin_export)
 
 describe(bin_unset)
 {
-		char *envp[] = {"A=1", NULL};
-		char *args[] = {"A", NULL};
-		t_env *env;
-		char *envp[] = {"A=1", NULL};
-		char *args[] = {"MISSING", NULL};
-		t_env *env;
+	char	*envp[] = {"A=1", NULL};
+	char	*args[] = {"A", NULL};
+	t_env	*env;
+	char	*envp[] = {"A=1", NULL};
+	char	*args[] = {"MISSING", NULL};
+	t_env	*env;
 
 	it("removes exported values")
 	{
@@ -164,11 +164,11 @@ describe(bin_unset)
 
 describe(bin_env)
 {
-		char *envp[] = {"A=1", "B", NULL};
-		char *args[] = {NULL};
-		t_env *env;
-		char *out;
-		int code;
+	char	*envp[] = {"A=1", "B", NULL};
+	char	*args[] = {NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
 
 	it("prints only entries with values")
 	{
@@ -184,10 +184,10 @@ describe(bin_env)
 
 describe(bin_pwd)
 {
-		char *args[] = {NULL};
-		t_env *env;
-		char *out;
-		int code;
+	char	*args[] = {NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
 
 	it("returns success when cwd is available")
 	{
@@ -201,14 +201,14 @@ describe(bin_pwd)
 
 describe(bin_exit)
 {
-		char *args[] = {"1", "2", NULL};
-		t_env *env;
-		char *args[] = {"notanumber", NULL};
-		t_env *env;
-		char *args[] = {"42", NULL};
-		t_env *env;
-		char *args[] = {"9223372036854775808", NULL};
-		t_env *env;
+	char	*args[] = {"1", "2", NULL};
+	t_env	*env;
+	char	*args[] = {"notanumber", NULL};
+	t_env	*env;
+	char	*args[] = {"42", NULL};
+	t_env	*env;
+	char	*args[] = {"9223372036854775808", NULL};
+	t_env	*env;
 
 	it("returns 1 for too many args without exiting")
 	{
@@ -238,28 +238,28 @@ describe(bin_exit)
 
 describe(bin_cd)
 {
-		char cwd[4096];
-		char *envp[] = {"HOME=tests/_tmp", NULL};
-		char *args[] = {NULL};
-		t_env *env;
-		char *args[] = {NULL};
-		t_env *env;
-		char cwd[4096];
-		char *args[] = {"tests/_tmp", NULL};
-		t_env *env;
-		char cwd[4096];
-		char *args[] = {"tests", NULL};
-		t_env *env;
-		char *args[] = {"tests/_tmp/__minishell_cd_missing__", NULL};
-		t_env *env;
-		char cwd[4096];
-		char *args[] = {"-", NULL};
-		char *envp[] = {"OPWD=tests/_tmp", NULL};
-		t_env *env;
-		char *out;
-		int code;
-		char *args[] = {"-", NULL};
-		t_env *env;
+	char	cwd[4096];
+	char	*envp[] = {"HOME=tests/_tmp", NULL};
+	char	*args[] = {NULL};
+	t_env	*env;
+	char	*args[] = {NULL};
+	t_env	*env;
+	char	cwd[4096];
+	char	*args[] = {"tests/_tmp", NULL};
+	t_env	*env;
+	char	cwd[4096];
+	char	*args[] = {"tests", NULL};
+	t_env	*env;
+	char	*args[] = {"tests/_tmp/__minishell_cd_missing__", NULL};
+	t_env	*env;
+	char	cwd[4096];
+	char	*args[] = {"-", NULL};
+	char	*envp[] = {"OPWD=tests/_tmp", NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
+	char	*args[] = {"-", NULL};
+	t_env	*env;
 
 	it("changes to HOME when no argument given")
 	{
