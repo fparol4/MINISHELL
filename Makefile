@@ -123,8 +123,8 @@ t\:envm: $(LIBFT)
 	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/envm.c \
-			$(SHARED_SRCS) \
-			$(ENVM_SRCS) \
+			$(SRC_SHARED) \
+			$(SRC_ENVM) \
 			$(LIBFT) \
 			-lreadline \
 			-o tests/build/envm
@@ -134,10 +134,10 @@ t\:builtin: $(LIBFT)
 	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/bin.c \
-			$(SHARED_SRCS) \
-			$(BIN_SRCS) \
+			$(SRC_SHARED) \
+			$(SRC_BIN) \
 			source/runner/status.c \
-			$(ENVM_SRCS) \
+			$(SRC_ENVM) \
 			$(LIBFT) \
 			-lreadline \
 			-o tests/build/builtin
@@ -147,10 +147,10 @@ t\:runner: $(LIBFT)
 	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/runner.c \
-			$(RUNNER_SRCS) \
-			$(SHARED_SRCS) \
-			$(BIN_SRCS) \
-			$(ENVM_SRCS) \
+			$(SRC_RUNNER) \
+			$(SRC_SHARED) \
+			$(SRC_BIN) \
+			$(SRC_ENVM) \
 			$(LIBFT) -lreadline -o tests/build/runner
 	@tests/build/runner
 
@@ -159,8 +159,8 @@ t\:core: $(LIBFT)
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/core.c \
 		source/core/core.c \
-			$(SHARED_SRCS) \
-			$(ENVM_SRCS) \
+			$(SRC_SHARED) \
+			$(SRC_ENVM) \
 			$(LIBFT) \
 			-lreadline \
 			-o tests/build/core
@@ -169,7 +169,7 @@ t\:core: $(LIBFT)
 t\:lexer: $(LIBFT)
 	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
-			$(LEXER_SRCS) \
+			$(SRC_LEXER) \
 			tests/lexer.c \
 			source/shared/error.c \
 			source/shared/quote.c \
@@ -182,8 +182,8 @@ t\:parser: $(LIBFT)
 	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/parser.c \
-			$(PARSER_SRCS) \
-			$(LEXER_SRCS) \
+			$(SRC_PARSER) \
+			$(SRC_LEXER) \
 			source/shared/error.c \
 			source/shared/quote.c \
 			source/shared/string.c \
