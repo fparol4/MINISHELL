@@ -1,4 +1,16 @@
-#include "header.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/04 20:42:27 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/06/04 20:43:11 by g-alves-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "lexer_internal.h"
 
 void	token_free(void *content)
 {
@@ -12,7 +24,8 @@ void	token_free(void *content)
 	}
 }
 
-t_list_token	*token_add(t_manager *manager, const char *value, t_token_type type)
+t_list_token	*token_add(t_manager *manager, const char *value,
+								t_token_type type)
 {
 	t_node			*node;
 	t_list_token	*token;

@@ -10,33 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./env.h"
+#include "./modules_env.h"
 
-int	env_set(t_env **env, const char *key, const char *value)
+static int	env_update_value(t_env *node, const char *value)
 {
 	char	*vdup;
-	t_env	*node;
-	t_env	*tail;
 
-	if (!env || !key)
+	if (!value)
+		return (0);
+	vdup = ft_strdup(value);
+	if (!vdup)
 		return (-1);
-	node = *env;
-	while (node)
-	{
-		if (ft_strcmp(node->key, key) == 0)
-		{
-			if (!value)
-				return (0);
-			vdup = ft_strdup(value);
-			if (!vdup)
-				return (-1);
-			free(node->value);
-			node->value = vdup;
-			return (0);
-		}
-		tail = node;
-		node = node->next;
-	}
+	free(node->value);
+	node->value = vdup;
+	return (0);
+}
+
+static int	env_append_node(t_env **env, t_env *tail, const char *key,
+		const char *value)
+{
+	t_env	*node;
+
 	node = env_node_new(key, value);
 	if (!node)
 		return (-1);
@@ -45,4 +39,23 @@ int	env_set(t_env **env, const char *key, const char *value)
 	else
 		tail->next = node;
 	return (0);
+}
+
+int	env_set(t_env **env, const char *key, const char *value)
+{
+	t_env	*node;
+	t_env	*tail;
+
+	if (!env || !key)
+		return (-1);
+	node = *env;
+	tail = NULL;
+	while (node)
+	{
+		if (ft_strcmp(node->key, key) == 0)
+			return (env_update_value(node, value));
+		tail = node;
+		node = node->next;
+	}
+	return (env_append_node(env, tail, key, value));
 }

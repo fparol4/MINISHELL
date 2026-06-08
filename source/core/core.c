@@ -21,8 +21,8 @@ int	core_init(t_shell *shell, char **envp)
 	if (!shell->env)
 		return (sh_err(NULL, "environment initialization failed"), 1);
 	if (env_set(&shell->env, ENV_ERRCODE, "0") == -1)
-		return (env_free(&shell->env), sh_err(NULL, "status initialization failed"),
-			1);
+		return (env_free(&shell->env),
+			sh_err(NULL, "status initialization failed"), 1);
 	shell->running = TRUE;
 	sh_sig_mode(SIG_INTERACTIVE);
 	return (0);

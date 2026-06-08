@@ -11,21 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../../headers/runner.h"
-#include <fcntl.h>
-
-typedef enum e_heredoc_state
-{
-	HEREDOC_DONE,
-	HEREDOC_EOF,
-	HEREDOC_INTR,
-	HEREDOC_FAIL
-}						t_heredoc_state;
-
-typedef struct s_redir_fd
-{
-	int					fd;
-	int					stdio;
-}						t_redir_fd;
 
 static int	rn_redir_append(char **buf, char *part)
 {
@@ -46,6 +31,17 @@ static int	rn_redir_char(char **buf, char c)
 	return (rn_redir_append(buf, part));
 }
 
+static char	*redir_value_special(int *idx, t_env **env)
+{
+	char	*value;
+
+	*idx += 2;
+	value = env_get(env, ENV_ERRCODE);
+	if (!value)
+		return (ft_strdup("0"));
+	return (ft_strdup(value));
+}
+
 static char	*rn_redir_value(char *line, int *idx, t_env **env)
 {
 	char	*key;
@@ -53,13 +49,7 @@ static char	*rn_redir_value(char *line, int *idx, t_env **env)
 	int		start;
 
 	if (line[*idx + 1] == '?')
-	{
-		*idx += 2;
-		value = env_get(env, ENV_ERRCODE);
-		if (!value)
-			return (ft_strdup("0"));
-		return (ft_strdup(value));
-	}
+		return (redir_value_special(idx, env));
 	if (!sh_varstart(line[*idx + 1]))
 		return ((*idx)++, ft_strdup("$"));
 	start = ++(*idx);
@@ -149,30 +139,39 @@ static int	rn_redir_linegrow(char **line, size_t *cap, size_t len)
 	return (0);
 }
 
+static ssize_t	read_heredoc_loop(char **line, size_t *len, size_t *cap)
+{
+	char	c;
+	ssize_t	readed;
+
+	while (TRUE)
+	{
+		readed = read(STDIN_FILENO, &c, 1);
+		if (readed <= 0)
+			return (readed);
+		if (c == '\n')
+			return (1);
+		if (rn_redir_linegrow(line, cap, *len))
+			return (-1);
+		(*line)[(*len)++] = c;
+	}
+}
+
 static char	*rn_redir_readline(void)
 {
 	char	*line;
 	size_t	len;
 	size_t	cap;
-	char	c;
-	ssize_t	readed;
+	ssize_t	end;
 
 	ft_putstr_fd("> ", STDERR_FILENO);
 	line = NULL;
 	len = 0;
 	cap = 0;
-	while (TRUE)
-	{
-		readed = read(STDIN_FILENO, &c, 1);
-		if (readed <= 0)
-			break ;
-		if (c == '\n')
-			break ;
-		if (rn_redir_linegrow(&line, &cap, len))
-			return (free(line), NULL);
-		line[len++] = c;
-	}
-	if (!line && readed <= 0)
+	end = read_heredoc_loop(&line, &len, &cap);
+	if (end == -1)
+		return (free(line), NULL);
+	if (!line && end <= 0)
 		return (NULL);
 	if (rn_redir_linegrow(&line, &cap, len))
 		return (free(line), NULL);
@@ -180,43 +179,57 @@ static char	*rn_redir_readline(void)
 	return (line);
 }
 
-static t_heredoc_state	rn_redir_heredoc_fill(int fd, char *target, t_env **env,
+static int	heredoc_write_line(int fd, char *line, t_env **env, int expand)
+{
+	char	*out;
+
+	out = rn_redir_line(line, env, expand);
+	free(line);
+	if (!out)
+		return (1);
+	if (write(fd, out, ft_strlen(out)) < 0)
+	{
+		free(out);
+		return (1);
+	}
+	free(out);
+	return (0);
+}
+
+static t_heredoc_state	heredoc_read_loop(int fd, char *target, t_env **env,
 		int expand)
 {
 	char	*line;
-	char	*out;
 
-	g_signal = 0;
-	sh_sig_mode(SIG_HEREDOC);
 	line = rn_redir_readline();
 	while (line)
 	{
 		if (g_signal == SIGINT)
-		{
-			free(line);
-			g_signal = 0;
-			sh_sig_mode(SIG_INTERACTIVE);
-			return (HEREDOC_INTR);
-		}
+			return (free(line), g_signal = 0, HEREDOC_INTR);
 		if (rn_redir_delim(line, target))
-		{
-			sh_sig_mode(SIG_INTERACTIVE);
 			return (free(line), HEREDOC_DONE);
-		}
-		out = rn_redir_line(line, env, expand);
-		free(line);
-		if (!out || write(fd, out, ft_strlen(out)) < 0)
-		{
-			sh_sig_mode(SIG_INTERACTIVE);
-			return (free(out), HEREDOC_FAIL);
-		}
-		free(out);
+		if (heredoc_write_line(fd, line, env, expand))
+			return (HEREDOC_FAIL);
 		line = rn_redir_readline();
 	}
-	sh_sig_mode(SIG_INTERACTIVE);
-	if (g_signal == SIGINT)
-		return (g_signal = 0, HEREDOC_INTR);
 	return (HEREDOC_EOF);
+}
+
+static t_heredoc_state	rn_redir_heredoc_fill(int fd, char *target, t_env **env,
+		int expand)
+{
+	t_heredoc_state	status;
+
+	g_signal = 0;
+	sh_sig_mode(SIG_HEREDOC);
+	status = heredoc_read_loop(fd, target, env, expand);
+	sh_sig_mode(SIG_INTERACTIVE);
+	if (status == HEREDOC_EOF && g_signal == SIGINT)
+	{
+		g_signal = 0;
+		return (HEREDOC_INTR);
+	}
+	return (status);
 }
 
 static int	rn_redir_heredoc(char *target, t_env **env, int expand)
@@ -286,38 +299,37 @@ static int	rn_redir_fd(t_parser_redir *redir, t_env **env)
 	return (fd);
 }
 
-static int	rn_redir_apply(t_parser_redir *redirs, size_t count,
-		t_env **env)
+static int	redir_open_all(t_redir_fd *opened, t_parser_redir *redirs,
+		size_t count, t_env **env)
 {
-	t_redir_fd		*opened;
-	size_t			i;
+	size_t	i;
+	int		fd;
 
-	if (!redirs || !count)
-		return (0);
-	opened = malloc(sizeof(*opened) * count);
-	if (!opened)
-		return (1);
 	i = 0;
 	while (i < count)
 	{
-		opened[i].fd = rn_redir_fd(&redirs[i], env);
-		if (opened[i].fd < 0)
+		fd = rn_redir_fd(&redirs[i], env);
+		if (fd < 0)
 		{
-			if (opened[i].fd == -2)
-			{
-				while (i > 0)
-					close(opened[--i].fd);
-				return (free(opened), 130);
-			}
 			while (i > 0)
 				close(opened[--i].fd);
-			return (free(opened), 1);
+			if (fd == -2)
+				return (130);
+			return (1);
 		}
+		opened[i].fd = fd;
 		opened[i].stdio = STDIN_FILENO;
 		if (redirs[i].type == REDIR_OUT || redirs[i].type == REDIR_APPEND)
 			opened[i].stdio = STDOUT_FILENO;
 		i++;
 	}
+	return (0);
+}
+
+static int	redir_dup_all(t_redir_fd *opened, size_t count)
+{
+	size_t	i;
+
 	i = 0;
 	while (i < count)
 	{
@@ -325,13 +337,31 @@ static int	rn_redir_apply(t_parser_redir *redirs, size_t count,
 		{
 			while (i < count)
 				close(opened[i++].fd);
-			return (free(opened), sh_err(NULL, "dup2 failed"), 1);
+			return (sh_err(NULL, "dup2 failed"), 1);
 		}
 		close(opened[i].fd);
 		i++;
 	}
-	free(opened);
 	return (0);
+}
+
+static int	rn_redir_apply(t_parser_redir *redirs, size_t count,
+		t_env **env)
+{
+	t_redir_fd		*opened;
+	int				status;
+
+	if (!redirs || !count)
+		return (0);
+	opened = malloc(sizeof(*opened) * count);
+	if (!opened)
+		return (1);
+	status = redir_open_all(opened, redirs, count, env);
+	if (status)
+		return (free(opened), status);
+	status = redir_dup_all(opened, count);
+	free(opened);
+	return (status);
 }
 
 int	rn_redir_restore(int saved[2])

@@ -12,7 +12,7 @@
 
 #include "../../../headers/minishell.h"
 
-static int	newline(char *arg)
+static int	echo_has_flag(char *arg)
 {
 	int	i;
 
@@ -23,6 +23,20 @@ static int	newline(char *arg)
 		if (arg[i++] != 'n')
 			return (0);
 	return (1);
+}
+
+static void	echo_print_args(char **args, int start)
+{
+	int	i;
+
+	i = start;
+	while (args[i])
+	{
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1])
+			ft_putstr_fd(" ", 1);
+		i++;
+	}
 }
 
 int	bin_echo(char **args, t_env **env)
@@ -38,18 +52,12 @@ int	bin_echo(char **args, t_env **env)
 	}
 	i = 0;
 	nl = 1;
-	while (args[i] && newline(args[i]))
+	while (args[i] && echo_has_flag(args[i]))
 	{
 		nl = 0;
 		i++;
 	}
-	while (args[i])
-	{
-		ft_putstr_fd(args[i], 1);
-		if (args[i + 1])
-			ft_putstr_fd(" ", 1);
-		i++;
-	}
+	echo_print_args(args, i);
 	if (nl)
 		ft_putchar_fd('\n', 1);
 	return (0);

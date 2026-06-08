@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./env.h"
+#include "./modules_env.h"
 
 static void	shlvl(t_env *env)
 {
@@ -83,33 +83,39 @@ static char	**minenv(void)
 	return (env);
 }
 
-t_env	*env_init(char **env)
+static t_env	*env_list_from_array(char **env)
 {
 	int		i;
 	t_env	*head;
-	t_env	*tail;
-	t_env	*node;
+	t_env	**next;
 
-	if (!env)
-		return (env_init(minenv()));
 	i = 0;
 	head = NULL;
-	tail = NULL;
+	next = &head;
 	while (env[i])
 	{
-		node = entryparse(env[i]);
-		if (!node)
+		*next = entryparse(env[i]);
+		if (!*next)
 		{
 			env_free(&head);
 			return (NULL);
 		}
-		if (!head)
-			head = node;
-		else
-			tail->next = node;
-		tail = node;
+		next = &(*next)->next;
 		i++;
 	}
+	*next = NULL;
+	return (head);
+}
+
+t_env	*env_init(char **env)
+{
+	t_env	*head;
+
+	if (!env)
+		return (env_init(minenv()));
+	head = env_list_from_array(env);
+	if (!head)
+		return (NULL);
 	shlvl(head);
 	return (head);
 }

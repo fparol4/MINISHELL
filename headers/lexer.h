@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/04 18:53:47 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/06/04 18:54:10 by g-alves-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LEXER_H
 # define LEXER_H
 
 # include "../libraries/libft/libft.h"
 
 typedef struct s_dlist_node	t_node;
-typedef struct s_dlist			t_manager;
+typedef struct s_dlist		t_manager;
 
 typedef enum e_token_type
 {
