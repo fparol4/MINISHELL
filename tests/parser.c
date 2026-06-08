@@ -12,19 +12,23 @@
 
 #include "tester.h"
 
-#define TEST_SHARED_PARSER
-#include "shared.c"
+static t_ast	*parse_input(const char *input)
+{
+	t_manager	*m;
+	t_ast		*ast;
+
+	m = lexer(input);
+	if (!m)
+		return (NULL);
+	ast = parser_controller(m);
+	lexer_free(m);
+	return (ast);
+}
+
 
 describe(parser_simple_command)
 {
-	t_ast		*ast;
-	t_simple	*simple;
-	t_ast		*ast;
-	t_simple	*simple;
-	t_ast		*ast;
-	t_simple	*simple;
-	t_ast		*ast;
-	t_simple	*simple;
+	{
 	t_ast		*ast;
 	t_simple	*simple;
 
@@ -39,6 +43,11 @@ describe(parser_simple_command)
 		assert(((char **)simple->args.items)[1] == NULL);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast		*ast;
+	t_simple	*simple;
+
 	it("parses multiple arguments")
 	{
 		ast = parse_input("echo hello world");
@@ -51,6 +60,11 @@ describe(parser_simple_command)
 		assert(((char **)simple->args.items)[3] == NULL);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast		*ast;
+	t_simple	*simple;
+
 	it("sets expand flag when dollar is in any arg")
 	{
 		ast = parse_input("echo $HOME");
@@ -59,6 +73,11 @@ describe(parser_simple_command)
 		asserteq(simple->expand, TRUE);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast		*ast;
+	t_simple	*simple;
+
 	it("parses mixed single and double quotes in one word")
 	{
 		ast = parse_input("echo 'one'\"two\"three");
@@ -69,6 +88,11 @@ describe(parser_simple_command)
 		assert(((char **)simple->args.items)[2] == NULL);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast		*ast;
+	t_simple	*simple;
+
 	it("parses empty quoted command args")
 	{
 		ast = parse_input("echo \"\"");
@@ -79,33 +103,14 @@ describe(parser_simple_command)
 		assert(((char **)simple->args.items)[2] == NULL);
 		parser_free_ast(ast);
 	}
+	}
 }
 
 describe(parser_redirections)
 {
+	{
 	t_ast			*ast;
 	t_simple		*simple;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_parser_redir	*redir;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_parser_redir	*redir;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_ast			*ast;
-	t_simple		*simple;
-	t_parser_redir	*redir;
 
 	it("parses redirect out")
 	{
@@ -118,6 +123,11 @@ describe(parser_redirections)
 		asserteq_str(((t_parser_redir *)simple->redirs.items)[0].file, "out");
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+
 	it("parses redirect in")
 	{
 		ast = parse_input("cat < file");
@@ -127,6 +137,11 @@ describe(parser_redirections)
 		asserteq_str(((t_parser_redir *)simple->redirs.items)[0].file, "file");
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+
 	it("parses append")
 	{
 		ast = parse_input("echo hi >> log");
@@ -136,6 +151,11 @@ describe(parser_redirections)
 			REDIR_APPEND);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+
 	it("parses heredoc")
 	{
 		ast = parse_input("cat << EOF");
@@ -146,6 +166,12 @@ describe(parser_redirections)
 		asserteq_str(((t_parser_redir *)simple->redirs.items)[0].file, "EOF");
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+	t_parser_redir	*redir;
+
 	it("preserves quoted metadata on redirection targets")
 	{
 		ast = parse_input("cat > \"two words\"");
@@ -158,6 +184,12 @@ describe(parser_redirections)
 		asserteq(redir[0].expand, FALSE);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+	t_parser_redir	*redir;
+
 	it("disables heredoc expansion for quoted delimiters")
 	{
 		ast = parse_input("cat << 'EOF'");
@@ -170,6 +202,11 @@ describe(parser_redirections)
 		asserteq(redir[0].expand, FALSE);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+
 	it("preserves redir order")
 	{
 		ast = parse_input("cmd > o1 > o2");
@@ -180,6 +217,11 @@ describe(parser_redirections)
 		asserteq_str(((t_parser_redir *)simple->redirs.items)[1].file, "o2");
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+
 	it("parses redir before args: < infile grep foo")
 	{
 		ast = parse_input("< infile grep foo");
@@ -189,6 +231,11 @@ describe(parser_redirections)
 		asserteq_str(((char **)simple->args.items)[0], "grep");
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+
 	it("parses redirections without command words")
 	{
 		ast = parse_input("> file");
@@ -200,6 +247,12 @@ describe(parser_redirections)
 		asserteq_str(((t_parser_redir *)simple->redirs.items)[0].file, "file");
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast			*ast;
+	t_simple		*simple;
+	t_parser_redir	*redir;
+
 	it("parses multiple redirections before and after args")
 	{
 		ast = parse_input("< in grep foo > out >> log");
@@ -215,18 +268,12 @@ describe(parser_redirections)
 		asserteq_str(((char **)simple->args.items)[1], "foo");
 		parser_free_ast(ast);
 	}
+	}
 }
 
 describe(parser_pipe)
 {
-	t_ast		*ast;
-	t_command	*left;
-	t_command	*right;
-	t_ast		*ast;
-	t_command	*root;
-	t_ast		*ast;
-	t_command	*left;
-	t_command	*right;
+	{
 	t_ast		*ast;
 	t_command	*left;
 	t_command	*right;
@@ -245,6 +292,11 @@ describe(parser_pipe)
 		asserteq_str(((char **)right->t_define.simple.args.items)[0], "cat");
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast		*ast;
+	t_command	*root;
+
 	it("builds a left-associative chain for three stages")
 	{
 		ast = parse_input("ls | grep foo | wc -l");
@@ -256,6 +308,12 @@ describe(parser_pipe)
 		asserteq(root->t_define.pipe.right->type, PNODE_CMD);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast		*ast;
+	t_command	*left;
+	t_command	*right;
+
 	it("parses pipe with redirections on each side")
 	{
 		ast = parse_input("ls -la | cat > out");
@@ -267,6 +325,12 @@ describe(parser_pipe)
 		asserteq(right->t_define.simple.redirs.length, 1);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast		*ast;
+	t_command	*left;
+	t_command	*right;
+
 	it("parses pipes with surrounding whitespace and quoted pipes")
 	{
 		ast = parse_input("  echo '|'   |   cat  ");
@@ -279,18 +343,12 @@ describe(parser_pipe)
 		asserteq_str(((char **)right->t_define.simple.args.items)[0], "cat");
 		parser_free_ast(ast);
 	}
+	}
 }
 
 describe(parser_errors)
 {
-	t_ast	*ast;
-	t_ast	*ast;
-	t_ast	*ast;
-	t_ast	*ast;
-	t_ast	*ast;
-	t_ast	*ast;
-	t_ast	*ast;
-	t_ast	*ast;
+	{
 	t_ast	*ast;
 
 	it("returns error on pipe at start")
@@ -301,6 +359,10 @@ describe(parser_errors)
 		asserteq(ast->error_type, SNTX_PIPE_START);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast	*ast;
+
 	it("returns error on pipe at end")
 	{
 		ast = parse_input("echo |");
@@ -309,6 +371,10 @@ describe(parser_errors)
 		asserteq(ast->error_type, SNTX_PIPE_END);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast	*ast;
+
 	it("returns error on redir without target")
 	{
 		ast = parse_input("cat <");
@@ -317,6 +383,10 @@ describe(parser_errors)
 		asserteq(ast->error_type, SNTX_REDIR_NO_TARGET);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast	*ast;
+
 	it("returns error on consecutive operators")
 	{
 		ast = parse_input("echo || cat");
@@ -324,6 +394,10 @@ describe(parser_errors)
 		asserteq(ast->error, 1);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast	*ast;
+
 	it("returns error on invalid repeated output operators")
 	{
 		ast = parse_input("echo >>> file");
@@ -331,6 +405,10 @@ describe(parser_errors)
 		asserteq(ast->error, 1);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast	*ast;
+
 	it("returns error on adjacent heredoc and input operators")
 	{
 		ast = parse_input("cat << < file");
@@ -338,6 +416,10 @@ describe(parser_errors)
 		asserteq(ast->error, 1);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast	*ast;
+
 	it("returns error on redir followed by pipe")
 	{
 		ast = parse_input("echo > | cat");
@@ -345,15 +427,24 @@ describe(parser_errors)
 		asserteq(ast->error, 1);
 		parser_free_ast(ast);
 	}
+	}
+	{
+	t_ast	*ast;
+
 	it("returns NULL on unclosed quote (caught by lexer)")
 	{
 		ast = parse_input("echo 'hello");
 		assert(ast == NULL);
 	}
+	}
+	{
+	t_ast	*ast;
+
 	it("returns NULL on empty input")
 	{
 		ast = parse_input("");
 		assert(ast == NULL);
+	}
 	}
 }
 

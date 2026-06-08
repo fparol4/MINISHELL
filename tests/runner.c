@@ -12,13 +12,12 @@
 
 #include "tester.h"
 
-#define TEST_SHARED_RUNNER
+#include "runner/common.c"
 #include "runner/command.c"
 #include "runner/expand.c"
 #include "runner/pipe.c"
 #include "runner/redir.c"
 #include "runner/signal.c"
 #include "runner/status.c"
-#include "shared.c"
 
 snow_main();

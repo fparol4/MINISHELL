@@ -2,8 +2,11 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -g3 -Wall -Wextra -Werror
-
 INCLUDES = -I. -Iheaders -Ilibraries -Ilibraries/libft
+
+LIBFT_DIR = libraries/libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
 TEST_FLAGS = -DSNOW_ENABLED
 
 SHARED_SRCS = source/shared/error.c \
@@ -106,9 +109,6 @@ SOURCES = source/main.c \
 OBJ_DIR = build
 OBJS = $(SOURCES:source/%.c=$(OBJ_DIR)/%.o)
 
-LIBFT_DIR = libraries/libft
-LIBFT = $(LIBFT_DIR)/libft.a
-
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
@@ -134,7 +134,7 @@ re: fclean all
 test: t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
 
 t\:envm: $(LIBFT)
-	@mkdir -p tests/build
+	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/envm.c \
 			$(SHARED_SRCS) \
@@ -145,7 +145,7 @@ t\:envm: $(LIBFT)
 	@tests/build/envm
 
 t\:builtin: $(LIBFT)
-	@mkdir -p tests/build
+	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/bin.c \
 			$(SHARED_SRCS) \
@@ -158,7 +158,7 @@ t\:builtin: $(LIBFT)
 	@tests/build/builtin
 
 t\:runner: $(LIBFT)
-	@mkdir -p tests/build
+	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/runner.c \
 			$(RUNNER_SRCS) \
@@ -169,7 +169,7 @@ t\:runner: $(LIBFT)
 	@tests/build/runner
 
 t\:core: $(LIBFT)
-	@mkdir -p tests/build
+	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/core.c \
 		source/core/core.c \
@@ -181,7 +181,7 @@ t\:core: $(LIBFT)
 	@tests/build/core
 
 t\:lexer: $(LIBFT)
-	@mkdir -p tests/build
+	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 			tests/lexer.c \
 			$(LEXER_SRCS) \
@@ -193,7 +193,7 @@ t\:lexer: $(LIBFT)
 	@tests/build/lexer
 
 t\:parser: $(LIBFT)
-	@mkdir -p tests/build
+	@mkdir -p tests/build tests/_tmp
 	@$(CC) $(CFLAGS) $(TEST_FLAGS) $(INCLUDES) \
 		tests/parser.c \
 			$(PARSER_SRCS) \

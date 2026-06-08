@@ -21,8 +21,8 @@ int	core_loop(t_shell *shell)
 
 describe(core_init)
 {
+	{
 	char	*envp[] = {"PWD=tests/_tmp", "SHLVL=1", NULL};
-	t_shell	shell;
 	t_shell	shell;
 
 	it("initializes shell env and status")
@@ -35,6 +35,10 @@ describe(core_init)
 		asserteq_str(env_get(&shell.env, ENV_ERRCODE), "0");
 		core_destroy(&shell);
 	}
+	}
+	{
+	t_shell	shell;
+
 	it("initializes with a minimal env when envp is NULL")
 	{
 		shell.env = NULL;
@@ -46,10 +50,12 @@ describe(core_init)
 		asserteq_str(env_get(&shell.env, ENV_ERRCODE), "0");
 		core_destroy(&shell);
 	}
+	}
 }
 
 describe(core_destroy)
 {
+	{
 	char	*envp[] = {"PWD=tests/_tmp", NULL};
 	t_shell	shell;
 
@@ -61,6 +67,7 @@ describe(core_destroy)
 		core_destroy(&shell);
 		assert(shell.env == NULL);
 		assert(shell.running == FALSE);
+	}
 	}
 }
 

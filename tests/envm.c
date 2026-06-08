@@ -14,9 +14,8 @@
 
 describe(env_init)
 {
+	{
 	char	*envp[] = {"USER=fcardozo", "HOME=tests/_tmp", NULL};
-	t_env	*env;
-	char	*envp[] = {"EMPTY", NULL};
 	t_env	*env;
 
 	it("parses entries into a linked list")
@@ -27,6 +26,11 @@ describe(env_init)
 		asserteq_str(env_get(&env, "HOME"), "tests/_tmp");
 		env_free(&env);
 	}
+	}
+	{
+	char	*envp[] = {"EMPTY", NULL};
+	t_env	*env;
+
 	it("keeps entries without value")
 	{
 		env = env_init(envp);
@@ -34,10 +38,12 @@ describe(env_init)
 		assert(env_get(&env, "EMPTY") == NULL);
 		env_free(&env);
 	}
+	}
 }
 
 describe(env_get)
 {
+	{
 	char	*envp[] = {"A=1", NULL};
 	t_env	*env;
 
@@ -47,10 +53,12 @@ describe(env_get)
 		assert(env_get(&env, "B") == NULL);
 		env_free(&env);
 	}
+	}
 }
 
 describe(env_size)
 {
+	{
 	char	*envp[] = {"A=1", "B=2", NULL};
 	t_env	*env;
 
@@ -60,12 +68,12 @@ describe(env_size)
 		asserteq(env_size(&env), 2);
 		env_free(&env);
 	}
+	}
 }
 
 describe(env_set)
 {
-	t_env	*env;
-	char	*envp[] = {"A=1", NULL};
+	{
 	t_env	*env;
 
 	it("adds a new key")
@@ -75,6 +83,11 @@ describe(env_set)
 		asserteq_str(env_get(&env, "A"), "1");
 		env_free(&env);
 	}
+	}
+	{
+	char	*envp[] = {"A=1", NULL};
+	t_env	*env;
+
 	it("updates an existing key")
 	{
 		env = env_init(envp);
@@ -82,10 +95,12 @@ describe(env_set)
 		asserteq_str(env_get(&env, "A"), "2");
 		env_free(&env);
 	}
+	}
 }
 
 describe(env_unset)
 {
+	{
 	char	*envp[] = {"A=1", "B=2", NULL};
 	t_env	*env;
 
@@ -97,10 +112,12 @@ describe(env_unset)
 		asserteq_str(env_get(&env, "B"), "2");
 		env_free(&env);
 	}
+	}
 }
 
 describe(env_toarr)
 {
+	{
 	char	*envp[] = {"A=1", "B=2", NULL};
 	t_env	*env;
 	char	**arr;
@@ -115,6 +132,7 @@ describe(env_toarr)
 		assert(arr[2] == NULL);
 		sh_freeargs(arr);
 		env_free(&env);
+	}
 	}
 }
 

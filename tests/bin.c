@@ -12,20 +12,74 @@
 
 #include "tester.h"
 
-#define TEST_SHARED_BUILTIN
-#include "shared.c"
+static int	fork_exit(char **args, t_env **env)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		dup2(open("/dev/null", O_WRONLY), STDOUT_FILENO);
+		dup2(open("/dev/null", O_WRONLY), STDERR_FILENO);
+		bin_exit(args, env);
+		_exit(1);
+	}
+	if (pid == -1)
+		return (-1);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (-1);
+}
+
+static t_env	*find_env_node(t_env *env, char *key)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+			return (env);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+static void	ensure_tmp_dir(void)
+{
+	mkdir("tests/_tmp", 0777);
+}
+
+static char	*capture_builtin(int (*fn)(char **, t_env **), char **args,
+		t_env **env, int *code)
+{
+	char	buf[4096];
+	char	*out;
+	int		pfd[2];
+	int		saved;
+	ssize_t	n;
+
+	if (pipe(pfd) == -1)
+		return (NULL);
+	saved = dup(STDOUT_FILENO);
+	dup2(pfd[1], STDOUT_FILENO);
+	close(pfd[1]);
+	*code = fn(args, env);
+	dup2(saved, STDOUT_FILENO);
+	close(saved);
+	n = read(pfd[0], buf, sizeof(buf) - 1);
+	close(pfd[0]);
+	if (n < 0)
+		n = 0;
+	buf[n] = '\0';
+	out = ft_strdup(buf);
+	return (out);
+}
+
 
 describe(bin_echo)
 {
+	{
 	char	*args[] = {"hello", "world", NULL};
-	t_env	*env;
-	char	*out;
-	int		code;
-	char	*args[] = {"-n", "hello", NULL};
-	t_env	*env;
-	char	*out;
-	int		code;
-	char	*args[] = {"-n", "-nn", "-nnn", "hello", NULL};
 	t_env	*env;
 	char	*out;
 	int		code;
@@ -38,6 +92,13 @@ describe(bin_echo)
 		asserteq_str(out, "hello world\n");
 		free(out);
 	}
+	}
+	{
+	char	*args[] = {"-n", "hello", NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
+
 	it("supports -n")
 	{
 		env = NULL;
@@ -46,6 +107,13 @@ describe(bin_echo)
 		asserteq_str(out, "hello");
 		free(out);
 	}
+	}
+	{
+	char	*args[] = {"-n", "-nn", "-nnn", "hello", NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
+
 	it("handles repeated -n flags")
 	{
 		env = NULL;
@@ -54,29 +122,14 @@ describe(bin_echo)
 		asserteq_str(out, "hello");
 		free(out);
 	}
+	}
 }
 
 describe(bin_export)
 {
+	{
 	char	*args[] = {"FOO=bar", NULL};
 	t_env	*env;
-	char	*args[] = {"KEY", NULL};
-	t_env	*env;
-	t_env	*node;
-	char	*args[] = {"KEY=", NULL};
-	t_env	*env;
-	t_env	*node;
-	char	*args[] = {"_A1=value", NULL};
-	t_env	*env;
-	char	*args[] = {"A+=value", NULL};
-	t_env	*env;
-	char	*args[] = {"1BAD=value", NULL};
-	t_env	*env;
-	char	*envp[] = {"Z=last", "A=first", NULL};
-	char	*args[] = {NULL};
-	t_env	*env;
-	char	*out;
-	int		code;
 
 	it("sets a value")
 	{
@@ -85,6 +138,12 @@ describe(bin_export)
 		asserteq_str(env_get(&env, "FOO"), "bar");
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"KEY", NULL};
+	t_env	*env;
+	t_env	*node;
+
 	it("creates a node without a value")
 	{
 		env = NULL;
@@ -94,6 +153,12 @@ describe(bin_export)
 		assert(node->value == NULL);
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"KEY=", NULL};
+	t_env	*env;
+	t_env	*node;
+
 	it("creates a node with an empty value")
 	{
 		env = NULL;
@@ -103,6 +168,11 @@ describe(bin_export)
 		asserteq_str(node->value, "");
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"_A1=value", NULL};
+	t_env	*env;
+
 	it("accepts underscores and digits after the first char")
 	{
 		env = NULL;
@@ -110,6 +180,11 @@ describe(bin_export)
 		asserteq_str(env_get(&env, "_A1"), "value");
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"A+=value", NULL};
+	t_env	*env;
+
 	it("rejects unsupported append assignment syntax")
 	{
 		env = NULL;
@@ -117,12 +192,25 @@ describe(bin_export)
 		assert(env_get(&env, "A") == NULL);
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"1BAD=value", NULL};
+	t_env	*env;
+
 	it("rejects invalid identifiers")
 	{
 		env = NULL;
 		asserteq(bin_export(args, &env), 1);
 		env_free(&env);
 	}
+	}
+	{
+	char	*envp[] = {"Z=last", "A=first", NULL};
+	char	*args[] = {NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
+
 	it("prints sorted declare -x output when no args")
 	{
 		env = env_init(envp);
@@ -135,15 +223,14 @@ describe(bin_export)
 		free(out);
 		env_free(&env);
 	}
+	}
 }
 
 describe(bin_unset)
 {
+	{
 	char	*envp[] = {"A=1", NULL};
 	char	*args[] = {"A", NULL};
-	t_env	*env;
-	char	*envp[] = {"A=1", NULL};
-	char	*args[] = {"MISSING", NULL};
 	t_env	*env;
 
 	it("removes exported values")
@@ -153,6 +240,12 @@ describe(bin_unset)
 		assert(env_get(&env, "A") == NULL);
 		env_free(&env);
 	}
+	}
+	{
+	char	*envp[] = {"A=1", NULL};
+	char	*args[] = {"MISSING", NULL};
+	t_env	*env;
+
 	it("ignores missing keys")
 	{
 		env = env_init(envp);
@@ -160,10 +253,12 @@ describe(bin_unset)
 		asserteq_str(env_get(&env, "A"), "1");
 		env_free(&env);
 	}
+	}
 }
 
 describe(bin_env)
 {
+	{
 	char	*envp[] = {"A=1", "B", NULL};
 	char	*args[] = {NULL};
 	t_env	*env;
@@ -180,10 +275,12 @@ describe(bin_env)
 		free(out);
 		env_free(&env);
 	}
+	}
 }
 
 describe(bin_pwd)
 {
+	{
 	char	*args[] = {NULL};
 	t_env	*env;
 	char	*out;
@@ -197,17 +294,13 @@ describe(bin_pwd)
 		assert(out[0] == '/');
 		free(out);
 	}
+	}
 }
 
 describe(bin_exit)
 {
+	{
 	char	*args[] = {"1", "2", NULL};
-	t_env	*env;
-	char	*args[] = {"notanumber", NULL};
-	t_env	*env;
-	char	*args[] = {"42", NULL};
-	t_env	*env;
-	char	*args[] = {"9223372036854775808", NULL};
 	t_env	*env;
 
 	it("returns 1 for too many args without exiting")
@@ -216,49 +309,48 @@ describe(bin_exit)
 		asserteq(bin_exit(args, &env), 1);
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"notanumber", NULL};
+	t_env	*env;
+
 	it("exits with 2 for non-numeric argument")
 	{
 		env = NULL;
 		asserteq(fork_exit(args, &env), 2);
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"42", NULL};
+	t_env	*env;
+
 	it("exits with the given numeric code")
 	{
 		env = NULL;
 		asserteq(fork_exit(args, &env), 42);
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"9223372036854775808", NULL};
+	t_env	*env;
+
 	it("exits with 2 for numeric overflow")
 	{
 		env = NULL;
 		asserteq(fork_exit(args, &env), 2);
 		env_free(&env);
 	}
+	}
 }
 
 describe(bin_cd)
 {
+	{
 	char	cwd[4096];
 	char	*envp[] = {"HOME=tests/_tmp", NULL};
 	char	*args[] = {NULL};
-	t_env	*env;
-	char	*args[] = {NULL};
-	t_env	*env;
-	char	cwd[4096];
-	char	*args[] = {"tests/_tmp", NULL};
-	t_env	*env;
-	char	cwd[4096];
-	char	*args[] = {"tests", NULL};
-	t_env	*env;
-	char	*args[] = {"tests/_tmp/__minishell_cd_missing__", NULL};
-	t_env	*env;
-	char	cwd[4096];
-	char	*args[] = {"-", NULL};
-	char	*envp[] = {"OPWD=tests/_tmp", NULL};
-	t_env	*env;
-	char	*out;
-	int		code;
-	char	*args[] = {"-", NULL};
 	t_env	*env;
 
 	it("changes to HOME when no argument given")
@@ -271,12 +363,23 @@ describe(bin_cd)
 		chdir(cwd);
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {NULL};
+	t_env	*env;
+
 	it("returns 1 when HOME is not set")
 	{
 		env = NULL;
 		asserteq(bin_cd(args, &env), 1);
 		env_free(&env);
 	}
+	}
+	{
+	char	cwd[4096];
+	char	*args[] = {"tests/_tmp", NULL};
+	t_env	*env;
+
 	it("changes to a given path and updates PWD")
 	{
 		assert(getcwd(cwd, sizeof(cwd)) != NULL);
@@ -287,6 +390,12 @@ describe(bin_cd)
 		chdir(cwd);
 		env_free(&env);
 	}
+	}
+	{
+	char	cwd[4096];
+	char	*args[] = {"tests", NULL};
+	t_env	*env;
+
 	it("updates OPWD as well as PWD")
 	{
 		assert(getcwd(cwd, sizeof(cwd)) != NULL);
@@ -299,12 +408,26 @@ describe(bin_cd)
 		chdir(cwd);
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"tests/_tmp/__minishell_cd_missing__", NULL};
+	t_env	*env;
+
 	it("returns 1 for a missing path")
 	{
 		env = NULL;
 		asserteq(bin_cd(args, &env), 1);
 		env_free(&env);
 	}
+	}
+	{
+	char	cwd[4096];
+	char	*args[] = {"-", NULL};
+	char	*envp[] = {"OPWD=tests/_tmp", NULL};
+	t_env	*env;
+	char	*out;
+	int		code;
+
 	it("cd - goes to OPWD and prints it")
 	{
 		assert(getcwd(cwd, sizeof(cwd)) != NULL);
@@ -319,11 +442,17 @@ describe(bin_cd)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"-", NULL};
+	t_env	*env;
+
 	it("cd - returns 1 when OPWD is not set")
 	{
 		env = NULL;
 		asserteq(bin_cd(args, &env), 1);
 		env_free(&env);
+	}
 	}
 }
 

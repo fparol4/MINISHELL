@@ -12,17 +12,42 @@
 
 #include "tester.h"
 
-#define TEST_SHARED_LEXER
-#include "shared.c"
+static t_manager	*lex(const char *input)
+{
+	return (lexer(input));
+}
+
+static t_list_token	*nth_token(t_manager *m, unsigned int n)
+{
+	t_node	*cur;
+
+	cur = m->head;
+	while (n-- && cur)
+		cur = cur->next;
+	if (!cur)
+		return (NULL);
+	return ((t_list_token *)cur->content);
+}
+
+static unsigned int	token_count(t_manager *m)
+{
+	t_node			*cur;
+	unsigned int	n;
+
+	n = 0;
+	cur = m->head;
+	while (cur)
+	{
+		n++;
+		cur = cur->next;
+	}
+	return (n);
+}
+
 
 describe(lexer_words)
 {
-	t_manager	*m;
-	t_manager	*m;
-	t_manager	*m;
-	t_manager	*m;
-	t_manager	*m;
-	t_manager	*m;
+	{
 	t_manager	*m;
 
 	it("tokenizes a simple command into words")
@@ -36,6 +61,10 @@ describe(lexer_words)
 		asserteq_str(nth_token(m, 1)->value, "-la");
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("keeps single-quoted content as one token")
 	{
 		m = lex("echo 'hello world'");
@@ -44,6 +73,10 @@ describe(lexer_words)
 		asserteq_str(nth_token(m, 1)->value, "'hello world'");
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("keeps mixed quotes in one word")
 	{
 		m = lex("echo 'one'\"two\"three");
@@ -53,6 +86,10 @@ describe(lexer_words)
 		asserteq(nth_token(m, 1)->quoted, TRUE);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("keeps quoted pipe characters inside words")
 	{
 		m = lex("echo '|' | cat");
@@ -63,6 +100,10 @@ describe(lexer_words)
 		asserteq(nth_token(m, 2)->type, TOKEN_PIPE);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("sets expand=true when dollar present")
 	{
 		m = lex("echo $HOME");
@@ -70,6 +111,10 @@ describe(lexer_words)
 		asserteq(nth_token(m, 1)->expand, TRUE);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("sets expand=false without dollar")
 	{
 		m = lex("echo hello");
@@ -77,6 +122,10 @@ describe(lexer_words)
 		asserteq(nth_token(m, 1)->expand, FALSE);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("returns empty list on whitespace-only input")
 	{
 		m = lex("   ");
@@ -84,16 +133,12 @@ describe(lexer_words)
 		asserteq(token_count(m), 0);
 		lexer_free(m);
 	}
+	}
 }
 
 describe(lexer_operators)
 {
-	t_manager	*m;
-	t_manager	*m;
-	t_manager	*m;
-	t_manager	*m;
-	t_manager	*m;
-	t_manager	*m;
+	{
 	t_manager	*m;
 
 	it("tokenizes pipe")
@@ -104,6 +149,10 @@ describe(lexer_operators)
 		asserteq(nth_token(m, 1)->type, TOKEN_PIPE);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("tokenizes redirect in")
 	{
 		m = lex("cat < file");
@@ -111,6 +160,10 @@ describe(lexer_operators)
 		asserteq(nth_token(m, 1)->type, TOKEN_REDIR_IN);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("tokenizes redirect out")
 	{
 		m = lex("ls > out");
@@ -119,6 +172,10 @@ describe(lexer_operators)
 		asserteq_str(nth_token(m, 2)->value, "out");
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("tokenizes append")
 	{
 		m = lex("echo hi >> out");
@@ -126,6 +183,10 @@ describe(lexer_operators)
 		asserteq(nth_token(m, 2)->type, TOKEN_APPEND);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("tokenizes heredoc")
 	{
 		m = lex("cat << EOF");
@@ -133,6 +194,10 @@ describe(lexer_operators)
 		asserteq(nth_token(m, 1)->type, TOKEN_HEREDOC);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("tokenizes a full pipeline with redirections")
 	{
 		m = lex("ls -la | cat > out");
@@ -142,6 +207,10 @@ describe(lexer_operators)
 		asserteq(nth_token(m, 5)->type, TOKEN_WORD);
 		lexer_free(m);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("marks consecutive pipe operators as invalid tokens")
 	{
 		m = lex("echo || cat");
@@ -149,12 +218,12 @@ describe(lexer_operators)
 		asserteq(nth_token(m, 1)->type, TOKEN_NONE);
 		lexer_free(m);
 	}
+	}
 }
 
 describe(lexer_errors)
 {
-	t_manager	*m;
-	t_manager	*m;
+	{
 	t_manager	*m;
 
 	it("returns NULL on unclosed single quote")
@@ -162,17 +231,26 @@ describe(lexer_errors)
 		m = lex("echo 'hello");
 		assert(m == NULL);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("returns NULL on unclosed double quote")
 	{
 		m = lex("echo \"hello");
 		assert(m == NULL);
 	}
+	}
+	{
+	t_manager	*m;
+
 	it("returns empty list on empty input")
 	{
 		m = lex("");
 		assert(m != NULL);
 		asserteq(token_count(m), 0);
 		lexer_free(m);
+	}
 	}
 }
 

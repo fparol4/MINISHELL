@@ -14,10 +14,8 @@
 
 describe(rn_exec_bin)
 {
+	{
 	char	*args[] = {"export", "FOO=bar", NULL};
-	t_env	*env;
-	int		status;
-	char	*args[] = {"ls", NULL};
 	t_env	*env;
 	int		status;
 
@@ -30,6 +28,12 @@ describe(rn_exec_bin)
 		asserteq_str(env_get(&env, "FOO"), "bar");
 		env_free(&env);
 	}
+	}
+	{
+	char	*args[] = {"ls", NULL};
+	t_env	*env;
+	int		status;
+
 	it("returns 0 for external commands")
 	{
 		env = NULL;
@@ -37,58 +41,16 @@ describe(rn_exec_bin)
 		asserteq(rn_exec_bin(args, &env, &status), 0);
 		asserteq(status, 42);
 	}
+	}
 }
 
 describe(rn_execute_cmd)
 {
+	{
 	char		*raw[] = {"export", "FOO=$USER", NULL};
 	char		*envp[] = {"USER=bar", NULL};
 	t_env		*env;
 	t_command	node;
-	char		*raw[] = {"true", NULL};
-	char		*envp[] = {"PATH=/usr/bin:/bin", NULL};
-	t_env		*env;
-	t_command	node;
-	char		*raw[] = {"not_a_real_command_xyz", NULL};
-	char		*envp[] = {"PATH=/usr/bin:/bin", NULL};
-	t_env		*env;
-	t_command	node;
-	char		*raw[] = {"./__minishell_missing_exec__", NULL};
-	t_env		*env;
-	t_command	node;
-	char		*err;
-	int			status;
-	char		path[] = "tests/_tmp/minishell_exec_dir_XXXXXX";
-	char		*raw[] = {path, NULL};
-	t_env		*env;
-	t_command	node;
-	char		*err;
-	int			status;
-	char		path[] = "tests/_tmp/minishell_exec_noexec_XXXXXX";
-	char		*raw[] = {path, NULL};
-	t_env		*env;
-	t_command	node;
-	char		*err;
-	int			fd;
-	int			status;
-	char		path[] = "tests/_tmp/minishell_exec_format_XXXXXX";
-	char		*raw[] = {path, NULL};
-	t_env		*env;
-	t_command	node;
-	char		*err;
-	int			fd;
-	int			status;
-	char		dir[] = "tests/_tmp/minishell_path_dir_XXXXXX";
-	char		*raw[] = {"blocked", NULL};
-	char		*envp[2];
-	char		*path;
-	char		*tmp;
-	char		*err;
-	char		*path_env;
-	t_env		*env;
-	t_command	node;
-	int			fd;
-	int			status;
 
 	it("expands args and runs builtin command")
 	{
@@ -99,6 +61,13 @@ describe(rn_execute_cmd)
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
 	}
+	}
+	{
+	char		*raw[] = {"true", NULL};
+	char		*envp[] = {"PATH=/usr/bin:/bin", NULL};
+	t_env		*env;
+	t_command	node;
+
 	it("runs external commands")
 	{
 		env = env_init(envp);
@@ -107,6 +76,13 @@ describe(rn_execute_cmd)
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
 	}
+	}
+	{
+	char		*raw[] = {"not_a_real_command_xyz", NULL};
+	char		*envp[] = {"PATH=/usr/bin:/bin", NULL};
+	t_env		*env;
+	t_command	node;
+
 	it("returns 127 and updates status for missing external commands")
 	{
 		env = env_init(envp);
@@ -115,6 +91,14 @@ describe(rn_execute_cmd)
 		asserteq_str(env_get(&env, ENV_ERRCODE), "127");
 		env_free(&env);
 	}
+	}
+	{
+	char		*raw[] = {"./__minishell_missing_exec__", NULL};
+	t_env		*env;
+	t_command	node;
+	char		*err;
+	int			status;
+
 	it("returns 127 for direct paths that do not exist")
 	{
 		env = NULL;
@@ -127,6 +111,15 @@ describe(rn_execute_cmd)
 		free(err);
 		env_free(&env);
 	}
+	}
+	{
+	char		path[] = "tests/_tmp/minishell_exec_dir_XXXXXX";
+	char		*raw[] = {path, NULL};
+	t_env		*env;
+	t_command	node;
+	char		*err;
+	int			status;
+
 	it("returns 126 for direct directory paths")
 	{
 		assert(rn_test_mkdtemp(path) != NULL);
@@ -141,6 +134,16 @@ describe(rn_execute_cmd)
 		free(err);
 		env_free(&env);
 	}
+	}
+	{
+	char		path[] = "tests/_tmp/minishell_exec_noexec_XXXXXX";
+	char		*raw[] = {path, NULL};
+	t_env		*env;
+	t_command	node;
+	char		*err;
+	int			fd;
+	int			status;
+
 	it("returns 126 for direct files without execute permission")
 	{
 		fd = rn_test_temp(path);
@@ -157,6 +160,16 @@ describe(rn_execute_cmd)
 		free(err);
 		env_free(&env);
 	}
+	}
+	{
+	char		path[] = "tests/_tmp/minishell_exec_format_XXXXXX";
+	char		*raw[] = {path, NULL};
+	t_env		*env;
+	t_command	node;
+	char		*err;
+	int			fd;
+	int			status;
+
 	it("returns 126 for executable files with invalid format")
 	{
 		fd = rn_test_temp(path);
@@ -174,6 +187,20 @@ describe(rn_execute_cmd)
 		free(err);
 		env_free(&env);
 	}
+	}
+	{
+	char		dir[] = "tests/_tmp/minishell_path_dir_XXXXXX";
+	char		*raw[] = {"blocked", NULL};
+	char		*envp[2];
+	char		*path;
+	char		*tmp;
+	char		*err;
+	char		*path_env;
+	t_env		*env;
+	t_command	node;
+	int			fd;
+	int			status;
+
 	it("returns 126 for PATH entries without execute permission")
 	{
 		assert(rn_test_mkdtemp(dir) != NULL);
@@ -204,5 +231,6 @@ describe(rn_execute_cmd)
 		free(path);
 		free(err);
 		env_free(&env);
+	}
 	}
 }

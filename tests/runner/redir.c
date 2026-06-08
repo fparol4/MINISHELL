@@ -14,6 +14,7 @@
 
 describe(rn_redir)
 {
+	{
 	char			path[] = "tests/_tmp/minishell_redir_in_XXXXXX";
 	char			*raw[] = {"cat", NULL};
 	t_env			*env;
@@ -22,110 +23,6 @@ describe(rn_redir)
 	char			*out;
 	int				fd;
 	int				status;
-	char			path[] = "tests/_tmp/minishell_redir_out_XXXXXX";
-	char			*raw[] = {"echo", "new", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*out;
-	int				fd;
-	char			path[] = "tests/_tmp/minishell_redir_app_XXXXXX";
-	char			*raw[] = {"echo", "new", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*out;
-	int				fd;
-	char			*raw[] = {"cat", NULL};
-	char			*envp[] = {"PATH=/usr/bin:/bin", "USER=bar", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*out;
-	int				status;
-	char			*raw[] = {"cat", NULL};
-	char			*envp[] = {"PATH=/usr/bin:/bin", "USER=bar", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*out;
-	int				status;
-	char			*raw[] = {"echo", "hello", NULL};
-	char			*envp[] = {"FILES=a b", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*raw[] = {"echo", "hello", NULL};
-	char			*envp[] = {"EMPTY=", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*err;
-	int				status;
-	char			dir[] = "tests/_tmp/minishell_redir_space_XXXXXX";
-	char			*raw[] = {"echo", "ok", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*path;
-	char			*target;
-	char			*out;
-	char			*raw[] = {"echo", "hello", NULL};
-	char			*envp[] = {"TARGET=two words", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*err;
-	int				status;
-	char			dir[] = "tests/_tmp/minishell_redir_denied_XXXXXX";
-	char			*raw[] = {"echo", "blocked", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*path;
-	char			*err;
-	int				status;
-	char			path[] = "tests/_tmp/minishell_redir_missing_input";
-	char			*raw[] = {"echo", "should-not-run", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*out;
-	int				status;
-	char			*raw[] = {"cat", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redirs[2];
-	char			*out;
-	int				status;
-	char			path[] = "tests/_tmp/minishell_redir_override_in_XXXXXX";
-	char			*raw[] = {"cat", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redirs[2];
-	char			*out;
-	int				fd;
-	int				status;
-	char			path[] = "tests/_tmp/minishell_redir_override_heredoc_XXXXXX";
-	char			*raw[] = {"cat", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redirs[2];
-	char			*out;
-	int				fd;
-	int				status;
-	char			*raw[] = {"true", NULL};
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*err;
-	int				status;
-	char			path[] = "tests/_tmp/minishell_redir_only_XXXXXX";
-	t_env			*env;
-	t_command		node;
-	t_parser_redir	redir;
-	char			*out;
-	int				fd;
 
 	it("reads stdin from input redirection")
 	{
@@ -145,6 +42,16 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			path[] = "tests/_tmp/minishell_redir_out_XXXXXX";
+	char			*raw[] = {"echo", "new", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*out;
+	int				fd;
+
 	it("writes stdout with truncation redirection")
 	{
 		fd = rn_test_temp(path);
@@ -162,6 +69,16 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			path[] = "tests/_tmp/minishell_redir_app_XXXXXX";
+	char			*raw[] = {"echo", "new", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*out;
+	int				fd;
+
 	it("writes stdout with append redirection")
 	{
 		fd = rn_test_temp(path);
@@ -179,6 +96,16 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			*raw[] = {"cat", NULL};
+	char			*envp[] = {"PATH=/usr/bin:/bin", "USER=bar", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*out;
+	int				status;
+
 	it("expands heredoc content when enabled")
 	{
 		env = env_init(envp);
@@ -193,6 +120,16 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			*raw[] = {"cat", NULL};
+	char			*envp[] = {"PATH=/usr/bin:/bin", "USER=bar", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*out;
+	int				status;
+
 	it("keeps heredoc content literal when expansion is disabled")
 	{
 		env = env_init(envp);
@@ -207,6 +144,14 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			*raw[] = {"echo", "hello", NULL};
+	char			*envp[] = {"FILES=a b", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+
 	it("fails when a redirection target expands to many args")
 	{
 		env = env_init(envp);
@@ -217,6 +162,16 @@ describe(rn_redir)
 		asserteq_str(env_get(&env, ENV_ERRCODE), "1");
 		env_free(&env);
 	}
+	}
+	{
+	char			*raw[] = {"echo", "hello", NULL};
+	char			*envp[] = {"EMPTY=", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*err;
+	int				status;
+
 	it("fails when a redirection target expands to empty")
 	{
 		env = env_init(envp);
@@ -231,6 +186,17 @@ describe(rn_redir)
 		free(err);
 		env_free(&env);
 	}
+	}
+	{
+	char			dir[] = "tests/_tmp/minishell_redir_space_XXXXXX";
+	char			*raw[] = {"echo", "ok", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*path;
+	char			*target;
+	char			*out;
+
 	it("uses quoted spaces as one redirection target")
 	{
 		assert(rn_test_mkdtemp(dir) != NULL);
@@ -252,6 +218,16 @@ describe(rn_redir)
 		free(path);
 		env_free(&env);
 	}
+	}
+	{
+	char			*raw[] = {"echo", "hello", NULL};
+	char			*envp[] = {"TARGET=two words", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*err;
+	int				status;
+
 	it("fails when an unquoted target expands to spaces")
 	{
 		env = env_init(envp);
@@ -265,6 +241,17 @@ describe(rn_redir)
 		free(err);
 		env_free(&env);
 	}
+	}
+	{
+	char			dir[] = "tests/_tmp/minishell_redir_denied_XXXXXX";
+	char			*raw[] = {"echo", "blocked", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*path;
+	char			*err;
+	int				status;
+
 	it("fails output redirection when permission is denied")
 	{
 		assert(rn_test_mkdtemp(dir) != NULL);
@@ -286,6 +273,16 @@ describe(rn_redir)
 		free(err);
 		env_free(&env);
 	}
+	}
+	{
+	char			path[] = "tests/_tmp/minishell_redir_missing_input";
+	char			*raw[] = {"echo", "should-not-run", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*out;
+	int				status;
+
 	it("does not execute command when input redirection is missing")
 	{
 		unlink(path);
@@ -300,6 +297,15 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			*raw[] = {"cat", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redirs[2];
+	char			*out;
+	int				status;
+
 	it("consumes multiple heredocs in order and keeps the last one on stdin")
 	{
 		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
@@ -315,6 +321,17 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			path[] = "tests/_tmp/minishell_redir_override_in_XXXXXX";
+	char			*raw[] = {"cat", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redirs[2];
+	char			*out;
+	int				fd;
+	int				status;
+
 	it("lets a later file input override an earlier heredoc")
 	{
 		fd = rn_test_temp(path);
@@ -334,6 +351,17 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			path[] = "tests/_tmp/minishell_redir_override_heredoc_XXXXXX";
+	char			*raw[] = {"cat", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redirs[2];
+	char			*out;
+	int				fd;
+	int				status;
+
 	it("lets a later heredoc override an earlier file input")
 	{
 		fd = rn_test_temp(path);
@@ -353,6 +381,15 @@ describe(rn_redir)
 		free(out);
 		env_free(&env);
 	}
+	}
+	{
+	char			*raw[] = {"true", NULL};
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*err;
+	int				status;
+
 	it("warns when heredoc ends before its delimiter")
 	{
 		env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
@@ -369,6 +406,15 @@ describe(rn_redir)
 		free(err);
 		env_free(&env);
 	}
+	}
+	{
+	char			path[] = "tests/_tmp/minishell_redir_only_XXXXXX";
+	t_env			*env;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*out;
+	int				fd;
+
 	it("handles commands with only redirections")
 	{
 		fd = rn_test_temp(path);
@@ -385,5 +431,6 @@ describe(rn_redir)
 		unlink(path);
 		free(out);
 		env_free(&env);
+	}
 	}
 }
