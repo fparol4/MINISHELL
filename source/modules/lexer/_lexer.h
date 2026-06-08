@@ -13,7 +13,7 @@
 #ifndef LEXER_INTERNAL_H
 # define LEXER_INTERNAL_H
 
-# include "scanner/scanner.h"
+# include "scanner/_scanner.h"
 # include "../../../headers/lexer.h"
 # include "../../../headers/errors.h"
 # include "../../../headers/shared.h"

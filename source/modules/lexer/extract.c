@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
+#include "_lexer.h"
 
 static void	quote_update(unsigned int props, unsigned int *state)
 {
@@ -56,8 +56,8 @@ t_list_token	*extract_word(t_manager *manager, t_scanner *input,
 	t_list_token	*token;
 
 	state = P_NONE;
-	scanner_markstart(input);
-	while (!scanner_isend(input))
+	scanner_mark_start(input);
+	while (!scanner_is_end(input))
 	{
 		props = rules->table.props[scanner_current(input)];
 		quote_update(props, &state);
@@ -84,8 +84,8 @@ t_list_token	*extract_operator(t_manager *manager, t_scanner *input,
 	unsigned int	count;
 
 	count = 0;
-	scanner_markstart(input);
-	while (!scanner_isend(input) && count < OPERATOR_MAX_LEN)
+	scanner_mark_start(input);
+	while (!scanner_is_end(input) && count < OPERATOR_MAX_LEN)
 	{
 		props = rules->table.props[scanner_current(input)];
 		if (!(props & rules->start_operator))

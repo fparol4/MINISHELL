@@ -1,41 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bin.h                                              :+:      :+:    :+:   */
+/*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: g-alves- <g-alves-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 20:13:25 by g-alves-          #+#    #+#             */
-/*   Updated: 2026/06/04 20:13:25 by g-alves-         ###   ########.fr       */
+/*   Created: 2026/06/04 20:14:14 by g-alves-          #+#    #+#             */
+/*   Updated: 2026/06/04 20:14:14 by g-alves-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BIN_H
-# define BIN_H
+#ifndef MODULES_ENV_H
+# define MODULES_ENV_H
 
-# include "../../../headers/builtin.h"
+# include <stdlib.h>
+# include "../../../headers/env.h"
 # include "../../../headers/errors.h"
 # include "../../../headers/shared.h"
 
-/* cd.c */
-int	bin_cd(char **args, t_env **env);
-
-/* echo.c */
-int	bin_echo(char **args, t_env **env);
-
-/* env.c */
-int	bin_env(char **args, t_env **env);
-
-/* exit.c */
-int	bin_exit(char **args, t_env **env);
-
-/* export.c */
-int	bin_export(char **args, t_env **env);
-
-/* pwd.c */
-int	bin_pwd(char **args, t_env **env);
-
-/* unset.c */
-int	bin_unset(char **args, t_env **env);
+int		env_node_free(t_env *node);
+int		env_free(t_env **env);
+int		env_set(t_env **env, const char *key, const char *value);
+int		env_size(t_env **envm);
+int		env_unset(t_env **env, const char *key);
+char	*env_get(t_env **env, const char *key);
+char	**env_toarr(t_env **env);
+t_env	*env_node_new(const char *key, const char *value);
+t_env	*env_init(char **env);
 
 #endif

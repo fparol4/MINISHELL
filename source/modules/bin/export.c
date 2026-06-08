@@ -12,7 +12,7 @@
 
 #include "../../../headers/minishell.h"
 
-static void	sortkeys(char **keys, int size)
+static void	export_sortkeys(char **keys, int size)
 {
 	int		i;
 	int		j;
@@ -36,7 +36,7 @@ static void	sortkeys(char **keys, int size)
 	}
 }
 
-static char	**getkeys(t_env **env, int *size_out)
+static char	**export_getkeys(t_env **env, int *size_out)
 {
 	int		i;
 	int		size;
@@ -63,18 +63,18 @@ static char	**getkeys(t_env **env, int *size_out)
 			keys[i++] = node->key;
 		node = node->next;
 	}
-	sortkeys(keys, size);
+	export_sortkeys(keys, size);
 	return (keys);
 }
 
-static int	print_export(t_env **env)
+static int	export_print(t_env **env)
 {
 	int		i;
 	int		k_size;
 	t_env	*node;
 	char	**keys;
 
-	keys = getkeys(env, &k_size);
+	keys = export_getkeys(env, &k_size);
 	if (!keys)
 		return (1);
 	i = 0;
@@ -107,7 +107,7 @@ int	bin_export(char **args, t_env **env)
 
 	code = 0;
 	if (!args[0])
-		return (print_export(env));
+		return (export_print(env));
 	i = 0;
 	while (args[i])
 	{

@@ -54,22 +54,17 @@ typedef struct s_scanner_table
 	unsigned int	props[256];
 }	t_scanner_table;
 
-/* load.c */
+
+
 void			scanner_init(t_scanner *sc, const char *input);
-
-/* move.c */
 void			scanner_advance(t_scanner *sc);
-int				scanner_isend(t_scanner *sc);
-size_t			scanner_markstart(t_scanner *sc);
 void			scanner_until(t_scanner *sc, int (*f)(int));
-
-/* get.c */
-unsigned int	scanner_current(t_scanner *sc);
-char			scanner_peek(t_scanner *sc, size_t offset);
-char			*scanner_extract(t_scanner *sc);
-
-/* table.c */
 void			scanner_table_char(t_scanner_table *table);
 void			scanner_table_token(t_scanner_table *table);
+int				scanner_is_end(t_scanner *sc);
+char			scanner_peek(t_scanner *sc, size_t offset);
+char			*scanner_extract(t_scanner *sc);
+size_t			scanner_mark_start(t_scanner *sc);
+size_t			scanner_current(t_scanner *sc);
 
 #endif
