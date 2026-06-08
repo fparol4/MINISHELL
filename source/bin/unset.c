@@ -23,8 +23,8 @@ int	bin_unset(char **args, t_env **env)
 	{
 		if (!sh_isidentifier(args[i]))
 		{
-			ft_putstr_fd("minishell: unset: `", 2);
-			ft_putstr_fd(args[i], 2);
+			ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
+			ft_putstr_fd(args[i], STDERR_FILENO);
 			ft_putendl_fd("': not a valid identifier", 2);
 			status = 1;
 		}

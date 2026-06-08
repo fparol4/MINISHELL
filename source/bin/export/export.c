@@ -24,8 +24,8 @@ static char	*export_key(char *arg)
 
 static int	export_invalid(char *arg)
 {
-	ft_putstr_fd("minishell: export: '", 2);
-	ft_putstr_fd(arg, 2);
+	ft_putstr_fd("minishell: export: '", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putendl_fd("': not a valid identifier", 2);
 	return (1);
 }

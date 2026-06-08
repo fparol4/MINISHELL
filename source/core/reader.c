@@ -50,7 +50,7 @@ static int	core_iteration(t_shell *shell)
 {
 	char	*line;
 
-	line = readline("GA&Fabricio:minishell$ ");
+	line = readline(PROMPT);
 	if (!line)
 	{
 		if (g_signal == SIGINT)

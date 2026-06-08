@@ -25,7 +25,7 @@
 # include <unistd.h>
 
 # define BUFFER_SIZE 4096
-# define MSG_MINISHELL "minishell:"
+# define PROMPT "GA&Fabricio:minishell$ "
 
 extern volatile sig_atomic_t	g_signal;
 

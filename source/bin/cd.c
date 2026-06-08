@@ -20,7 +20,7 @@ static char	*getpath(char **args, t_env **env)
 	{
 		path = env_get(env, PWD_HOME);
 		if (!path)
-			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
 		return (path);
 	}
 	if (ft_strcmp(args[0], "-") == 0)
@@ -29,7 +29,7 @@ static char	*getpath(char **args, t_env **env)
 		if (!path)
 			path = env_get(env, "OPWD");
 		if (!path)
-			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+			ft_putstr_fd("minishell: cd: OLDPWD not set\n", STDERR_FILENO);
 		else
 			ft_putendl_fd(path, 1);
 		return (path);
@@ -45,7 +45,7 @@ int	bin_cd(char **args, t_env **env)
 
 	if (args[0] && args[1])
 	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
 		return (1);
 	}
 	path = getpath(args, env);

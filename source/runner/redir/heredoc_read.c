@@ -19,7 +19,7 @@ static int	rn_redir_delim(char *line, char *target)
 
 void	rn_redir_warn(char *target)
 {
-	ft_putstr_fd(MSG_MINISHELL, STDERR_FILENO);
+	ft_putstr_fd("minishell:", STDERR_FILENO);
 	ft_putstr_fd(" warning: here-document delimited by end-of-file (wanted `",
 		STDERR_FILENO);
 	ft_putstr_fd(target, STDERR_FILENO);
