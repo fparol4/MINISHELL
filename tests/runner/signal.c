@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../source/shared/_shared.h"
 #include "../tester.h"
 
 describe(sh_sig_mode)

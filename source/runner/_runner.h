@@ -14,6 +14,7 @@
 # define _RUNNER_H
 
 # include "../../headers/minishell.h"
+# include "../shared/_shared.h"
 
 char	**rn_expand(char **args, t_env **env);
 int		rn_execute(t_command *cmd, t_env **env);

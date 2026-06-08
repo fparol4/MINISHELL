@@ -14,7 +14,7 @@
 # define _LEXER_H
 
 # include "../../headers/lexer.h"
-# include "../../headers/minishell.h"
+# include "../shared/_shared.h"
 # include "scanner/_scanner.h"
 
 # define OPERATOR_MAX_LEN 2

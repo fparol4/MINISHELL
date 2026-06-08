@@ -43,21 +43,5 @@ typedef struct s_shell
 }								t_shell;
 
 int								core_run(char **envp);
-int								core_init(t_shell *shell, char **envp);
-int								core_loop(t_shell *shell);
-void							core_destroy(t_shell *shell);
-
-int								sh_isspace(char c);
-int								sh_varstart(char c);
-int								sh_varchar(char c);
-int								sh_isidentifier(char *s);
-int								sh_has_quotes(char *s);
-char							*sh_quote_remove(char *s);
-void							sh_freesec(void **items);
-void							sh_freeargs(char **args);
-void							sh_err(char *scope, char *msg);
-void							sh_err2(char *scope, char *arg, char *msg);
-void							sh_stxerr(t_syntax_error type);
-void							sh_sig_mode(t_sig_mode mode);
 
 #endif

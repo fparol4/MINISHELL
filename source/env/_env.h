@@ -14,7 +14,7 @@
 # define _ENV_H
 
 # include "../../headers/env.h"
-# include "../../headers/minishell.h"
+# include "../shared/_shared.h"
 # include <stdlib.h>
 
 int		env_node_free(t_env *node);

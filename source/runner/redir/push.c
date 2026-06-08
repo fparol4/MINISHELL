@@ -35,9 +35,6 @@ static int	redir_save_stdio(int saved[2])
 	saved[1] = dup(STDOUT_FILENO);
 	if (saved[0] == -1 || saved[1] == -1)
 		return (rn_redir_restore(saved), sh_err(NULL, "dup failed"), 1);
-	if (fcntl(saved[0], F_SETFD, FD_CLOEXEC) == -1 || fcntl(saved[1], F_SETFD,
-			FD_CLOEXEC) == -1)
-		return (rn_redir_restore(saved), sh_err(NULL, "fcntl failed"), 1);
 	return (0);
 }
 

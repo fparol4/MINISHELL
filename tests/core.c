@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "../source/core/_core.h"
 #include "tester.h"
 
 int	core_loop(t_shell *shell)

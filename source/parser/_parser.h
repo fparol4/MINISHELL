@@ -14,6 +14,7 @@
 # define _PARSER_H
 
 # include "../../headers/parser.h"
+# include "../shared/_shared.h"
 
 # define OFFSET 2
 
@@ -39,6 +40,7 @@ t_list_token		*parser_get_token(t_node *current_node);
 unsigned int		parser_get_class(t_token_type type);
 
 t_command			*parse_simple_command(t_parser *parser);
+void				parser_free_cmd(t_command *cmd);
 void				parser_free_simple(t_simple *simple);
 void				parser_set_syntax_error(t_parser *parser,
 						t_syntax_error type);

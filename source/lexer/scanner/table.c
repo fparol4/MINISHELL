@@ -18,7 +18,7 @@ void	scanner_table_char(t_scanner_table *table)
 
 	if (!table)
 		return ;
-	ft_memset(table, 0, 256);
+	ft_memset(table, 0, sizeof(*table));
 	i = 0;
 	while (i < 256)
 	{

@@ -17,7 +17,5 @@
 # include "./parser.h"
 
 int	rn_execute(t_command *cmd, t_env **env);
-int	rn_status_set(t_env **env, int status);
-int	rn_status_get(t_env **env);
 
 #endif

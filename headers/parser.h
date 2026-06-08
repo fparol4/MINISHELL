@@ -83,6 +83,5 @@ typedef struct s_command
 
 t_ast						*parser_controller(t_manager *manager);
 void						parser_free_ast(t_ast *ast);
-void						parser_free_cmd(t_command *cmd);
 
 #endif
