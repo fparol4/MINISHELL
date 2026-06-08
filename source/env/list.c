@@ -16,7 +16,7 @@ t_env	*env_node_new(const char *key, const char *value)
 {
 	t_env	*node;
 
-	node = calloc(1, sizeof(t_env));
+	node = ft_calloc(1, sizeof(t_env));
 	if (!node)
 		return (NULL);
 	node->key = ft_strdup(key);

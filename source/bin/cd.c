@@ -27,8 +27,6 @@ static char	*getpath(char **args, t_env **env)
 	{
 		path = env_get(env, ENV_OPWD);
 		if (!path)
-			path = env_get(env, "OPWD");
-		if (!path)
 			ft_putstr_fd("minishell: cd: OLDPWD not set\n", STDERR_FILENO);
 		else
 			ft_putendl_fd(path, 1);

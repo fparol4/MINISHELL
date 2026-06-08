@@ -110,9 +110,17 @@ static t_env	*env_list_from_array(char **env)
 t_env	*env_init(char **env)
 {
 	t_env	*head;
+	char	**min;
 
 	if (!env)
-		return (env_init(minenv()));
+	{
+		min = minenv();
+		if (!min)
+			return (NULL);
+		head = env_init(min);
+		sh_freeargs(min);
+		return (head);
+	}
 	head = env_list_from_array(env);
 	if (!head)
 		return (NULL);

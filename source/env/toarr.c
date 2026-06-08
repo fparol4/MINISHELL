@@ -47,7 +47,7 @@ char	**env_toarr(t_env **env)
 	t_env	*node;
 
 	es = env_size(env);
-	arr = calloc(es + 1, sizeof(char *));
+	arr = ft_calloc(es + 1, sizeof(char *));
 	if (!arr)
 		return (NULL);
 	node = *env;

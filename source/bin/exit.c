@@ -82,7 +82,6 @@ int	bin_exit(char **args, t_env **env)
 	if (!exit_value(args[0], &code))
 	{
 		sh_err2("exit", args[0], "numeric argument required");
-		env_set(env, ENV_ERRCODE, "2");
 		exit(2);
 	}
 	if (args[1])

@@ -18,7 +18,7 @@ int	env_free(t_env **env)
 	t_env	*next;
 
 	if (!env || !*env)
-		return (1);
+		return (0);
 	node = *env;
 	while (node)
 	{
@@ -27,5 +27,5 @@ int	env_free(t_env **env)
 		node = next;
 	}
 	*env = NULL;
-	return (1);
+	return (0);
 }
