@@ -5,16 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 12:55:13 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 12:55:13 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/08 19:23:39 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/08 19:23:39 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _LEXER_H
 # define _LEXER_H
 
-# include "../../headers/minishell.h"
 # include "../../headers/lexer.h"
+# include "../../headers/minishell.h"
 # include "scanner/_scanner.h"
 
 # define OPERATOR_MAX_LEN 2
