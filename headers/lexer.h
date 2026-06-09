@@ -27,17 +27,17 @@ typedef enum e_token_type
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
 	TOKEN_WORD
-}							t_token_type;
+}	t_token_type;
 
 typedef struct s_list_token
 {
-	char					*value;
-	t_token_type			type;
-	t_bool					expand;
-	t_bool					quoted;
-}							t_list_token;
+	char			*value;
+	t_token_type	type;
+	t_bool			expand;
+	t_bool			quoted;
+}					t_list_token;
 
-t_manager					*lexer(const char *input);
-void						lexer_free(t_manager *manager);
+t_manager	*lexer(const char *input);
+void		lexer_free(t_manager *manager);
 
 #endif

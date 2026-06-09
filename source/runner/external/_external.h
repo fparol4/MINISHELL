@@ -25,7 +25,7 @@ typedef enum e_ext_kind
 	EXT_NOT_FOUND,
 	EXT_DENIED,
 	EXT_DIR
-}			t_ext_kind;
+}	t_ext_kind;
 
 t_ext_kind	rn_ext_classify(char *path);
 int			rn_ext_report(char *path, t_ext_kind kind);

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "_pipe.h"
+#include "../../../headers/minishell.h"
 
 void	rn_pipe_close_all(int *fds, size_t pipe_count)
 {

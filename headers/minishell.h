@@ -34,14 +34,14 @@ typedef enum e_sig_mode
 	SIG_INTERACTIVE,
 	SIG_EXEC,
 	SIG_HEREDOC
-}								t_sig_mode;
+}	t_sig_mode;
 
 typedef struct s_shell
 {
-	t_env						*env;
-	t_bool						running;
-}								t_shell;
+	t_env	*env;
+	t_bool	running;
+}	t_shell;
 
-int								core_run(char **envp);
+int	core_run(char **envp);
 
 #endif
