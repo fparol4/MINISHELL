@@ -61,7 +61,7 @@ describe(rn_redir)
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		rn_test_redir(&redir, REDIR_OUT, path, 1);
 		rn_test_attach_redirs(&node, &redir, 1);
-		asserteq(rn_execute(&node, &env), 0);
+		asserteq(rn_execute(&node, &env, STDIN_FILENO), 0);
 		out = rn_test_readfile(path);
 		assert(out != NULL);
 		asserteq_str(out, "new\n");
@@ -88,7 +88,7 @@ describe(rn_redir)
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		rn_test_redir(&redir, REDIR_APPEND, path, 1);
 		rn_test_attach_redirs(&node, &redir, 1);
-		asserteq(rn_execute(&node, &env), 0);
+		asserteq(rn_execute(&node, &env, STDIN_FILENO), 0);
 		out = rn_test_readfile(path);
 		assert(out != NULL);
 		asserteq_str(out, "old\nnew\n");
@@ -158,7 +158,7 @@ describe(rn_redir)
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		rn_test_redir(&redir, REDIR_OUT, "$FILES", 1);
 		rn_test_attach_redirs(&node, &redir, 1);
-		asserteq(rn_execute(&node, &env), 1);
+		asserteq(rn_execute(&node, &env, STDIN_FILENO), 1);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "1");
 		env_free(&env);
 	}
@@ -207,7 +207,7 @@ describe(rn_redir)
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
 		rn_test_redir(&redir, REDIR_OUT, target, 0);
 		rn_test_attach_redirs(&node, &redir, 1);
-		asserteq(rn_execute(&node, &env), 0);
+		asserteq(rn_execute(&node, &env, STDIN_FILENO), 0);
 		out = rn_test_readfile(path);
 		assert(out != NULL);
 		asserteq_str(out, "ok\n");
@@ -424,7 +424,7 @@ describe(rn_redir)
 		rn_test_node(&node, PNODE_CMD, NULL, NULL, NULL);
 		rn_test_redir(&redir, REDIR_OUT, path, 1);
 		rn_test_attach_redirs(&node, &redir, 1);
-		asserteq(rn_execute(&node, &env), 0);
+		asserteq(rn_execute(&node, &env, STDIN_FILENO), 0);
 		out = rn_test_readfile(path);
 		assert(out != NULL);
 		asserteq_str(out, "");

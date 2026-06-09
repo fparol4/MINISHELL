@@ -52,6 +52,15 @@ static void	pipe_child_exit(int *fds, size_t pipe_count)
 
 void	rn_pipe_child(t_pipe_ctx *ctx, size_t pos)
 {
+	int	heredoc_fd;
+
+	heredoc_fd = STDIN_FILENO;
+	if (pos > 0)
+	{
+		heredoc_fd = dup(STDIN_FILENO);
+		if (heredoc_fd == -1)
+			pipe_child_exit(ctx->fds, ctx->pipe_count);
+	}
 	if (pos > 0 && dup2(ctx->fds[(pos - 1) * 2], STDIN_FILENO) == -1)
 		pipe_child_exit(ctx->fds, ctx->pipe_count);
 	if (ctx->cmds[pos + 1] && dup2(ctx->fds[pos * 2 + 1], STDOUT_FILENO) == -1)
@@ -59,5 +68,5 @@ void	rn_pipe_child(t_pipe_ctx *ctx, size_t pos)
 	rn_pipe_close_all(ctx->fds, ctx->pipe_count);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	_exit(rn_execute(ctx->cmds[pos], ctx->env));
+	_exit(rn_execute(ctx->cmds[pos], ctx->env, heredoc_fd));
 }

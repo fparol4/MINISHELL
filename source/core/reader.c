@@ -41,7 +41,7 @@ static int	core_process_line(t_shell *shell, char *line)
 		parser_free_ast(ast);
 		return (0);
 	}
-	rn_execute(ast->root, &shell->env);
+	rn_execute(ast->root, &shell->env, STDIN_FILENO);
 	parser_free_ast(ast);
 	return (0);
 }

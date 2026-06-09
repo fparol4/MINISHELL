@@ -39,13 +39,13 @@ static int	redir_save_stdio(int saved[2])
 }
 
 int	rn_redir_push(t_parser_redir *redirs, size_t count, t_env **env,
-		int saved[2])
+		int saved[2], int heredoc_fd)
 {
 	int	status;
 
 	if (redir_save_stdio(saved))
 		return (1);
-	status = rn_redir_apply(redirs, count, env);
+	status = rn_redir_apply(redirs, count, env, heredoc_fd);
 	if (status)
 		return (rn_redir_restore(saved), status);
 	return (0);

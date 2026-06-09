@@ -56,7 +56,7 @@ describe(rn_pipe)
 		rn_test_node(&left, PNODE_CMD, left_args, NULL, NULL);
 		rn_test_node(&right, PNODE_CMD, right_args, NULL, NULL);
 		rn_test_node(&node, PNODE_PIPE, NULL, &left, &right);
-		status = rn_execute(&node, &env);
+		status = rn_execute(&node, &env, STDIN_FILENO);
 		asserteq(status, 0);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
@@ -230,6 +230,35 @@ describe(rn_pipe)
 		assert(out != NULL);
 		asserteq(status, 0);
 		asserteq_str(out, "4\n");
+		free(out);
+		env_free(&env);
+	}
+	}
+	{
+	char			*envp[] = {"PATH=/usr/bin:/bin", NULL};
+	char			*left_args[] = {"echo", "pipe", NULL};
+	char			*right_args[] = {"cat", NULL};
+	t_env			*env;
+	t_command		left;
+	t_command		right;
+	t_command		node;
+	t_parser_redir	redir;
+	char			*out;
+	int				status;
+
+	it("reads a right-side heredoc from the shell instead of the pipe")
+	{
+		env = env_init(envp);
+		rn_test_node(&left, PNODE_CMD, left_args, NULL, NULL);
+		rn_test_node(&right, PNODE_CMD, right_args, NULL, NULL);
+		rn_test_redir(&redir, REDIR_HEREDOC, "EOF", 1);
+		rn_test_attach_redirs(&right, &redir, 1);
+		rn_test_node(&node, PNODE_PIPE, NULL, &left, &right);
+		asserteq(rn_test_with_stdin("heredoc\nEOF\n", &node, &env, &status,
+				&out), 0);
+		assert(out != NULL);
+		asserteq(status, 0);
+		asserteq_str(out, "heredoc\n");
 		free(out);
 		env_free(&env);
 	}
@@ -410,7 +439,7 @@ describe(rn_pipe)
 		rn_test_redir(&redir, REDIR_IN, path, 1);
 		rn_test_attach_redirs(&right, &redir, 1);
 		rn_test_node(&node, PNODE_PIPE, NULL, &left, &right);
-		status = rn_execute(&node, &env);
+		status = rn_execute(&node, &env, STDIN_FILENO);
 		asserteq(status, 1);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "1");
 		env_free(&env);

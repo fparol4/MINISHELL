@@ -46,7 +46,7 @@ static char	*rn_test_capture_execute(t_command *node, t_env **env, int *code)
 	saved = dup(STDOUT_FILENO);
 	dup2(pfd[1], STDOUT_FILENO);
 	close(pfd[1]);
-	*code = rn_execute(node, env);
+	*code = rn_execute(node, env, STDIN_FILENO);
 	dup2(saved, STDOUT_FILENO);
 	close(saved);
 	n = read(pfd[0], buf, sizeof(buf) - 1);
@@ -74,7 +74,7 @@ static char	*rn_test_capture_fd(int target, t_command *node, t_env **env,
 		return (close(pfd[0]), close(pfd[1]), NULL);
 	dup2(pfd[1], target);
 	close(pfd[1]);
-	*code = rn_execute(node, env);
+	*code = rn_execute(node, env, STDIN_FILENO);
 	dup2(saved, target);
 	close(saved);
 	n = read(pfd[0], buf, sizeof(buf) - 1);
@@ -208,4 +208,3 @@ static char	*rn_test_quote(char *path)
 	assert(out != NULL);
 	return (out);
 }
-

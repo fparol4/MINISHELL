@@ -12,12 +12,13 @@
 
 #include "_runner.h"
 
-static int	rn_cmd_redir_push(t_simple *simple, t_env **env, int saved[2])
+static int	rn_cmd_redir_push(t_simple *simple, t_env **env, int saved[2],
+		int heredoc_fd)
 {
 	if (!simple->redirs.length)
 		return (0);
 	return (rn_redir_push((t_parser_redir *)simple->redirs.items,
-			simple->redirs.length, env, saved));
+			simple->redirs.length, env, saved, heredoc_fd));
 }
 
 static int	rn_cmd_run(char **args, t_env **env)
@@ -31,7 +32,7 @@ static int	rn_cmd_run(char **args, t_env **env)
 	return (rn_exec_ext(args, env));
 }
 
-int	rn_exec_cmd(t_command *cmd, t_env **env)
+int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 {
 	t_simple	*simple;
 	char		**args;
@@ -44,7 +45,7 @@ int	rn_exec_cmd(t_command *cmd, t_env **env)
 	args = rn_expand((char **)simple->args.items, env);
 	if (!args)
 		return (1);
-	status = rn_cmd_redir_push(simple, env, saved);
+	status = rn_cmd_redir_push(simple, env, saved, heredoc_fd);
 	if (status)
 		return (sh_freeargs(args), status);
 	status = rn_cmd_run(args, env);
@@ -59,14 +60,14 @@ int	rn_exec_pipe(t_command *cmd, t_env **env)
 	return (rn_pipe(cmd, env));
 }
 
-int	rn_execute(t_command *cmd, t_env **env)
+int	rn_execute(t_command *cmd, t_env **env, int heredoc_fd)
 {
 	int	status;
 
 	if (!cmd)
 		return (0);
 	if (cmd->type == PNODE_CMD)
-		status = rn_exec_cmd(cmd, env);
+		status = rn_exec_cmd(cmd, env, heredoc_fd);
 	else if (cmd->type == PNODE_PIPE)
 		status = rn_exec_pipe(cmd, env);
 	else

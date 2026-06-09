@@ -42,7 +42,7 @@ static int	rn_redir_open(char *target, t_parser_redir_type type)
 	return (open(target, O_WRONLY | O_CREAT | O_APPEND, 0644));
 }
 
-int	rn_redir_fd(t_parser_redir *redir, t_env **env)
+int	rn_redir_fd(t_parser_redir *redir, t_env **env, int input_fd)
 {
 	char	*target;
 	int		fd;
@@ -51,7 +51,7 @@ int	rn_redir_fd(t_parser_redir *redir, t_env **env)
 	if (!target)
 		return (-1);
 	if (redir->type == REDIR_HEREDOC)
-		fd = rn_redir_heredoc(target, env, redir->expand);
+		fd = rn_redir_heredoc(target, env, redir->expand, input_fd);
 	else
 		fd = rn_redir_open(target, redir->type);
 	if (fd == -1 && redir->type != REDIR_HEREDOC)

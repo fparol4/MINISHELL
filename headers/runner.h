@@ -16,6 +16,6 @@
 # include "./bin.h"
 # include "./parser.h"
 
-int	rn_execute(t_command *cmd, t_env **env);
+int	rn_execute(t_command *cmd, t_env **env, int heredoc_fd);
 
 #endif

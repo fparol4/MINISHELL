@@ -26,7 +26,7 @@ void	rn_redir_warn(char *target)
 	ft_putstr_fd("')\n", STDERR_FILENO);
 }
 
-char	*rn_redir_readline(void)
+char	*rn_redir_readline(int input_fd)
 {
 	char	*line;
 	size_t	len;
@@ -37,7 +37,7 @@ char	*rn_redir_readline(void)
 	line = NULL;
 	len = 0;
 	cap = 0;
-	end = read_heredoc_loop(&line, &len, &cap);
+	end = read_heredoc_loop(input_fd, &line, &len, &cap);
 	if (end == -1)
 		return (free(line), NULL);
 	if (!line && end <= 0)
@@ -62,11 +62,12 @@ static int	heredoc_write_line(int fd, char *line, t_env **env, int expand)
 	return (0);
 }
 
-t_heredoc_state	heredoc_read_loop(int fd, char *target, t_env **env, int expand)
+t_heredoc_state	heredoc_read_loop(int fd, char *target, t_env **env,
+		int expand, int input_fd)
 {
 	char	*line;
 
-	line = rn_redir_readline();
+	line = rn_redir_readline(input_fd);
 	while (line)
 	{
 		if (g_signal == SIGINT)
@@ -75,7 +76,7 @@ t_heredoc_state	heredoc_read_loop(int fd, char *target, t_env **env, int expand)
 			return (free(line), HEREDOC_DONE);
 		if (heredoc_write_line(fd, line, env, expand))
 			return (HEREDOC_FAIL);
-		line = rn_redir_readline();
+		line = rn_redir_readline(input_fd);
 	}
 	return (HEREDOC_EOF);
 }

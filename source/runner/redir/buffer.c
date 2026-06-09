@@ -49,14 +49,14 @@ int	rn_redir_linegrow(char **line, size_t *cap, size_t len)
 	return (free(*line), *line = next, 0);
 }
 
-ssize_t	read_heredoc_loop(char **line, size_t *len, size_t *cap)
+ssize_t	read_heredoc_loop(int input_fd, char **line, size_t *len, size_t *cap)
 {
 	char	c;
 	ssize_t	readed;
 
 	while (TRUE)
 	{
-		readed = read(STDIN_FILENO, &c, 1);
+		readed = read(input_fd, &c, 1);
 		if (readed <= 0)
 			return (readed);
 		if (c == '\n')

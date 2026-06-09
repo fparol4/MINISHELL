@@ -56,7 +56,7 @@ describe(rn_execute_cmd)
 	{
 		env = env_init(envp);
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
-		asserteq(rn_execute(&node, &env), 0);
+		asserteq(rn_execute(&node, &env, STDIN_FILENO), 0);
 		asserteq_str(env_get(&env, "FOO"), "bar");
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
@@ -72,7 +72,7 @@ describe(rn_execute_cmd)
 	{
 		env = env_init(envp);
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
-		asserteq(rn_execute(&node, &env), 0);
+		asserteq(rn_execute(&node, &env, STDIN_FILENO), 0);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
 	}
@@ -87,7 +87,7 @@ describe(rn_execute_cmd)
 	{
 		env = env_init(envp);
 		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
-		asserteq(rn_execute(&node, &env), 127);
+		asserteq(rn_execute(&node, &env, STDIN_FILENO), 127);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "127");
 		env_free(&env);
 	}
