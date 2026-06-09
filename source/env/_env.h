@@ -5,16 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:25:14 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:25:14 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _ENV_H
 # define _ENV_H
 
-# include "../../headers/env.h"
-# include "../shared/_shared.h"
+# include "../../headers/minishell.h"
 # include <stdlib.h>
 
 int		env_node_free(t_env *node);

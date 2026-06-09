@@ -5,16 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:25:15 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:25:15 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _PARSER_H
 # define _PARSER_H
 
-# include "../../headers/parser.h"
-# include "../shared/_shared.h"
+# include "../../headers/minishell.h"
 
 # define OFFSET 2
 

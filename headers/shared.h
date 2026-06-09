@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _shared.h                                          :+:      :+:    :+:   */
+/*   shared.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:25:14 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:25:14 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 00:00:00 by Codex             #+#    #+#             */
+/*   Updated: 2026/06/09 00:00:00 by Codex            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _SHARED_H
-# define _SHARED_H
+#ifndef SHARED_H
+# define SHARED_H
 
-# include "../../headers/minishell.h"
+# include "./core.h"
+# include "./parser.h"
 
 void	sh_freesec(void **items);
 void	sh_freeargs(char **args);

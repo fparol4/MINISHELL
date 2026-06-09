@@ -1,23 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   load.c                                             :+:      :+:    :+:   */
+/*   core.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 00:00:00 by Codex             #+#    #+#             */
+/*   Updated: 2026/06/09 00:00:00 by Codex            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_scanner.h"
+#ifndef CORE_H
+# define CORE_H
 
-void	scanner_init(t_scanner *sc, const char *input)
+# include "../libraries/libft/libft.h"
+# include <signal.h>
+# include "./env.h"
+
+# define BUFFER_SIZE 4096
+# define PROMPT "GA&Fabricio:minishell$ "
+
+extern volatile sig_atomic_t	g_signal;
+
+typedef enum e_sig_mode
 {
-	if (!sc || !input)
-		return ;
-	sc->input = (char *)input;
-	sc->cursor = 0;
-	sc->len = ft_strlen(sc->input);
-	sc->start = 0;
-}
+	SIG_INTERACTIVE,
+	SIG_EXEC,
+	SIG_HEREDOC
+}	t_sig_mode;
+
+typedef struct s_shell
+{
+	t_env	*env;
+	t_bool	running;
+}	t_shell;
+
+int	core_run(char **envp);
+
+#endif
