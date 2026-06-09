@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:25:16 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:25:16 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 10:09:17 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 10:09:17 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define _RUNNER_H
 
 # include "../../headers/minishell.h"
-# include "../shared/_shared.h"
+# include "../../headers/shared.h"
 
 char	**rn_expand(char **args, t_env **env);
 int		rn_execute(t_command *cmd, t_env **env);

@@ -11,7 +11,6 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 SRC_SHARED = source/shared/error.c \
 			  source/shared/free.c \
-			  source/shared/general.c \
 			  source/shared/quote.c \
 			  source/shared/string.c \
 			  source/shared/signal.c

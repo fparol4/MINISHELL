@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:25:15 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:25:15 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 10:09:16 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 10:09:16 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define _PARSER_H
 
 # include "../../headers/parser.h"
-# include "../shared/_shared.h"
+# include "../../headers/shared.h"
 
 # define OFFSET 2
 

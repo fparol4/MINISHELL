@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 19:25:17 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/08 19:25:17 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 10:09:18 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 10:09:18 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define _BIN_H
 
 # include "../../headers/bin.h"
-# include "../shared/_shared.h"
+# include "../../headers/shared.h"
 
 int		bin_cd(char **args, t_env **env);
 int		bin_echo(char **args, t_env **env);
