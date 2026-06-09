@@ -16,7 +16,7 @@ size_t	scanner_current(t_scanner *sc)
 {
 	if (!sc || !sc->input || sc->cursor >= sc->len)
 		return (0);
-	return ((size_t)sc->input[sc->cursor]);
+	return ((unsigned char)sc->input[sc->cursor]);
 }
 
 char	scanner_peek(t_scanner *sc, size_t offset)
