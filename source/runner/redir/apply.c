@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ static int	redir_dup_all(t_redir_fd *opened, size_t count)
 		{
 			while (i < count)
 				close(opened[i++].fd);
-			return (sh_err(NULL, "dup2 failed"), 1);
+			sh_err(NULL, "dup2 failed");
+			return (1);
 		}
 		close(opened[i].fd);
 		i++;
@@ -81,7 +82,10 @@ int	rn_redir_apply(t_parser_redir *redirs, size_t count, t_env **env,
 		return (1);
 	status = redir_open_all(opened, redirs, count, env, input_fd);
 	if (status)
-		return (free(opened), status);
+	{
+		free(opened);
+		return (status);
+	}
 	status = redir_dup_all(opened, count);
 	free(opened);
 	return (status);

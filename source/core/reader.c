@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ static int	core_process_line(t_shell *shell, char *line)
 
 	ast = core_parse(line);
 	if (!ast)
-		return (rn_status_set(&shell->env, SH_STATUS_SYNTAX_ERROR), 0);
+	{
+		rn_status_set(&shell->env, SH_STATUS_SYNTAX_ERROR);
+		return (0);
+	}
 	if (ast->error)
 	{
 		sh_stxerr(ast->error_type);
@@ -75,6 +78,7 @@ static int	core_iteration(t_shell *shell)
 int	core_loop(t_shell *shell)
 {
 	int	ret;
+	int	status;
 
 	if (!shell)
 		return (1);
@@ -82,7 +86,11 @@ int	core_loop(t_shell *shell)
 	{
 		ret = core_iteration(shell);
 		if (ret == -1)
-			return (rn_status_get(&shell->env));
+		{
+			status = rn_status_get(&shell->env);
+			return (status);
+		}
 	}
-	return (rn_status_get(&shell->env));
+	status = rn_status_get(&shell->env);
+	return (status);
 }

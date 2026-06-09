@@ -71,7 +71,11 @@ static char	*rn_test_capture_fd(int target, t_command *node, t_env **env,
 		return (NULL);
 	saved = dup(target);
 	if (saved == -1)
-		return (close(pfd[0]), close(pfd[1]), NULL);
+	{
+		close(pfd[0]);
+		close(pfd[1]);
+		return (NULL);
+	}
 	dup2(pfd[1], target);
 	close(pfd[1]);
 	*code = rn_execute(node, env, STDIN_FILENO);
@@ -88,7 +92,10 @@ static char	*rn_test_capture_fd(int target, t_command *node, t_env **env,
 
 static char	*rn_test_capture_error(t_command *node, t_env **env, int *code)
 {
-	return (rn_test_capture_fd(STDERR_FILENO, node, env, code));
+	char	*out;
+
+	out = rn_test_capture_fd(STDERR_FILENO, node, env, code);
+	return (out);
 }
 
 static void	rn_test_redir(t_parser_redir *redir, t_parser_redir_type type,
@@ -118,11 +125,18 @@ static int	rn_test_with_stdin(char *input, t_command *node, t_env **env,
 	if (pipe(pfd) == -1)
 		return (1);
 	if (write(pfd[1], input, ft_strlen(input)) < 0)
-		return (close(pfd[0]), close(pfd[1]), 1);
+	{
+		close(pfd[0]);
+		close(pfd[1]);
+		return (1);
+	}
 	close(pfd[1]);
 	saved = dup(STDIN_FILENO);
 	if (saved == -1)
-		return (close(pfd[0]), 1);
+	{
+		close(pfd[0]);
+		return (1);
+	}
 	dup2(pfd[0], STDIN_FILENO);
 	close(pfd[0]);
 	*out = rn_test_capture_execute(node, env, status);
@@ -140,11 +154,18 @@ static int	rn_test_with_stdin_capture(char *input, t_command *node,
 	if (pipe(pfd) == -1)
 		return (1);
 	if (write(pfd[1], input, ft_strlen(input)) < 0)
-		return (close(pfd[0]), close(pfd[1]), 1);
+	{
+		close(pfd[0]);
+		close(pfd[1]);
+		return (1);
+	}
 	close(pfd[1]);
 	saved = dup(STDIN_FILENO);
 	if (saved == -1)
-		return (close(pfd[0]), 1);
+	{
+		close(pfd[0]);
+		return (1);
+	}
 	dup2(pfd[0], STDIN_FILENO);
 	close(pfd[0]);
 	*captured = rn_test_capture_fd(target, node, env, status);
@@ -156,8 +177,11 @@ static int	rn_test_with_stdin_capture(char *input, t_command *node,
 static int	rn_test_with_stdin_error(char *input, t_command *node, t_env **env,
 		int *status, char **err)
 {
-	return (rn_test_with_stdin_capture(input, node, env, status, err,
-			STDERR_FILENO));
+	int	code;
+
+	code = rn_test_with_stdin_capture(input, node, env, status, err,
+			STDERR_FILENO);
+	return (code);
 }
 
 static void	rn_test_ensure_tmp(void)
@@ -167,14 +191,20 @@ static void	rn_test_ensure_tmp(void)
 
 static int	rn_test_temp(char *tpl)
 {
+	int	fd;
+
 	rn_test_ensure_tmp();
-	return (mkstemp(tpl));
+	fd = mkstemp(tpl);
+	return (fd);
 }
 
 static char	*rn_test_mkdtemp(char *tpl)
 {
+	char	*dir;
+
 	rn_test_ensure_tmp();
-	return (mkdtemp(tpl));
+	dir = mkdtemp(tpl);
+	return (dir);
 }
 
 static char	*rn_test_readfile(char *path)

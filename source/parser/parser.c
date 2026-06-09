@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,10 @@ t_ast	*parser_controller(t_manager *manager)
 		return (NULL);
 	parser_init(&parser, manager);
 	if (parser_is_end(&parser))
-		return (free(ast), NULL);
+	{
+		free(ast);
+		return (NULL);
+	}
 	parser.ast = ast;
 	if (parser.token->type == TOKEN_PIPE)
 	{

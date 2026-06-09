@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 # define _REDIR_H
 
 # include "../_runner.h"
+# include <errno.h>
 # include <fcntl.h>
+# include <string.h>
 
 typedef enum e_heredoc_state
 {
@@ -32,13 +34,9 @@ typedef struct s_redir_fd
 
 int				rn_redir_append(char **buf, char *part);
 int				rn_redir_char(char **buf, char c);
-int				rn_redir_linegrow(char **line, size_t *cap, size_t len);
-ssize_t			read_heredoc_loop(int input_fd, char **line, size_t *len,
-					size_t *cap);
 char			*rn_redir_line(char *line, t_env **env, int expand);
 char			*rn_redir_readline(int input_fd);
-void			rn_redir_warn(char *target);
-t_heredoc_state	heredoc_read_loop(int fd, char *target, t_env **env,
+t_heredoc_state	rn_redir_heredoc_loop(int fd, char *target, t_env **env,
 					int expand, int input_fd);
 int				rn_redir_heredoc(char *target, t_env **env, int expand,
 					int input_fd);

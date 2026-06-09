@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 static int	rn_pipe_status(int status)
 {
+	int	exit_status;
+
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
+	{
+		exit_status = WEXITSTATUS(status);
+		return (exit_status);
+	}
 	if (WIFSIGNALED(status))
 		return (128 + WTERMSIG(status));
 	return (1);
@@ -47,12 +52,17 @@ static int	rn_pipe_fork_all(t_pipe_ctx *ctx, pid_t *pids, size_t *forked)
 	{
 		pids[i] = fork();
 		if (pids[i] == -1)
-			return (*forked = i, sh_err(NULL, "fork failed"), 1);
+		{
+			*forked = i;
+			sh_err(NULL, "fork failed");
+			return (1);
+		}
 		if (pids[i] == 0)
 			rn_pipe_child(ctx, i);
 		i++;
 	}
-	return (*forked = i, 0);
+	*forked = i;
+	return (0);
 }
 
 int	rn_pipe_fork_wait(t_command **cmds, t_env **env, int *fds, size_t count)
@@ -78,5 +88,6 @@ int	rn_pipe_fork_wait(t_command **cmds, t_env **env, int *fds, size_t count)
 	else
 		status = rn_pipe_wait(pids, count);
 	sh_sig_mode(SIG_INTERACTIVE);
-	return (free(pids), status);
+	free(pids);
+	return (status);
 }

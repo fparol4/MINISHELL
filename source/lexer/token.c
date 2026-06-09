@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,20 @@ t_list_token	*token_add(t_manager *manager, const char *value,
 		return (NULL);
 	token->value = ft_strdup(value);
 	if (!token->value)
-		return (free(token), NULL);
+	{
+		free(token);
+		return (NULL);
+	}
 	token->type = type;
 	token->expand = (ft_strchr(value, '$') != NULL);
 	token->quoted = sh_has_quotes((char *)value);
 	node = ft_dlist_node_new(token);
 	if (!node)
-		return (free(token->value), free(token), NULL);
+	{
+		free(token->value);
+		free(token);
+		return (NULL);
+	}
 	ft_dlist_add_tail(manager, node);
 	return (token);
 }

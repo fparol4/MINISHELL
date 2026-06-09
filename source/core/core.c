@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:55 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:55 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,16 @@ int	core_init(t_shell *shell, char **envp)
 		return (1);
 	shell->env = env_init(envp);
 	if (!shell->env)
-		return (sh_err(NULL, "environment initialization failed"), 1);
+	{
+		sh_err(NULL, "environment initialization failed");
+		return (1);
+	}
 	if (env_set(&shell->env, ENV_ERRCODE, "0") == -1)
-		return (env_free(&shell->env), sh_err(NULL,
-				"status initialization failed"), 1);
+	{
+		env_free(&shell->env);
+		sh_err(NULL, "status initialization failed");
+		return (1);
+	}
 	shell->running = TRUE;
 	sh_sig_mode(SIG_INTERACTIVE);
 	return (0);

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:55 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:55 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:47 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:47 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,18 @@ int	sh_isspace(char c)
 
 int	sh_varstart(char c)
 {
-	return (ft_isalpha(c) || c == '_');
+	int	is_start;
+
+	is_start = (ft_isalpha(c) || c == '_');
+	return (is_start);
 }
 
 int	sh_varchar(char c)
 {
-	return (ft_isalnum(c) || c == '_');
+	int	is_char;
+
+	is_char = (ft_isalnum(c) || c == '_');
+	return (is_char);
 }
 
 int	sh_isidentifier(char *s)

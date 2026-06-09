@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void				parser_next(t_parser *parser);
 t_bool				parser_is_end(t_parser *parser);
 void				parser_start_command(t_parser *parser);
 void				parser_finish_command(t_parser *parser);
-void				parser_add_arg(t_parser *parser, char *arg, t_bool expand);
+void				parser_add_arg(t_parser *parser, char *arg);
 void				parser_add_redir(t_parser *parser, t_parser_redir_type type,
 						t_list_token *token);
 

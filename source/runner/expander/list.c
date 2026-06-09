@@ -5,46 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "_expander.h"
 
-int	exp_listgrow(t_arglist *list)
-{
-	char	**next;
-	int		i;
-
-	if (list->size + 1 < list->cap)
-		return (0);
-	if (list->cap == 0)
-		list->cap = 8;
-	else
-		list->cap *= 2;
-	next = malloc(sizeof(char *) * list->cap);
-	if (!next)
-		return (1);
-	i = 0;
-	while (i < list->size)
-	{
-		next[i] = list->items[i];
-		i++;
-	}
-	return (free(list->items), list->items = next, 0);
-}
-
-int	exp_listadd(t_arglist *list, char *item)
-{
-	if (exp_listgrow(list))
-		return (free(item), 1);
-	list->items[list->size++] = item;
-	list->items[list->size] = NULL;
-	return (0);
-}
-
-int	exp_flush_word(t_arglist *list, t_word *word)
+int	exp_flush_word(t_array *list, t_word *word)
 {
 	char	*out;
 
@@ -56,8 +24,11 @@ int	exp_flush_word(t_arglist *list, t_word *word)
 		out = ft_strdup("");
 	if (!out)
 		return (1);
-	if (exp_listadd(list, out))
+	if (!ft_array_append(list, &out))
+	{
+		free(out);
 		return (1);
+	}
 	word->len = 0;
 	word->active = 0;
 	if (word->buf)
@@ -65,7 +36,7 @@ int	exp_flush_word(t_arglist *list, t_word *word)
 	return (0);
 }
 
-int	exp_add_unquoted(t_arglist *list, t_word *word, const char *value)
+int	exp_add_unquoted(t_array *list, t_word *word, const char *value)
 {
 	int	i;
 

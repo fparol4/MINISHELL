@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ static t_env	*entryparse(const char *entry)
 
 	eq = ft_strchr(entry, '=');
 	if (!eq)
-		return (env_node_new(entry, NULL));
+	{
+		node = env_node_new(entry, NULL);
+		return (node);
+	}
 	key_l = (size_t)(eq - entry);
 	key = ft_substr(entry, 0, key_l);
 	if (!key)

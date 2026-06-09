@@ -5,21 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:58 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:58 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "_runner.h"
-
-static int	rn_cmd_redir_push(t_simple *simple, t_env **env, int saved[2],
-		int heredoc_fd)
-{
-	if (!simple->redirs.length)
-		return (0);
-	return (rn_redir_push((t_parser_redir *)simple->redirs.items,
-			simple->redirs.length, env, saved, heredoc_fd));
-}
 
 static int	rn_cmd_run(char **args, t_env **env)
 {
@@ -29,7 +20,8 @@ static int	rn_cmd_run(char **args, t_env **env)
 		return (0);
 	if (rn_exec_bin(args, env, &status))
 		return (status);
-	return (rn_exec_ext(args, env));
+	status = rn_exec_ext(args, env);
+	return (status);
 }
 
 int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
@@ -45,19 +37,21 @@ int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 	args = rn_expand((char **)simple->args.items, env);
 	if (!args)
 		return (1);
-	status = rn_cmd_redir_push(simple, env, saved, heredoc_fd);
+	if (simple->redirs.length)
+		status = rn_redir_push((t_parser_redir *)simple->redirs.items,
+				simple->redirs.length, env, saved, heredoc_fd);
+	else
+		status = 0;
 	if (status)
-		return (sh_freeargs(args), status);
+	{
+		sh_freeargs(args);
+		return (status);
+	}
 	status = rn_cmd_run(args, env);
 	sh_freeargs(args);
 	if (simple->redirs.length && rn_redir_restore(saved))
 		status = 1;
 	return (status);
-}
-
-int	rn_exec_pipe(t_command *cmd, t_env **env)
-{
-	return (rn_pipe(cmd, env));
 }
 
 int	rn_execute(t_command *cmd, t_env **env, int heredoc_fd)
@@ -69,7 +63,7 @@ int	rn_execute(t_command *cmd, t_env **env, int heredoc_fd)
 	if (cmd->type == PNODE_CMD)
 		status = rn_exec_cmd(cmd, env, heredoc_fd);
 	else if (cmd->type == PNODE_PIPE)
-		status = rn_exec_pipe(cmd, env);
+		status = rn_pipe(cmd, env);
 	else
 		status = 1;
 	rn_status_set(env, status);

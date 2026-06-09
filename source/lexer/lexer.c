@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ t_manager	*lexer(const char *input)
 	t_scanner	sc;
 	t_manager	*manager;
 	t_rules		*rules;
+	t_manager	*cleaned;
 
 	if (!input)
 		return (NULL);
@@ -67,7 +68,8 @@ t_manager	*lexer(const char *input)
 	if (!state_machine(manager, &sc, rules))
 	{
 		sh_stxerr(SNTX_UNCLOSED_QUOTE);
-		return (lexer_cleanup(manager, rules));
+		cleaned = lexer_cleanup(manager, rules);
+		return (cleaned);
 	}
 	free(rules);
 	return (manager);

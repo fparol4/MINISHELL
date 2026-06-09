@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:58 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:58 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 int	main(int argc, char **argv, char **envp)
 {
+	int	status;
+
 	(void)argc;
 	(void)argv;
-	return (core_run(envp));
+	status = core_run(envp);
+	return (status);
 }

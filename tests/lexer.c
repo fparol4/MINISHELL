@@ -14,7 +14,10 @@
 
 static t_manager	*lex(const char *input)
 {
-	return (lexer(input));
+	t_manager	*manager;
+
+	manager = lexer(input);
+	return (manager);
 }
 
 static t_list_token	*nth_token(t_manager *m, unsigned int n)

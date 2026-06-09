@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,16 @@
 
 size_t	rn_pipe_count(t_command *node)
 {
+	size_t	count;
+
 	if (!node)
 		return (0);
 	if (node->type == PNODE_PIPE)
-		return (rn_pipe_count(node->t_define.pipe.left)
-			+ rn_pipe_count(node->t_define.pipe.right));
+	{
+		count = rn_pipe_count(node->t_define.pipe.left);
+		count += rn_pipe_count(node->t_define.pipe.right);
+		return (count);
+	}
 	return (1);
 }
 
