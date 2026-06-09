@@ -33,11 +33,11 @@ static int	core_process_line(t_shell *shell, char *line)
 
 	ast = core_parse(line);
 	if (!ast)
-		return (rn_status_set(&shell->env, 2), 0);
+		return (rn_status_set(&shell->env, SH_STATUS_SYNTAX_ERROR), 0);
 	if (ast->error)
 	{
 		sh_stxerr(ast->error_type);
-		rn_status_set(&shell->env, 2);
+		rn_status_set(&shell->env, SH_STATUS_SYNTAX_ERROR);
 		parser_free_ast(ast);
 		return (0);
 	}
@@ -55,7 +55,7 @@ static int	core_iteration(t_shell *shell)
 	{
 		if (g_signal == SIGINT)
 		{
-			rn_status_set(&shell->env, 130);
+			rn_status_set(&shell->env, SH_STATUS_SIGINT);
 			g_signal = 0;
 			return (1);
 		}
@@ -63,7 +63,7 @@ static int	core_iteration(t_shell *shell)
 		return (-1);
 	}
 	if (g_signal == SIGINT)
-		rn_status_set(&shell->env, 130);
+		rn_status_set(&shell->env, SH_STATUS_SIGINT);
 	g_signal = 0;
 	if (*line)
 		add_history(line);

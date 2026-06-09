@@ -29,6 +29,12 @@ typedef enum e_sig_mode
 	SIG_HEREDOC
 }	t_sig_mode;
 
+typedef enum e_shell_status
+{
+	SH_STATUS_SYNTAX_ERROR = 2,
+	SH_STATUS_SIGINT = 130
+}	t_shell_status;
+
 typedef struct s_shell
 {
 	t_env	*env;
