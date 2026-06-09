@@ -27,7 +27,7 @@ typedef enum e_table_char
 	P_DQUOTE = 1 << 4,
 	P_ESCAPE = 1 << 5,
 	P_SYMBOL = 1 << 6
-}					t_table_char;
+}	t_table_char;
 
 typedef enum e_token_table
 {
@@ -43,26 +43,26 @@ typedef enum e_token_table
 
 typedef struct s_scanner
 {
-	char			*input;
-	size_t			cursor;
-	size_t			len;
-	size_t			start;
-}					t_scanner;
+	char	*input;
+	size_t	cursor;
+	size_t	len;
+	size_t	start;
+}	t_scanner;
 
 typedef struct s_scanner_table
 {
 	unsigned int	props[256];
-}					t_scanner_table;
+}	t_scanner_table;
 
-void				scanner_init(t_scanner *sc, const char *input);
-void				scanner_advance(t_scanner *sc);
-void				scanner_until(t_scanner *sc, int (*f)(int));
-void				scanner_table_char(t_scanner_table *table);
-void				scanner_table_token(t_scanner_table *table);
-int					scanner_is_end(t_scanner *sc);
-char				scanner_peek(t_scanner *sc, size_t offset);
-char				*scanner_extract(t_scanner *sc);
-size_t				scanner_mark_start(t_scanner *sc);
-size_t				scanner_current(t_scanner *sc);
+void	scanner_init(t_scanner *sc, const char *input);
+void	scanner_advance(t_scanner *sc);
+void	scanner_until(t_scanner *sc, int (*f)(int));
+void	scanner_table_char(t_scanner_table *table);
+void	scanner_table_token(t_scanner_table *table);
+int		scanner_is_end(t_scanner *sc);
+char	scanner_peek(t_scanner *sc, size_t offset);
+char	*scanner_extract(t_scanner *sc);
+size_t	scanner_mark_start(t_scanner *sc);
+size_t	scanner_current(t_scanner *sc);
 
 #endif
