@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,15 @@ t_list_token	*extract_word(t_manager *manager, t_scanner *input,
 	}
 	word = scanner_extract(input);
 	if (!input || input->cursor <= input->start)
-		return (free(word), NULL);
+	{
+		free(word);
+		return (NULL);
+	}
 	if (state != P_NONE)
-		return (free(word), NULL);
+	{
+		free(word);
+		return (NULL);
+	}
 	token = token_add(manager, word, TOKEN_WORD);
 	free(word);
 	return (token);
@@ -94,7 +100,10 @@ t_list_token	*extract_operator(t_manager *manager, t_scanner *input,
 	}
 	type = scanner_extract(input);
 	if (!input || input->cursor <= input->start)
-		return (free(type), NULL);
+	{
+		free(type);
+		return (NULL);
+	}
 	token = token_add(manager, type, operator_type(type));
 	free(type);
 	return (token);

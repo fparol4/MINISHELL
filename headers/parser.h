@@ -55,13 +55,11 @@ typedef struct s_parser_redir
 	t_parser_redir_type	type;
 	char				*file;
 	t_bool				expand;
-	t_bool				quoted;
 }	t_parser_redir;
 
 typedef struct s_simple
 {
 	t_array	args;
-	t_bool	expand;
 	t_array	redirs;
 }	t_simple;
 

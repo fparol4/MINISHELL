@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ static t_command	*simple_to_command(t_simple *simple)
 
 static void	consume_word(t_parser *parser)
 {
-	parser_add_arg(parser, ft_strdup(parser->token->value),
-		parser->token->expand);
+	parser_add_arg(parser, ft_strdup(parser->token->value));
 	parser_next(parser);
 }
 
@@ -53,6 +52,7 @@ t_command	*parse_simple_command(t_parser *parser)
 {
 	t_simple		*simple;
 	unsigned int	class;
+	t_command		*cmd;
 
 	parser_start_command(parser);
 	if (parser->state)
@@ -74,5 +74,6 @@ t_command	*parse_simple_command(t_parser *parser)
 	parser_finish_command(parser);
 	if (parser->state || !simple)
 		return (NULL);
-	return (simple_to_command(simple));
+	cmd = simple_to_command(simple);
+	return (cmd);
 }

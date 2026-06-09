@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	parser_finish_command(t_parser *parser)
 	parser->current_cmd = NULL;
 }
 
-void	parser_add_arg(t_parser *parser, char *arg, t_bool expand)
+void	parser_add_arg(t_parser *parser, char *arg)
 {
 	char	**args;
 
@@ -64,8 +64,6 @@ void	parser_add_arg(t_parser *parser, char *arg, t_bool expand)
 		parser_start_command(parser);
 	if (!parser->current_cmd)
 		return ;
-	if (expand)
-		parser->current_cmd->expand = TRUE;
 	if (!ft_array_append(&parser->current_cmd->args, &arg))
 	{
 		free(arg);
@@ -96,7 +94,6 @@ void	parser_add_redir(t_parser *parser, t_parser_redir_type type,
 	}
 	redir.type = type;
 	redir.file = word;
-	redir.quoted = token->quoted;
 	redir.expand = !token->quoted;
 	if (!ft_array_append(&parser->current_cmd->redirs, &redir))
 	{

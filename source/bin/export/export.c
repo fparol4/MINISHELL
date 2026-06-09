@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:58 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:58 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:44 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:44 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,16 @@
 static char	*export_key(char *arg)
 {
 	char	*c_eq;
+	char	*key;
 
 	c_eq = ft_strchr(arg, '=');
 	if (c_eq)
-		return (ft_substr(arg, 0, c_eq - arg));
-	return (ft_strdup(arg));
+	{
+		key = ft_substr(arg, 0, c_eq - arg);
+		return (key);
+	}
+	key = ft_strdup(arg);
+	return (key);
 }
 
 static int	export_invalid(char *arg)
@@ -53,10 +58,14 @@ int	bin_export(char **args, t_env **env)
 {
 	int	i;
 	int	code;
+	int	status;
 
 	code = 0;
 	if (!args[0])
-		return (export_print(env));
+	{
+		status = export_print(env);
+		return (status);
+	}
 	i = 0;
 	while (args[i])
 	{

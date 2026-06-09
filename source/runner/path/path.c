@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,15 @@ static char	*path_search_dirs(char **dirs, char *cmd)
 	{
 		full = rn_path_join(dirs[i++], cmd);
 		if (!full)
-			return (free(fallback), NULL);
+		{
+			free(fallback);
+			return (NULL);
+		}
 		if (rn_path_candidate(full, &fallback))
-			return (free(fallback), full);
+		{
+			free(fallback);
+			return (full);
+		}
 	}
 	return (fallback);
 }
@@ -37,8 +43,6 @@ static char	*rn_path_search(char **args, t_env **env)
 	char	*path;
 	char	*found;
 
-	if (ft_strchr(args[0], '/'))
-		return (ft_strdup(args[0]));
 	path = env_get(env, "PATH");
 	if (!path || !*path)
 		return (NULL);
@@ -46,13 +50,16 @@ static char	*rn_path_search(char **args, t_env **env)
 	if (!dirs)
 		return (NULL);
 	found = path_search_dirs(dirs, args[0]);
-	rn_path_free(dirs);
+	sh_freeargs(dirs);
 	return (found);
 }
 
 char	*rn_path(char **args, t_env **env)
 {
+	char	*path;
+
 	if (!args || !args[0])
 		return (NULL);
-	return (rn_path_search(args, env));
+	path = rn_path_search(args, env);
+	return (path);
 }

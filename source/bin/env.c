@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:58 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:58 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:44 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:44 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ int	bin_env(char **args, t_env **env)
 	t_env	*item;
 
 	if (args && args[0])
-		return (sh_err2("env", args[0], "No such file or directory"), 127);
+	{
+		sh_err2("env", args[0], "No such file or directory");
+		return (127);
+	}
 	item = *env;
 	while (item)
 	{

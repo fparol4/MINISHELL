@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ static int	wordgrow(t_word *word, int add)
 		return (1);
 	if (word->buf)
 		ft_memcpy(next, word->buf, word->len);
-	return (free(word->buf), word->buf = next, word->cap = cap, 0);
+	free(word->buf);
+	word->buf = next;
+	word->cap = cap;
+	return (0);
 }
 
 int	exp_wordchar(t_word *word, char c)

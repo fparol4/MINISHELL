@@ -5,17 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "_path.h"
-
-void	rn_path_free(char **dirs)
-{
-	sh_freeargs(dirs);
-}
 
 char	*rn_path_join(char *dir, char *cmd)
 {
@@ -33,14 +28,18 @@ char	*rn_path_join(char *dir, char *cmd)
 int	rn_path_match(char *full)
 {
 	struct stat	st;
+	int			match;
 
 	if (stat(full, &st) == -1)
 		return (0);
 	if (S_ISDIR(st.st_mode))
 		return (0);
-	return (access(full, X_OK) == 0);
+	match = (access(full, X_OK) == 0);
+	return (match);
 }
 
+/* Store an existing-but-not-executable path as fallback so the caller can
+   report "permission denied" instead of "command not found" if no match found. */
 int	rn_path_candidate(char *full, char **fallback)
 {
 	if (rn_path_match(full))

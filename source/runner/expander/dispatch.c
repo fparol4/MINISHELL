@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quotes.c                                           :+:      :+:    :+:   */
+/*   dispatch.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,25 @@ int	exp_double(t_exp_ctx *ctx)
 	return (0);
 }
 
-int	exp_arg_char(t_exp_ctx *ctx)
+int	exp_process_char(t_exp_ctx *ctx)
 {
+	int	status;
+
 	if (ctx->arg[*ctx->i] == '\'')
-		return (exp_single(ctx->word, ctx->arg, ctx->i));
+	{
+		status = exp_single(ctx->word, ctx->arg, ctx->i);
+		return (status);
+	}
 	if (ctx->arg[*ctx->i] == '"')
-		return (exp_double(ctx));
+	{
+		status = exp_double(ctx);
+		return (status);
+	}
 	if (ctx->arg[*ctx->i] == '$')
-		return (exp_var(ctx));
+	{
+		status = exp_var(ctx);
+		return (status);
+	}
 	if (sh_isspace(ctx->arg[*ctx->i]))
 	{
 		if (exp_flush_word(ctx->list, ctx->word))
@@ -62,5 +73,6 @@ int	exp_arg_char(t_exp_ctx *ctx)
 			(*ctx->i)++;
 		return (0);
 	}
-	return (exp_wordchar(ctx->word, ctx->arg[(*ctx->i)++]));
+	status = exp_wordchar(ctx->word, ctx->arg[(*ctx->i)++]);
+	return (status);
 }

@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:57 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:57 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "_expander.h"
 
-static char	*var_special(int *i, t_env **env)
+static char	*exp_var_status(int *i, t_env **env)
 {
 	char	*value;
 
@@ -31,7 +31,10 @@ char	*exp_varvalue(char *arg, int *i, t_env **env)
 
 	(*i)++;
 	if (arg[*i] == '?')
-		return (var_special(i, env));
+	{
+		value = exp_var_status(i, env);
+		return (value);
+	}
 	if (!sh_varstart(arg[*i]))
 		return (NULL);
 	start = *i;
@@ -50,19 +53,29 @@ char	*exp_varvalue(char *arg, int *i, t_env **env)
 int	exp_var(t_exp_ctx *ctx)
 {
 	char	*value;
+	int		status;
 
 	value = exp_varvalue(ctx->arg, ctx->i, ctx->env);
 	if (!value)
-		return (exp_wordchar(ctx->word, '$'));
-	return (exp_add_unquoted(ctx->list, ctx->word, value));
+	{
+		status = exp_wordchar(ctx->word, '$');
+		return (status);
+	}
+	status = exp_add_unquoted(ctx->list, ctx->word, value);
+	return (status);
 }
 
 int	exp_var_quoted(t_exp_ctx *ctx)
 {
 	char	*value;
+	int		status;
 
 	value = exp_varvalue(ctx->arg, ctx->i, ctx->env);
 	if (!value)
-		return (exp_wordchar(ctx->word, '$'));
-	return (exp_wordstr(ctx->word, value));
+	{
+		status = exp_wordchar(ctx->word, '$');
+		return (status);
+	}
+	status = exp_wordstr(ctx->word, value);
+	return (status);
 }

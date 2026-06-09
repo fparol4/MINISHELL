@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:58 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:58 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include "../../headers/minishell.h"
 
 char	**rn_expand(char **args, t_env **env);
+char	*exp_varvalue(char *arg, int *i, t_env **env);
 int		rn_execute(t_command *cmd, t_env **env, int heredoc_fd);
 int		rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd);
-int		rn_exec_pipe(t_command *cmd, t_env **env);
 int		rn_pipe(t_command *cmd, t_env **env);
 int		rn_redir_push(t_parser_redir *redirs, size_t count, t_env **env,
 			int saved[2], int heredoc_fd);

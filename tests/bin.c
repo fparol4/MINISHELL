@@ -16,6 +16,7 @@ static int	fork_exit(char **args, t_env **env)
 {
 	pid_t	pid;
 	int		status;
+	int		code;
 
 	pid = fork();
 	if (pid == 0)
@@ -29,7 +30,10 @@ static int	fork_exit(char **args, t_env **env)
 		return (-1);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
+	{
+		code = WEXITSTATUS(status);
+		return (code);
+	}
 	return (-1);
 }
 

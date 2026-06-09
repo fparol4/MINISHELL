@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	env_set(t_env **env, const char *key, const char *value)
 {
 	t_env	*node;
 	t_env	*tail;
+	int		status;
 
 	if (!env || !key)
 		return (-1);
@@ -53,9 +54,13 @@ int	env_set(t_env **env, const char *key, const char *value)
 	while (node)
 	{
 		if (ft_strcmp(node->key, key) == 0)
-			return (env_update_value(node, value));
+		{
+			status = env_update_value(node, value);
+			return (status);
+		}
 		tail = node;
 		node = node->next;
 	}
-	return (env_append_node(env, tail, key, value));
+	status = env_append_node(env, tail, key, value);
+	return (status);
 }

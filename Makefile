@@ -44,7 +44,7 @@ SRC_RUNNER = source/runner/path/path.c \
 			 source/runner/pipe/process.c \
 			 source/runner/pipe/tree.c \
 			 source/runner/redir/apply.c \
-			 source/runner/redir/buffer.c \
+			 source/runner/redir/strbuilder.c \
 			 source/runner/redir/expand.c \
 			 source/runner/redir/heredoc.c \
 			 source/runner/redir/heredoc_read.c \
@@ -57,7 +57,7 @@ SRC_RUNNER = source/runner/path/path.c \
 			 source/runner/external/resolve.c \
 			 source/runner/expander/expand.c \
 			 source/runner/expander/list.c \
-			 source/runner/expander/quotes.c \
+			 source/runner/expander/dispatch.c \
 			 source/runner/expander/variable.c \
 			 source/runner/expander/word.c
 

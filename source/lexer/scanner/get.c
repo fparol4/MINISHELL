@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:21:56 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:21:56 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 18:46:45 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/09 18:46:45 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ char	scanner_peek(t_scanner *sc, size_t offset)
 
 char	*scanner_extract(t_scanner *sc)
 {
+	char	*content;
+
 	if (!sc || !sc->input || sc->cursor < sc->start)
 		return (NULL);
-	return (ft_substr(sc->input, sc->start, sc->cursor - sc->start));
+	content = ft_substr(sc->input, sc->start, sc->cursor - sc->start);
+	return (content);
 }
