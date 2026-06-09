@@ -1,30 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   core.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 10:09:15 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 10:09:15 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/09 00:00:00 by Codex             #+#    #+#             */
+/*   Updated: 2026/06/09 00:00:00 by Codex            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#ifndef CORE_H
+# define CORE_H
 
-void	sh_freesec(void **items)
+# include "../libraries/libft/libft.h"
+# include <signal.h>
+# include "./env.h"
+
+# define BUFFER_SIZE 4096
+# define PROMPT "GA&Fabricio:minishell$ "
+
+extern volatile sig_atomic_t	g_signal;
+
+typedef enum e_sig_mode
 {
-	int	i;
+	SIG_INTERACTIVE,
+	SIG_EXEC,
+	SIG_HEREDOC
+}	t_sig_mode;
 
-	if (!items)
-		return ;
-	i = 0;
-	while (items[i])
-		free(items[i++]);
-	free(items);
-}
-
-void	sh_freeargs(char **args)
+typedef struct s_shell
 {
-	sh_freesec((void **)args);
-}
+	t_env	*env;
+	t_bool	running;
+}	t_shell;
+
+int	core_run(char **envp);
+
+#endif

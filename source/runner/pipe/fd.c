@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/minishell.h"
 #include "_pipe.h"
 
 void	rn_pipe_close_all(int *fds, size_t pipe_count)

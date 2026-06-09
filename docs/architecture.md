@@ -20,7 +20,7 @@ main()
 
 | Module | Directory | Public header | Responsibility |
 |---|---|---|---|
-| core | `source/core/` | — | REPL loop, init/destroy |
+| core | `source/core/` | `headers/core.h` | REPL loop, init/destroy |
 | shared | `source/shared/` | `headers/shared.h` | Errors, free helpers, signals, string utils, quote utils |
 | env | `source/env/` | `headers/env.h` | Environment variable store (linked list) |
 | lexer | `source/lexer/` | `headers/lexer.h` | Tokenisation: char stream → `t_manager` (doubly-linked token list) |

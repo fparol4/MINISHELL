@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/shared.h"
+#include "../../headers/minishell.h"
 
 volatile sig_atomic_t	g_signal = 0;
 

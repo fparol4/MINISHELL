@@ -13,9 +13,7 @@
 #ifndef _PIPE_H
 # define _PIPE_H
 
-# include "../../../headers/env.h"
-# include "../../../headers/parser.h"
-# include "../../../headers/shared.h"
+# include "../_runner.h"
 # include <sys/wait.h>
 
 typedef struct s_pipe_ctx

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/shared.h"
+#include "../../headers/minishell.h"
 
 void	sh_err(char *scope, char *msg)
 {

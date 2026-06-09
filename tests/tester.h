@@ -13,11 +13,7 @@
 #ifndef TESTER_H
 # define TESTER_H
 
-# include "../headers/bin.h"
-# include "../headers/env.h"
 # include "../headers/minishell.h"
-# include "../headers/runner.h"
-# include "../headers/shared.h"
 # include "../source/runner/_runner.h"
 # include "snow.h"
 # include <fcntl.h>

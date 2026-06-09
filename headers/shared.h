@@ -13,7 +13,8 @@
 #ifndef SHARED_H
 # define SHARED_H
 
-# include "./minishell.h"
+# include "./core.h"
+# include "./parser.h"
 
 void	sh_freesec(void **items);
 void	sh_freeargs(char **args);

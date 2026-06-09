@@ -13,8 +13,7 @@
 #ifndef _BIN_H
 # define _BIN_H
 
-# include "../../headers/bin.h"
-# include "../../headers/shared.h"
+# include "../../headers/minishell.h"
 
 int		bin_cd(char **args, t_env **env);
 int		bin_echo(char **args, t_env **env);

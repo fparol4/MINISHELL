@@ -14,7 +14,6 @@
 # define _CORE_H
 
 # include "../../headers/minishell.h"
-# include "../../headers/shared.h"
 
 int		core_run(char **envp);
 int		core_init(t_shell *shell, char **envp);

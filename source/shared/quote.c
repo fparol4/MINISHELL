@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/shared.h"
+#include "../../headers/minishell.h"
 
 int	sh_has_quotes(char *s)
 {

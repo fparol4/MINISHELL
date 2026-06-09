@@ -13,8 +13,7 @@
 #ifndef _ENV_H
 # define _ENV_H
 
-# include "../../headers/env.h"
-# include "../../headers/shared.h"
+# include "../../headers/minishell.h"
 # include <stdlib.h>
 
 int		env_node_free(t_env *node);

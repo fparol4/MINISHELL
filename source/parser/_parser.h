@@ -13,8 +13,7 @@
 #ifndef _PARSER_H
 # define _PARSER_H
 
-# include "../../headers/parser.h"
-# include "../../headers/shared.h"
+# include "../../headers/minishell.h"
 
 # define OFFSET 2
 
