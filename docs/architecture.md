@@ -1,6 +1,6 @@
 # Architecture
 
-## Overview
+## TESTE	
 
 Minishell follows a classic pipeline: read → lex → parse → execute. Each stage is a separate module with its own types and headers. The shell state is one stack-allocated `t_shell` struct; everything else is passed down by pointer.
 
