@@ -21,12 +21,3 @@ int	main(int argc, char **argv, char **envp)
 	status = core_run(envp);
 	return (status);
 }
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/31 14:06:39 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/05/31 14:06:39 by fcardozo         ###   ########.fr       */
-/*                                                                            */
