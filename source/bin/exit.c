@@ -76,7 +76,7 @@ int	bin_exit(char **args, t_env **env)
 	long long	code;
 
 	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
-		ft_putendl_fd("exit", 1);
+		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!args || !args[0])
 		exit(rn_status_get(env));
 	if (!exit_value(args[0], &code))
@@ -86,7 +86,7 @@ int	bin_exit(char **args, t_env **env)
 	}
 	if (args[1])
 	{
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		env_set(env, ENV_ERRCODE, "1");
 		return (1);
 	}
