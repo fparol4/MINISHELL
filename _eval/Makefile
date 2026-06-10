@@ -1,3 +1,4 @@
+
 # --- TESTS ---
 
 TEST_FLAGS = -DSNOW_ENABLED

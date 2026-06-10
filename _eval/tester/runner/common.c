@@ -196,7 +196,7 @@ static int	rn_test_with_stdin_out(char *input, t_rn_test_capture *capture)
 
 static void	rn_test_ensure_tmp(void)
 {
-	mkdir("testing/_tmp", 0777);
+	mkdir("tester/_tmp", 0777);
 }
 
 static int	rn_test_temp(char *tpl)
