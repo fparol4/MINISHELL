@@ -27,11 +27,6 @@ typedef enum e_ext_kind
 	EXT_DIR
 }			t_ext_kind;
 
-t_ext_kind	rn_ext_classify(char *path);
-int			rn_ext_report(char *path, t_ext_kind kind);
-int			rn_ext_execfail(char *path);
 int			rn_ext_resolve(char **args, t_env **env, char **path);
-void		rn_ext_child(char *path, char **args, char **envp);
-int			rn_ext_wait(pid_t pid);
 
 #endif

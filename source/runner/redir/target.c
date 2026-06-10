@@ -65,14 +65,14 @@ int	rn_redir_fd(t_parser_redir *redir, t_env **env, int input_fd)
 
 	target = rn_redir_target(redir, env);
 	if (!target)
-		return (-1);
+		return (REDIR_FD_ERR);
 	// P1
 	if (redir->type == REDIR_HEREDOC)
 		fd = rn_redir_heredoc(target, env, redir->expand, input_fd);
 	// P2
 	else
 		fd = rn_redir_open(target, redir->type);
-	if (fd == -1 && redir->type != REDIR_HEREDOC)
+	if (fd == REDIR_FD_ERR && redir->type != REDIR_HEREDOC)
 		sh_err2(NULL, target, strerror(errno));
 	free(target);
 	return (fd);

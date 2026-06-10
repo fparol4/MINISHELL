@@ -18,6 +18,9 @@
 # include <fcntl.h>
 # include <string.h>
 
+# define REDIR_FD_ERR   -1
+# define REDIR_FD_INTR  -2
+
 typedef enum e_heredoc_state
 {
 	HEREDOC_DONE,

@@ -35,7 +35,6 @@ typedef struct s_parser
 	t_ast			*ast;
 }					t_parser;
 
-t_list_token		*parser_get_token(t_node *current_node);
 unsigned int		parser_get_class(t_token_type type);
 
 t_command			*parse_simple_command(t_parser *parser);

@@ -12,6 +12,21 @@
 
 #include "_redir.h"
 
+static int	redir_save_stdio(int saved[2])
+{
+	saved[0] = -1;
+	saved[1] = -1;
+	saved[0] = dup(STDIN_FILENO);
+	saved[1] = dup(STDOUT_FILENO);
+	if (saved[0] == -1 || saved[1] == -1)
+	{
+		rn_redir_restore(saved);
+		sh_err(NULL, "dup failed");
+		return (1);
+	}
+	return (0);
+}
+
 int	rn_redir_restore(int saved[2])
 {
 	if (saved[0] != -1 && dup2(saved[0], STDIN_FILENO) == -1)
@@ -32,21 +47,6 @@ int	rn_redir_restore(int saved[2])
 		close(saved[0]);
 	if (saved[1] != -1)
 		close(saved[1]);
-	return (0);
-}
-
-static int	redir_save_stdio(int saved[2])
-{
-	saved[0] = -1;
-	saved[1] = -1;
-	saved[0] = dup(STDIN_FILENO);
-	saved[1] = dup(STDOUT_FILENO);
-	if (saved[0] == -1 || saved[1] == -1)
-	{
-		rn_redir_restore(saved);
-		sh_err(NULL, "dup failed");
-		return (1);
-	}
 	return (0);
 }
 

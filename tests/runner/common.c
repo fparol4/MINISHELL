@@ -104,7 +104,6 @@ static void	rn_test_redir(t_parser_redir *redir, t_parser_redir_type type,
 	redir->type = type;
 	redir->file = target;
 	redir->expand = expand;
-	redir->quoted = !expand;
 }
 
 static void	rn_test_attach_redirs(t_command *node, t_parser_redir *redirs,

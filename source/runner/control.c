@@ -24,7 +24,7 @@ static int	rn_cmd_run(char **args, t_env **env)
 	return (status);
 }
 
-int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
+static int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 {
 	t_simple	*simple;
 	char		**args;

@@ -19,7 +19,7 @@ int	bin_env(char **args, t_env **env)
 	if (args && args[0])
 	{
 		sh_err2("env", args[0], "No such file or directory");
-		return (127);
+		return (EXIT_NOT_FOUND);
 	}
 	item = *env;
 	while (item)

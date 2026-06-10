@@ -12,7 +12,29 @@
 
 #include "_parser.h"
 
-static void	parser_cleanup(t_simple *simple);
+static void	parser_cleanup(t_simple *simple)
+{
+	char			**args;
+	t_parser_redir	*redirs;
+	size_t			i;
+
+	i = 0;
+	args = (char **)simple->args.items;
+	while (args && i < simple->args.length)
+	{
+		free(args[i]);
+		i++;
+	}
+	ft_array_free(&simple->args);
+	i = 0;
+	redirs = (t_parser_redir *)simple->redirs.items;
+	while (redirs && i < simple->redirs.length)
+	{
+		free(redirs[i].file);
+		i++;
+	}
+	ft_array_free(&simple->redirs);
+}
 
 void	parser_free_ast(t_ast *ast)
 {
@@ -42,28 +64,4 @@ void	parser_free_simple(t_simple *simple)
 		return ;
 	parser_cleanup(simple);
 	free(simple);
-}
-
-static void	parser_cleanup(t_simple *simple)
-{
-	char			**args;
-	t_parser_redir	*redirs;
-	size_t			i;
-
-	i = 0;
-	args = (char **)simple->args.items;
-	while (args && i < simple->args.length)
-	{
-		free(args[i]);
-		i++;
-	}
-	ft_array_free(&simple->args);
-	i = 0;
-	redirs = (t_parser_redir *)simple->redirs.items;
-	while (redirs && i < simple->redirs.length)
-	{
-		free(redirs[i].file);
-		i++;
-	}
-	ft_array_free(&simple->redirs);
 }

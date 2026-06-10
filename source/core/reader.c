@@ -54,8 +54,16 @@ static int	core_iteration(t_shell *shell)
 	char	*line;
 
 	line = readline(PROMPT);
+	write(1, "helloworld/n", 13);
 	if (!line)
 	{
+		if (g_signal == SIGINT)
+		{
+			rn_status_set(&shell->env, SH_STATUS_SIGINT);
+			g_signal = 0;
+			return (1);
+		}
+		write(STDOUT_FILENO, "bbb\n", 5);
 		write(STDOUT_FILENO, "exit\n", 5);
 		return (-1);
 	}
