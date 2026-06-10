@@ -14,6 +14,19 @@
 
 volatile sig_atomic_t	g_signal = 0;
 
+static void	sh_echoctl(int enable)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return ;
+	if (enable)
+		term.c_lflag |= ECHOCTL;
+	else
+		term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
 static void	sh_sigint_interactive(int sig)
 {
 	(void)sig;
@@ -42,11 +55,17 @@ void	sh_sig_mode(t_sig_mode mode)
 	sa_int.sa_flags = 0;
 	sa_quit.sa_flags = 0;
 	if (mode == SIG_INTERACTIVE)
+	{
 		sa_int.sa_handler = sh_sigint_interactive;
+		sh_echoctl(1);
+	}
 	else if (mode == SIG_EXEC)
 		sa_int.sa_handler = SIG_IGN;
 	else
+	{
 		sa_int.sa_handler = sh_sigint_heredoc;
+		sh_echoctl(0);
+	}
 	sa_quit.sa_handler = SIG_IGN;
 	sigaction(SIGINT, &sa_int, NULL);
 	sigaction(SIGQUIT, &sa_quit, NULL);
