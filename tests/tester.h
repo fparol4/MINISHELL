@@ -23,18 +23,4 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-/*
-Suggested rn_expand tests:
-- single quotes remove quotes and keep literal $VAR
-- double quotes remove quotes and expand $VAR
-- unquoted $VAR expands and splits spaces
-- quoted $VAR expands and does not split spaces
-- unknown variables become empty
-- empty quoted args stay as empty args
-- $ alone stays literal
-- invalid var start keeps $ literal
-- $? expands from ENV_ERRCODE
-- mixed quoted/unquoted parts join into the same word
-*/
-
 #endif

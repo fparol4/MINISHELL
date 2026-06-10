@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/10 16:34:16 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/10 16:34:16 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include <fcntl.h>
 # include <string.h>
 
-# define REDIR_FD_ERR   -1
-# define REDIR_FD_INTR  -2
+# define REDIR_FD_ERR -1
+# define REDIR_FD_INTR -2
 
 typedef enum e_heredoc_state
 {

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/10 16:34:15 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/10 16:34:15 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ typedef enum e_ext_kind
 	EXT_NOT_FOUND,
 	EXT_DENIED,
 	EXT_DIR
-}			t_ext_kind;
+}	t_ext_kind;
 
-int			rn_ext_resolve(char **args, t_env **env, char **path);
+int	rn_ext_resolve(char **args, t_env **env, char **path);
 
 #endif
