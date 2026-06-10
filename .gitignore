@@ -4,5 +4,3 @@ minishell
 .task/
 .leak_tests/
 tests/_tmp/*
-ext_tester
-tester
