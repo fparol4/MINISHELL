@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/10 16:34:14 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/10 16:34:14 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/10 17:14:00 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/10 17:14:00 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,28 +49,33 @@ static int	core_process_line(t_shell *shell, char *line)
 	return (0);
 }
 
+static int	core_eof(t_shell *shell)
+{
+	if (g_signal == SIGINT)
+	{
+		rn_status_set(&shell->env, SH_STATUS_SIGINT);
+		g_signal = 0;
+		return (1);
+	}
+	write(STDOUT_FILENO, "exit\n", 5);
+	return (-1);
+}
+
 static int	core_iteration(t_shell *shell)
 {
 	char	*line;
 
 	line = readline(PROMPT);
 	if (!line)
-	{
-		if (g_signal == SIGINT)
-		{
-			rn_status_set(&shell->env, SH_STATUS_SIGINT);
-			g_signal = 0;
-			return (1);
-		}
-		write(STDOUT_FILENO, "exit\n", 5);
-		return (-1);
-	}
+		return (core_eof(shell));
 	if (g_signal == SIGINT)
 		rn_status_set(&shell->env, SH_STATUS_SIGINT);
 	g_signal = 0;
 	if (*line)
+	{
 		add_history(line);
-	core_process_line(shell, line);
+		core_process_line(shell, line);
+	}
 	free(line);
 	if (g_signal == SH_EXIT_REQUESTED)
 		return (-1);

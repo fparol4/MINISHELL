@@ -22,7 +22,7 @@ int	core_loop(t_shell *shell)
 describe(core_init)
 {
 	{
-	char	*envp[] = {"PWD=tests/_tmp", "SHLVL=1", NULL};
+	char	*envp[] = {"PWD=testing/_tmp", "SHLVL=1", NULL};
 	t_shell	shell;
 
 	it("initializes shell env and status")
@@ -60,7 +60,7 @@ describe(core_init)
 describe(core_destroy)
 {
 	{
-	char	*envp[] = {"PWD=tests/_tmp", NULL};
+	char	*envp[] = {"PWD=testing/_tmp", NULL};
 	t_shell	shell;
 
 	it("frees env and marks shell as stopped")

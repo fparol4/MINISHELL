@@ -1,4 +1,0 @@
--I.
--Iheaders
--Ilibraries
--Ilibraries/libft

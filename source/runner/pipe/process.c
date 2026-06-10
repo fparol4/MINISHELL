@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/10 16:34:16 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/10 16:34:16 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/10 17:14:02 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/10 17:14:02 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ static int	rn_pipe_fork_all(t_pipe_ctx *ctx, pid_t *pids, size_t *forked)
 
 int	rn_pipe_fork_wait(t_pipe_ctx *ctx)
 {
-	pid_t		*pids;
-	size_t		forked;
-	int			status;
-	size_t		count;
+	pid_t	*pids;
+	size_t	forked;
+	int		status;
+	size_t	count;
 
 	count = ctx->pipe_count + 1;
 	pids = ft_calloc(count, sizeof(pid_t));

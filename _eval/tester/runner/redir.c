@@ -16,7 +16,7 @@ describe(rn_redir)
 {
 	it("reads stdin from input redirection")
 	{
-		char			path[] = "tests/_tmp/minishell_redir_in_XXXXXX";
+		char			path[] = "testing/_tmp/minishell_redir_in_XXXXXX";
 		char			*raw[] = {"cat", NULL};
 		t_env			*env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
 		t_command		node;
@@ -42,7 +42,7 @@ describe(rn_redir)
 	}
 	it("writes stdout with truncation redirection")
 	{
-		char			path[] = "tests/_tmp/minishell_redir_out_XXXXXX";
+		char			path[] = "testing/_tmp/minishell_redir_out_XXXXXX";
 		char			*raw[] = {"echo", "new", NULL};
 		t_env			*env = NULL;
 		t_command		node;
@@ -66,7 +66,7 @@ describe(rn_redir)
 	}
 	it("writes stdout with append redirection")
 	{
-		char			path[] = "tests/_tmp/minishell_redir_app_XXXXXX";
+		char			path[] = "testing/_tmp/minishell_redir_app_XXXXXX";
 		char			*raw[] = {"echo", "new", NULL};
 		t_env			*env = NULL;
 		t_command		node;
@@ -168,7 +168,7 @@ describe(rn_redir)
 	}
 	it("uses quoted spaces as one redirection target")
 	{
-		char			dir[] = "tests/_tmp/minishell_redir_space_XXXXXX";
+		char			dir[] = "testing/_tmp/minishell_redir_space_XXXXXX";
 		char			*raw[] = {"echo", "ok", NULL};
 		t_env			*env = NULL;
 		t_command		node;
@@ -217,7 +217,7 @@ describe(rn_redir)
 	}
 	it("fails output redirection when permission is denied")
 	{
-		char			dir[] = "tests/_tmp/minishell_redir_denied_XXXXXX";
+		char			dir[] = "testing/_tmp/minishell_redir_denied_XXXXXX";
 		char			*raw[] = {"echo", "blocked", NULL};
 		t_env			*env = NULL;
 		t_command		node;
@@ -246,7 +246,7 @@ describe(rn_redir)
 	}
 	it("does not execute command when input redirection is missing")
 	{
-		char			path[] = "tests/_tmp/minishell_redir_missing_input";
+		char			path[] = "testing/_tmp/minishell_redir_missing_input";
 		char			*raw[] = {"echo", "should-not-run", NULL};
 		t_env			*env = NULL;
 		t_command		node;
@@ -288,7 +288,7 @@ describe(rn_redir)
 	}
 	it("lets a later file input override an earlier heredoc")
 	{
-		char			path[] = "tests/_tmp/minishell_redir_override_in_XXXXXX";
+		char			path[] = "testing/_tmp/minishell_redir_override_in_XXXXXX";
 		char			*raw[] = {"cat", NULL};
 		t_env			*env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
 		t_command		node;
@@ -315,7 +315,7 @@ describe(rn_redir)
 	}
 	it("lets a later heredoc override an earlier file input")
 	{
-		char			path[] = "tests/_tmp/minishell_redir_override_heredoc_XXXXXX";
+		char			path[] = "testing/_tmp/minishell_redir_override_heredoc_XXXXXX";
 		char			*raw[] = {"cat", NULL};
 		t_env			*env = env_init((char *[]){"PATH=/usr/bin:/bin", NULL});
 		t_command		node;
@@ -364,7 +364,7 @@ describe(rn_redir)
 	}
 	it("handles commands with only redirections")
 	{
-		char			path[] = "tests/_tmp/minishell_redir_only_XXXXXX";
+		char			path[] = "testing/_tmp/minishell_redir_only_XXXXXX";
 		t_env			*env = NULL;
 		t_command		node;
 		t_parser_redir	redir;

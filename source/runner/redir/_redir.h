@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/10 16:34:16 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/10 16:34:16 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/10 17:14:02 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/10 17:14:02 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ typedef enum e_heredoc_state
 	HEREDOC_EOF,
 	HEREDOC_INTR,
 	HEREDOC_FAIL
-}				t_heredoc_state;
+}					t_heredoc_state;
 
 typedef struct s_redir_fd
 {
-	int			fd;
-	int			stdio;
-}				t_redir_fd;
+	int				fd;
+	int				stdio;
+}					t_redir_fd;
 
 typedef struct s_redir_ctx
 {
@@ -41,26 +41,27 @@ typedef struct s_redir_ctx
 	size_t			count;
 	t_env			**env;
 	int				input_fd;
-}				t_redir_ctx;
+}					t_redir_ctx;
 
 typedef struct s_heredoc_ctx
 {
-	int		fd;
-	char	*target;
-	t_env	**env;
-	int		expand;
-	int		input_fd;
-}				t_heredoc_ctx;
+	int				fd;
+	char			*target;
+	t_env			**env;
+	int				expand;
+	int				input_fd;
+}					t_heredoc_ctx;
 
-int				rn_redir_append(char **buf, char *part);
-int				rn_redir_char(char **buf, char c);
-char			*rn_redir_line(char *line, t_env **env, int expand);
-char			*rn_redir_readline(int input_fd);
-t_heredoc_state	rn_redir_heredoc_loop(t_heredoc_ctx *ctx);
-int				rn_redir_heredoc(char *target, t_env **env, int expand,
-					int input_fd);
-int				rn_redir_fd(t_parser_redir *redir, t_env **env, int input_fd);
-int				rn_redir_apply(t_redir_ctx *ctx);
-int				rn_redir_push(t_redir_ctx *ctx, int saved[2]);
+int					rn_redir_append(char **buf, char *part);
+int					rn_redir_char(char **buf, char c);
+char				*rn_redir_line(char *line, t_env **env, int expand);
+char				*rn_redir_readline(int input_fd);
+t_heredoc_state		rn_redir_heredoc_loop(t_heredoc_ctx *ctx);
+int					rn_redir_heredoc(char *target, t_env **env, int expand,
+						int input_fd);
+int					rn_redir_fd(t_parser_redir *redir, t_env **env,
+						int input_fd);
+int					rn_redir_apply(t_redir_ctx *ctx);
+int					rn_redir_push(t_redir_ctx *ctx, int saved[2]);
 
 #endif

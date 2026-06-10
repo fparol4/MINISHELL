@@ -47,7 +47,7 @@ static t_env *find_env_node(t_env *env, char *key)
 	return (NULL);
 }
 
-static void ensure_tmp_dir(void) { mkdir("tests/_tmp", 0777); }
+static void ensure_tmp_dir(void) { mkdir("testing/_tmp", 0777); }
 
 static char *capture_builtin(
 	int (*fn)(char **, t_env **), char **args, t_env **env, int *code)
@@ -378,7 +378,7 @@ describe(bin_cd)
 {
 	{
 		char cwd[4096];
-		char *envp[] = {"HOME=tests/_tmp", NULL};
+		char *envp[] = {"HOME=testing/_tmp", NULL};
 		char *args[] = {NULL};
 		t_env *env;
 
@@ -388,7 +388,7 @@ describe(bin_cd)
 			ensure_tmp_dir();
 			env = env_init(envp);
 			asserteq(bin_cd(args, &env), 0);
-			assert(strstr(env_get(&env, "PWD"), "/tests/_tmp") != NULL);
+			assert(strstr(env_get(&env, "PWD"), "/testing/_tmp") != NULL);
 			chdir(cwd);
 			env_free(&env);
 		}
@@ -406,7 +406,7 @@ describe(bin_cd)
 	}
 	{
 		char cwd[4096];
-		char *args[] = {"tests/_tmp", NULL};
+		char *args[] = {"testing/_tmp", NULL};
 		t_env *env;
 
 		it("changes to a given path and updates PWD")
@@ -415,14 +415,14 @@ describe(bin_cd)
 			ensure_tmp_dir();
 			env = NULL;
 			asserteq(bin_cd(args, &env), 0);
-			assert(strstr(env_get(&env, "PWD"), "/tests/_tmp") != NULL);
+			assert(strstr(env_get(&env, "PWD"), "/testing/_tmp") != NULL);
 			chdir(cwd);
 			env_free(&env);
 		}
 	}
 	{
 		char cwd[4096];
-		char *args[] = {"tests", NULL};
+		char *args[] = {"testing", NULL};
 		t_env *env;
 
 		it("updates OPWD as well as PWD")
@@ -433,13 +433,13 @@ describe(bin_cd)
 			asserteq(bin_cd(args, &env), 0);
 			asserteq_str(env_get(&env, ENV_OPWD), cwd);
 			assert(env_get(&env, "PWD") != NULL);
-			assert(strstr(env_get(&env, "PWD"), "/tests") != NULL);
+			assert(strstr(env_get(&env, "PWD"), "/testing") != NULL);
 			chdir(cwd);
 			env_free(&env);
 		}
 	}
 	{
-		char *args[] = {"tests/_tmp/__minishell_cd_missing__", NULL};
+		char *args[] = {"testing/_tmp/__minishell_cd_missing__", NULL};
 		t_env *env;
 
 		it("returns 1 for a missing path")
@@ -452,7 +452,7 @@ describe(bin_cd)
 	{
 		char cwd[4096];
 		char *args[] = {"-", NULL};
-		char *envp[] = {"OPWD=tests/_tmp", NULL};
+		char *envp[] = {"OPWD=testing/_tmp", NULL};
 		t_env *env;
 		char *out;
 		int code;
@@ -464,9 +464,9 @@ describe(bin_cd)
 			env = env_init(envp);
 			out = capture_builtin(bin_cd, args, &env, &code);
 			asserteq(code, 0);
-			assert(strstr(env_get(&env, "PWD"), "/tests/_tmp") != NULL);
+			assert(strstr(env_get(&env, "PWD"), "/testing/_tmp") != NULL);
 			assert(out != NULL);
-			assert(strstr(out, "tests/_tmp") != NULL);
+			assert(strstr(out, "testing/_tmp") != NULL);
 			chdir(cwd);
 			free(out);
 			env_free(&env);

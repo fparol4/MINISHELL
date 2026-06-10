@@ -15,7 +15,7 @@
 describe(env_init)
 {
 	{
-	char	*envp[] = {"USER=fcardozo", "HOME=tests/_tmp", NULL};
+	char	*envp[] = {"USER=fcardozo", "HOME=testing/_tmp", NULL};
 	t_env	*env;
 
 	it("parses entries into a linked list")
@@ -23,7 +23,7 @@ describe(env_init)
 		env = env_init(envp);
 		assert(env != NULL);
 		asserteq_str(env_get(&env, "USER"), "fcardozo");
-		asserteq_str(env_get(&env, "HOME"), "tests/_tmp");
+		asserteq_str(env_get(&env, "HOME"), "testing/_tmp");
 		env_free(&env);
 	}
 	}

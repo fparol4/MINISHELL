@@ -94,7 +94,7 @@ describe(rn_execute_cmd)
 	}
 	it("returns 126 for direct directory paths")
 	{
-		char		path[] = "tests/_tmp/minishell_exec_dir_XXXXXX";
+		char		path[] = "testing/_tmp/minishell_exec_dir_XXXXXX";
 		char		*raw[] = {path, NULL};
 		t_env		*env = NULL;
 		t_command	node;
@@ -114,7 +114,7 @@ describe(rn_execute_cmd)
 	}
 	it("returns 126 for direct files without execute permission")
 	{
-		char		path[] = "tests/_tmp/minishell_exec_noexec_XXXXXX";
+		char		path[] = "testing/_tmp/minishell_exec_noexec_XXXXXX";
 		char		*raw[] = {path, NULL};
 		t_env		*env = NULL;
 		t_command	node;
@@ -137,7 +137,7 @@ describe(rn_execute_cmd)
 	}
 	it("returns 126 for executable files with invalid format")
 	{
-		char		path[] = "tests/_tmp/minishell_exec_format_XXXXXX";
+		char		path[] = "testing/_tmp/minishell_exec_format_XXXXXX";
 		char		*raw[] = {path, NULL};
 		t_env		*env = NULL;
 		t_command	node;
@@ -161,7 +161,7 @@ describe(rn_execute_cmd)
 	}
 	it("returns 126 for PATH entries without execute permission")
 	{
-		char	dir[] = "tests/_tmp/minishell_path_dir_XXXXXX";
+		char	dir[] = "testing/_tmp/minishell_path_dir_XXXXXX";
 		char	*raw[] = {"blocked", NULL};
 		char	*envp[2];
 		char	*path;

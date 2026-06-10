@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/10 16:34:15 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/10 16:34:15 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/10 17:14:01 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/10 17:14:01 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ static int	parse_simple_token(t_parser *parser)
 
 t_command	*parse_simple_command(t_parser *parser)
 {
-	t_simple		*simple;
-	t_command		*cmd;
+	t_simple	*simple;
+	t_command	*cmd;
 
 	parser_start_command(parser);
 	if (parser->state)
