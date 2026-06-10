@@ -106,7 +106,6 @@ static t_env	*env_list_from_array(char **env)
 		next = &(*next)->next;
 		i++;
 	}
-	*next = NULL;
 	return (head);
 }
 

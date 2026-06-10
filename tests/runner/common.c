@@ -33,20 +33,30 @@ static void	rn_test_node(t_command *node, t_pnode_type type, char **args,
 	}
 }
 
+static t_ast	*rn_test_ast(void)
+{
+	t_ast	*ast;
+
+	ast = ft_calloc(1, sizeof(t_ast));
+	return (ast);
+}
+
 static char	*rn_test_capture_execute(t_command *node, t_env **env, int *code)
 {
 	char	buf[4096];
 	char	*out;
+	t_ast	*ast;
 	int		pfd[2];
 	int		saved;
 	ssize_t	n;
 
+	ast = rn_test_ast();
 	if (pipe(pfd) == -1)
 		return (NULL);
 	saved = dup(STDOUT_FILENO);
 	dup2(pfd[1], STDOUT_FILENO);
 	close(pfd[1]);
-	*code = rn_execute(node, env, STDIN_FILENO);
+	*code = rn_execute(node, env, STDIN_FILENO, ast);
 	dup2(saved, STDOUT_FILENO);
 	close(saved);
 	n = read(pfd[0], buf, sizeof(buf) - 1);
@@ -63,10 +73,12 @@ static char	*rn_test_capture_fd(int target, t_command *node, t_env **env,
 {
 	char	buf[4096];
 	char	*out;
+	t_ast	*ast;
 	int		pfd[2];
 	int		saved;
 	ssize_t	n;
 
+	ast = rn_test_ast();
 	if (pipe(pfd) == -1)
 		return (NULL);
 	saved = dup(target);
@@ -78,7 +90,7 @@ static char	*rn_test_capture_fd(int target, t_command *node, t_env **env,
 	}
 	dup2(pfd[1], target);
 	close(pfd[1]);
-	*code = rn_execute(node, env, STDIN_FILENO);
+	*code = rn_execute(node, env, STDIN_FILENO, ast);
 	dup2(saved, target);
 	close(saved);
 	n = read(pfd[0], buf, sizeof(buf) - 1);
