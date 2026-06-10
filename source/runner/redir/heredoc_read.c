@@ -117,7 +117,7 @@ t_heredoc_state	rn_redir_heredoc_loop(int fd, char *target, t_env **env,
 			g_signal = 0;
 			return (HEREDOC_INTR);
 		}
-		if (rn_redir_delim(line, target))
+		if (ft_strcmp(line, target) == 0)
 		{
 			free(line);
 			return (HEREDOC_DONE);

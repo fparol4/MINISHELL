@@ -67,11 +67,26 @@ static int	rn_ext_wait(pid_t pid)
 	return (1);
 }
 
+static int	ext_fork(char *path, char **args, char **envp)
+{
+	pid_t	pid;
+
+	sh_sig_mode(SIG_EXEC);
+	pid = fork();
+	if (pid == -1)
+	{
+		sh_sig_mode(SIG_INTERACTIVE);
+		return (-1);
+	}
+	if (pid == 0)
+		rn_ext_child(path, args, envp);
+	return (rn_ext_wait(pid));
+}
+
 int	rn_exec_ext(char **args, t_env **env)
 {
 	char	*path;
 	char	**envp;
-	pid_t	pid;
 	int		status;
 
 	if (!args || !args[0])
@@ -88,19 +103,10 @@ int	rn_exec_ext(char **args, t_env **env)
 		free(path);
 		return (1);
 	}
-	sh_sig_mode(SIG_EXEC);
-	pid = fork();
-	if (pid == -1)
-	{
-		free(path);
-		sh_freeargs(envp);
-		sh_sig_mode(SIG_INTERACTIVE);
-		return (1);
-	}
-	if (pid == 0)
-		rn_ext_child(path, args, envp);
+	status = ext_fork(path, args, envp);
 	free(path);
 	sh_freeargs(envp);
-	status = rn_ext_wait(pid);
+	if (status == -1)
+		return (1);
 	return (status);
 }
