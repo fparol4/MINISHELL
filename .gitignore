@@ -2,3 +2,4 @@
 build/
 minishell
 .task/
+.leak_tests/

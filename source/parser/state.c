@@ -20,6 +20,7 @@ void	parser_start_command(t_parser *parser)
 		parser->current_cmd = ft_calloc(1, sizeof(t_simple));
 	if (!parser->current_cmd)
 	{
+		free(parser->current_cmd);
 		parser->state = TRUE;
 		return ;
 	}
