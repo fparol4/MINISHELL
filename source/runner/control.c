@@ -38,8 +38,7 @@ static int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 	if (!args)
 		return (1);
 	if (simple->redirs.length)
-		status = rn_redir_push((t_parser_redir *)simple->redirs.items,
-				simple->redirs.length, env, saved, heredoc_fd);
+		status = rn_redir_push(&simple->redirs, env, saved, heredoc_fd);
 	else
 		status = 0;
 	if (status)

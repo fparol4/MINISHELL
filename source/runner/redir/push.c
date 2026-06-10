@@ -50,14 +50,15 @@ int	rn_redir_restore(int saved[2])
 	return (0);
 }
 
-int	rn_redir_push(t_parser_redir *redirs, size_t count, t_env **env,
-		int saved[2], int heredoc_fd)
+int	rn_redir_push(t_array *redirs, t_env **env, int saved[2],
+		int heredoc_fd)
 {
 	int	status;
 
 	if (redir_save_stdio(saved))
 		return (1);
-	status = rn_redir_apply(redirs, count, env, heredoc_fd);
+	status = rn_redir_apply((t_parser_redir *)redirs->items,
+			redirs->length, env, heredoc_fd);
 	if (status)
 	{
 		rn_redir_restore(saved);
