@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "_pipe.h"
+#include <readline/history.h>
+#include "../../headers/parser.h"
 
 static void	pipe_child_exit(int *fds, size_t pipe_count)
 {
@@ -67,9 +69,19 @@ int	rn_pipe_create(int *fds, size_t pipe_count)
 	return (0);
 }
 
+static void	rn_pipe_child_cleanup(t_pipe_ctx *ctx)
+{
+	env_free(ctx->env);
+	rl_clear_history();
+	free(ctx->cmds);
+	free(ctx->fds);
+	free(ctx->pids);
+}
+
 void	rn_pipe_child(t_pipe_ctx *ctx, size_t pos)
 {
 	int	heredoc_fd;
+	int	status;
 
 	heredoc_fd = rn_heredoc_fd(ctx, pos);
 	if (pos > 0 && dup2(ctx->fds[(pos - 1) * 2], STDIN_FILENO) == -1)
@@ -79,5 +91,7 @@ void	rn_pipe_child(t_pipe_ctx *ctx, size_t pos)
 	rn_pipe_close_all(ctx->fds, ctx->pipe_count);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	_exit(rn_execute(ctx->cmds[pos], ctx->env, heredoc_fd));
+	status = rn_execute(ctx->cmds[pos], ctx->env, heredoc_fd);
+	rn_pipe_child_cleanup(ctx);
+	_exit(status);
 }

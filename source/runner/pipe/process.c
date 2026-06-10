@@ -79,6 +79,7 @@ int	rn_pipe_fork_wait(t_command **cmds, t_env **env, int *fds, size_t count)
 	pids = ft_calloc(count, sizeof(pid_t));
 	if (!pids)
 		return (1);
+	ctx.pids = pids;
 	sh_sig_mode(SIG_EXEC);
 	forked = 0;
 	status = rn_pipe_fork_all(&ctx, pids, &forked);

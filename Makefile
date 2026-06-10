@@ -150,6 +150,7 @@ t\:runner: $(LIBFT)
 			$(SRC_SHARED) \
 			$(SRC_BIN) \
 			$(SRC_ENVM) \
+			source/parser/cleanup.c \
 			$(LIBFT) -lreadline -o tests/build/runner
 	@tests/build/runner
 

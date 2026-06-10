@@ -3,3 +3,4 @@ build/
 minishell
 .task/
 .leak_tests/
+tests/_tmp/*

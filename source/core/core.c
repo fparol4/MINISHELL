@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "_core.h"
+#include <readline/history.h>
 
 int	core_init(t_shell *shell, char **envp)
 {
@@ -38,6 +39,7 @@ void	core_destroy(t_shell *shell)
 	if (!shell)
 		return ;
 	env_free(&shell->env);
+	rl_clear_history();
 	shell->running = FALSE;
 }
 

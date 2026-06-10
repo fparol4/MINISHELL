@@ -21,6 +21,7 @@ typedef struct s_pipe_ctx
 	t_command	**cmds;
 	t_env		**env;
 	int			*fds;
+	pid_t		*pids;
 	size_t		pipe_count;
 }				t_pipe_ctx;
 
