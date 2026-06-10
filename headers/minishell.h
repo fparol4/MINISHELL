@@ -15,10 +15,12 @@
 
 /* external */
 # include "../libraries/libft/libft.h"
-# include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <termios.h>
 
 /* internal */
 # include "./bin.h"

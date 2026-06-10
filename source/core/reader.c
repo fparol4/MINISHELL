@@ -5,14 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/10 17:14:00 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/10 17:14:00 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/10 17:39:50 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/10 17:39:50 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "_core.h"
-#include <readline/history.h>
-#include <readline/readline.h>
 
 static t_ast	*core_parse(char *line)
 {
@@ -84,19 +82,19 @@ static int	core_iteration(t_shell *shell)
 
 int	core_loop(t_shell *shell)
 {
-	int	ret;
-	int	status;
+	int				ret;
+	int				status;
+	struct termios	tm;
 
+	tcgetattr(STDIN_FILENO, &tm);
 	if (!shell)
 		return (1);
 	while (shell->running)
 	{
 		ret = core_iteration(shell);
 		if (ret == -1)
-		{
-			status = rn_status_get(&shell->env);
-			return (status);
-		}
+			return (rn_status_get(&shell->env));
+		tcsetattr(STDIN_FILENO, TCSANOW, &tm);
 	}
 	status = rn_status_get(&shell->env);
 	return (status);
