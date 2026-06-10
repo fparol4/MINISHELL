@@ -72,6 +72,8 @@ static int	core_iteration(t_shell *shell)
 		add_history(line);
 	core_process_line(shell, line);
 	free(line);
+	if (g_signal == SH_EXIT_REQUESTED)
+		return (-1);
 	return (0);
 }
 

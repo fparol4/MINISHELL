@@ -17,6 +17,7 @@ int	core_init(t_shell *shell, char **envp)
 {
 	if (!shell)
 		return (1);
+	g_signal = 0;
 	shell->env = env_init(envp);
 	if (!shell->env)
 	{
