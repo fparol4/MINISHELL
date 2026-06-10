@@ -19,6 +19,7 @@
 
 # define BUFFER_SIZE 4096
 # define PROMPT "GA&Fabricio:minishell$ "
+# define SH_EXIT_REQUESTED 1024
 
 extern volatile sig_atomic_t	g_signal;
 

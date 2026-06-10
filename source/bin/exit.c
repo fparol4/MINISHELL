@@ -71,12 +71,6 @@ static int	exit_value(char *arg, long long *out)
 	return (1);
 }
 
-static void	exit_cleanup(t_env **env)
-{
-	env_free(env);
-	rl_clear_history();
-}
-
 int	bin_exit(char **args, t_env **env)
 {
 	long long	code;
@@ -86,14 +80,14 @@ int	bin_exit(char **args, t_env **env)
 	if (!args || !args[0])
 	{
 		code = rn_status_get(env);
-		exit_cleanup(env);
-		exit((unsigned char)code);
+		g_signal = SH_EXIT_REQUESTED;
+		return ((unsigned char)code);
 	}
 	if (!exit_value(args[0], &code))
 	{
 		sh_err2("exit", args[0], "numeric argument required");
-		exit_cleanup(env);
-		exit(2);
+		g_signal = SH_EXIT_REQUESTED;
+		return (2);
 	}
 	if (args[1])
 	{
@@ -101,6 +95,6 @@ int	bin_exit(char **args, t_env **env)
 		env_set(env, ENV_ERRCODE, "1");
 		return (1);
 	}
-	exit_cleanup(env);
-	exit((unsigned char)code);
+	g_signal = SH_EXIT_REQUESTED;
+	return ((unsigned char)code);
 }
