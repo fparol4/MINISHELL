@@ -24,13 +24,6 @@ static void	quote_update(unsigned int props, unsigned int *state)
 		*state = P_NONE;
 }
 
-static int	word_isend(unsigned int props, unsigned int state, t_rules *rules)
-{
-	if (state != P_NONE)
-		return (0);
-	return ((props & P_SPACE) || (props & rules->start_operator));
-}
-
 static t_token_type	operator_type(const char *type)
 {
 	if (ft_strcmp(type, ">>") == 0)
@@ -60,17 +53,13 @@ t_list_token	*extract_word(t_manager *manager, t_scanner *input,
 	{
 		props = rules->table.props[scanner_current(input)];
 		quote_update(props, &state);
-		if (word_isend(props, state, rules))
+		if (state == P_NONE && ((props & P_SPACE)
+				|| (props & rules->start_operator)))
 			break ;
 		scanner_advance(input);
 	}
 	word = scanner_extract(input);
-	if (!input || input->cursor <= input->start)
-	{
-		free(word);
-		return (NULL);
-	}
-	if (state != P_NONE)
+	if ((!input || input->cursor <= input->start) || state != P_NONE)
 	{
 		free(word);
 		return (NULL);

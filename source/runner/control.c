@@ -25,10 +25,23 @@ static int	rn_cmd_run(char **args, t_env **env)
 	return (status);
 }
 
+static int	rn_exec_redirs(t_simple *simple, t_env **env, int heredoc_fd,
+		int saved[2])
+{
+	t_redir_ctx	redir;
+
+	if (!simple->redirs.length)
+		return (0);
+	redir.redirs = (t_parser_redir *)simple->redirs.items;
+	redir.count = simple->redirs.length;
+	redir.env = env;
+	redir.input_fd = heredoc_fd;
+	return (rn_redir_push(&redir, saved));
+}
+
 static int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 {
 	t_simple	*simple;
-	t_redir_ctx	redir;
 	char		**args;
 	int			saved[2];
 	int			status;
@@ -39,16 +52,7 @@ static int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 	args = rn_expand((char **)simple->args.items, env);
 	if (!args)
 		return (1);
-	if (simple->redirs.length)
-	{
-		redir.redirs = (t_parser_redir *)simple->redirs.items;
-		redir.count = simple->redirs.length;
-		redir.env = env;
-		redir.input_fd = heredoc_fd;
-		status = rn_redir_push(&redir, saved);
-	}
-	else
-		status = 0;
+	status = rn_exec_redirs(simple, env, heredoc_fd, saved);
 	if (status)
 	{
 		sh_freeargs(args);

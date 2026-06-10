@@ -38,7 +38,6 @@ static t_env	*entryparse(const char *entry)
 {
 	char	*eq;
 	char	*key;
-	char	*value;
 	t_env	*node;
 	size_t	key_l;
 
@@ -52,15 +51,8 @@ static t_env	*entryparse(const char *entry)
 	key = ft_substr(entry, 0, key_l);
 	if (!key)
 		return (NULL);
-	value = ft_strdup(eq + 1);
-	if (!value)
-	{
-		free(key);
-		return (NULL);
-	}
-	node = env_node_new(key, value);
+	node = env_node_new(key, eq + 1);
 	free(key);
-	free(value);
 	return (node);
 }
 

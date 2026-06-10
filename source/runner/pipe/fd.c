@@ -69,19 +69,6 @@ int	rn_pipe_create(int *fds, size_t pipe_count)
 	return (0);
 }
 
-static void	rn_pipe_child_cleanup(t_pipe_ctx *ctx)
-{
-	env_free(ctx->env);
-	rl_clear_history();
-	if (ctx->ast)
-		parser_free_ast(ctx->ast);
-	else
-		parser_free_cmd(ctx->root);
-	free(ctx->cmds);
-	free(ctx->fds);
-	free(ctx->pids);
-}
-
 void	rn_pipe_child(t_pipe_ctx *ctx, size_t pos)
 {
 	int	heredoc_fd;

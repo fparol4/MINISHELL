@@ -25,14 +25,11 @@ static int	pipe_alloc(t_command ***cmds, int **fds, size_t count)
 	return (0);
 }
 
-int	rn_pipe(t_command *node, t_env **env, t_ast *ast)
+static int	rn_pipe_ctx(t_pipe_ctx *ctx, t_command *node, t_env **env,
+		t_ast *ast)
 {
-	t_pipe_ctx	ctx;
-	t_command	**cmds;
-	int			*fds;
-	size_t		count;
-	size_t		idx;
-	int			status;
+	size_t	count;
+	size_t	idx;
 
 	count = rn_pipe_count(node);
 	if (count < 2)
@@ -40,25 +37,33 @@ int	rn_pipe(t_command *node, t_env **env, t_ast *ast)
 		sh_err(NULL, "invalid pipe node");
 		return (1);
 	}
-	if (pipe_alloc(&cmds, &fds, count))
+	if (pipe_alloc(&ctx->cmds, &ctx->fds, count))
 		return (1);
 	idx = 0;
-	rn_pipe_flatten(node, cmds, &idx);
-	if (rn_pipe_create(fds, count - 1))
+	rn_pipe_flatten(node, ctx->cmds, &idx);
+	if (rn_pipe_create(ctx->fds, count - 1))
 	{
-		free(cmds);
-		free(fds);
+		free(ctx->cmds);
+		free(ctx->fds);
 		return (1);
 	}
-	ctx.cmds = cmds;
-	ctx.root = node;
-	ctx.ast = ast;
-	ctx.env = env;
-	ctx.fds = fds;
-	ctx.pids = NULL;
-	ctx.pipe_count = count - 1;
+	ctx->root = node;
+	ctx->ast = ast;
+	ctx->env = env;
+	ctx->pids = NULL;
+	ctx->pipe_count = count - 1;
+	return (0);
+}
+
+int	rn_pipe(t_command *node, t_env **env, t_ast *ast)
+{
+	t_pipe_ctx	ctx;
+	int			status;
+
+	if (rn_pipe_ctx(&ctx, node, env, ast))
+		return (1);
 	status = rn_pipe_fork_wait(&ctx);
-	free(cmds);
-	free(fds);
+	free(ctx.cmds);
+	free(ctx.fds);
 	return (status);
 }

@@ -37,6 +37,24 @@ static t_heredoc_state	rn_redir_heredoc_fill(t_heredoc_ctx *ctx)
 	return (status);
 }
 
+static int	rn_redir_heredoc_status(t_heredoc_state state, int fd, char *target)
+{
+	if (state == HEREDOC_INTR)
+	{
+		close(fd);
+		return (REDIR_FD_INTR);
+	}
+	if (state == HEREDOC_FAIL)
+	{
+		sh_err(NULL, "heredoc failed");
+		close(fd);
+		return (REDIR_FD_ERR);
+	}
+	if (state == HEREDOC_EOF)
+		rn_redir_warn(target);
+	return (fd);
+}
+
 int	rn_redir_heredoc(char *target, t_env **env, int expand, int input_fd)
 {
 	int				pfd[2];
@@ -55,18 +73,5 @@ int	rn_redir_heredoc(char *target, t_env **env, int expand, int input_fd)
 	ctx.input_fd = input_fd;
 	state = rn_redir_heredoc_fill(&ctx);
 	close(pfd[1]);
-	if (state == HEREDOC_INTR)
-	{
-		close(pfd[0]);
-		return (REDIR_FD_INTR);
-	}
-	if (state == HEREDOC_FAIL)
-	{
-		sh_err(NULL, "heredoc failed");
-		close(pfd[0]);
-		return (REDIR_FD_ERR);
-	}
-	if (state == HEREDOC_EOF)
-		rn_redir_warn(target);
-	return (pfd[0]);
+	return (rn_redir_heredoc_status(state, pfd[0], target));
 }

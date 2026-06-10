@@ -40,6 +40,7 @@ SRC_ENVM = source/env/list.c \
 SRC_RUNNER = source/runner/path/path.c \
 			 source/runner/path/parts.c \
 			 source/runner/pipe/fd.c \
+			 source/runner/pipe/cleanup.c \
 			 source/runner/pipe/pipe.c \
 			 source/runner/pipe/process.c \
 			 source/runner/pipe/tree.c \

@@ -48,10 +48,26 @@ static void	consume_redir(t_parser *parser)
 	parser_next(parser);
 }
 
+static int	parse_simple_token(t_parser *parser)
+{
+	unsigned int	class;
+
+	class = parser_get_class(parser->token->type);
+	if (class == C_WORD)
+		consume_word(parser);
+	else if (class == C_REDIR)
+		consume_redir(parser);
+	else
+	{
+		parser_set_syntax_error(parser, SNTX_EMPTY_CMD);
+		return (1);
+	}
+	return (0);
+}
+
 t_command	*parse_simple_command(t_parser *parser)
 {
 	t_simple		*simple;
-	unsigned int	class;
 	t_command		*cmd;
 
 	parser_start_command(parser);
@@ -59,16 +75,8 @@ t_command	*parse_simple_command(t_parser *parser)
 		return (NULL);
 	while (parser->token && parser->token->type != TOKEN_PIPE)
 	{
-		class = parser_get_class(parser->token->type);
-		if (class == C_WORD)
-			consume_word(parser);
-		else if (class == C_REDIR)
-			consume_redir(parser);
-		else
-		{
-			parser_set_syntax_error(parser, SNTX_EMPTY_CMD);
+		if (parse_simple_token(parser))
 			return (NULL);
-		}
 	}
 	simple = parser->current_cmd;
 	parser_finish_command(parser);

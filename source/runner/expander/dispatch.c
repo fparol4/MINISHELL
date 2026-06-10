@@ -46,33 +46,24 @@ int	exp_double(t_exp_ctx *ctx)
 	return (0);
 }
 
+static int	exp_process_space(t_exp_ctx *ctx)
+{
+	if (exp_flush_word(ctx->list, ctx->word))
+		return (1);
+	while (sh_isspace(ctx->arg[*ctx->i]))
+		(*ctx->i)++;
+	return (0);
+}
+
 int	exp_process_char(t_exp_ctx *ctx)
 {
-	int	status;
-
 	if (ctx->arg[*ctx->i] == '\'')
-	{
-		status = exp_single(ctx->word, ctx->arg, ctx->i);
-		return (status);
-	}
+		return (exp_single(ctx->word, ctx->arg, ctx->i));
 	if (ctx->arg[*ctx->i] == '"')
-	{
-		status = exp_double(ctx);
-		return (status);
-	}
+		return (exp_double(ctx));
 	if (ctx->arg[*ctx->i] == '$')
-	{
-		status = exp_var(ctx);
-		return (status);
-	}
+		return (exp_var(ctx));
 	if (sh_isspace(ctx->arg[*ctx->i]))
-	{
-		if (exp_flush_word(ctx->list, ctx->word))
-			return (1);
-		while (sh_isspace(ctx->arg[*ctx->i]))
-			(*ctx->i)++;
-		return (0);
-	}
-	status = exp_wordchar(ctx->word, ctx->arg[(*ctx->i)++]);
-	return (status);
+		return (exp_process_space(ctx));
+	return (exp_wordchar(ctx->word, ctx->arg[(*ctx->i)++]));
 }
