@@ -12,20 +12,6 @@
 
 #include "../../headers/minishell.h"
 
-int	sh_has_quotes(char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s && s[i])
-	{
-		if (s[i] == '\'' || s[i] == '"')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 static int	quote_should_copy(char c, char *quote)
 {
 	if (!*quote && (c == '\'' || c == '"'))
@@ -39,6 +25,20 @@ static int	quote_should_copy(char c, char *quote)
 		return (0);
 	}
 	return (1);
+}
+
+int	sh_has_quotes(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s && s[i])
+	{
+		if (s[i] == '\'' || s[i] == '"')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 char	*sh_quote_remove(char *s)

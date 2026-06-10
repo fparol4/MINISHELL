@@ -12,33 +12,33 @@
 
 #include "_external.h"
 
-int	rn_ext_execfail(char *path)
+static int	rn_ext_execfail(char *path)
 {
 	if (errno == ENOENT)
 	{
 		sh_err2(NULL, path, "No such file or directory");
-		return (127);
+		return (EXIT_NOT_FOUND);
 	}
 	if (errno == EISDIR)
 	{
 		sh_err2(NULL, path, "Is a directory");
-		return (126);
+		return (EXIT_NOT_EXEC);
 	}
 	if (errno == EACCES)
 	{
 		sh_err2(NULL, path, "Permission denied");
-		return (126);
+		return (EXIT_NOT_EXEC);
 	}
 	if (errno == ENOEXEC)
 	{
 		sh_err2(NULL, path, "Exec format error");
-		return (126);
+		return (EXIT_NOT_EXEC);
 	}
 	sh_err2(NULL, path, strerror(errno));
-	return (126);
+	return (EXIT_NOT_EXEC);
 }
 
-void	rn_ext_child(char *path, char **args, char **envp)
+static void	rn_ext_child(char *path, char **args, char **envp)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -46,7 +46,7 @@ void	rn_ext_child(char *path, char **args, char **envp)
 	_exit(rn_ext_execfail(path));
 }
 
-int	rn_ext_wait(pid_t pid)
+static int	rn_ext_wait(pid_t pid)
 {
 	int	status;
 	int	ret;

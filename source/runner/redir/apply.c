@@ -38,8 +38,8 @@ static int	redir_open_all(t_redir_fd *opened, t_parser_redir *redirs,
 		if (fd < 0)
 		{
 			redir_close_opened(opened, i);
-			if (fd == -2)
-				return (130);
+			if (fd == REDIR_FD_INTR)
+				return (EXIT_SIGINT);
 			return (1);
 		}
 		opened[i].fd = fd;

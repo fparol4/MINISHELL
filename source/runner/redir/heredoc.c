@@ -46,20 +46,20 @@ int	rn_redir_heredoc(char *target, t_env **env, int expand, int input_fd)
 	if (pipe(pfd) == -1)
 	{
 		sh_err(NULL, "pipe failed");
-		return (-1);
+		return (REDIR_FD_ERR);
 	}
 	state = rn_redir_heredoc_fill(pfd[1], target, env, expand, input_fd);
 	close(pfd[1]);
 	if (state == HEREDOC_INTR)
 	{
 		close(pfd[0]);
-		return (-2);
+		return (REDIR_FD_INTR);
 	}
 	if (state == HEREDOC_FAIL)
 	{
 		sh_err(NULL, "heredoc failed");
 		close(pfd[0]);
-		return (-1);
+		return (REDIR_FD_ERR);
 	}
 	if (state == HEREDOC_EOF)
 		rn_redir_warn(target);

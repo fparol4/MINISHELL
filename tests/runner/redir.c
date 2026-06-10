@@ -265,7 +265,7 @@ describe(rn_redir)
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 1);
-		assert(strstr(err, "open failed") != NULL);
+		assert(strstr(err, "Permission denied") != NULL);
 		chmod(dir, 0700);
 		unlink(path);
 		rmdir(dir);

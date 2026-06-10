@@ -57,7 +57,6 @@ t_manager	*lexer(const char *input)
 	t_scanner	sc;
 	t_manager	*manager;
 	t_rules		*rules;
-	t_manager	*cleaned;
 
 	if (!input)
 		return (NULL);
@@ -68,8 +67,7 @@ t_manager	*lexer(const char *input)
 	if (!state_machine(manager, &sc, rules))
 	{
 		sh_stxerr(SNTX_UNCLOSED_QUOTE);
-		cleaned = lexer_cleanup(manager, rules);
-		return (cleaned);
+		return (lexer_cleanup(manager, rules));
 	}
 	free(rules);
 	return (manager);

@@ -19,18 +19,12 @@ int	sh_isspace(char c)
 
 int	sh_varstart(char c)
 {
-	int	is_start;
-
-	is_start = (ft_isalpha(c) || c == '_');
-	return (is_start);
+	return (ft_isalpha(c) || c == '_');
 }
 
 int	sh_varchar(char c)
 {
-	int	is_char;
-
-	is_char = (ft_isalnum(c) || c == '_');
-	return (is_char);
+	return (ft_isalnum(c) || c == '_');
 }
 
 int	sh_isidentifier(char *s)

@@ -26,7 +26,7 @@ static int	rn_pipe_status(int status)
 	return (1);
 }
 
-int	rn_pipe_wait(pid_t *pids, size_t count)
+static int	rn_pipe_wait(pid_t *pids, size_t count)
 {
 	size_t	i;
 	int		status;

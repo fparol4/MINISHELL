@@ -12,6 +12,13 @@
 
 #include "_parser.h"
 
+static t_list_token	*parser_get_token(t_node *current_node)
+{
+	if (!current_node)
+		return (NULL);
+	return ((t_list_token *)current_node->content);
+}
+
 void	parser_init(t_parser *parser, t_manager *manager)
 {
 	if (!parser)
@@ -53,11 +60,4 @@ unsigned int	parser_get_class(t_token_type type)
 	if (type == TOKEN_PIPE)
 		return (C_PIPE);
 	return (C_NONE);
-}
-
-t_list_token	*parser_get_token(t_node *current_node)
-{
-	if (!current_node)
-		return (NULL);
-	return ((t_list_token *)current_node->content);
 }

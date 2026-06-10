@@ -16,6 +16,10 @@
 # include "./bin.h"
 # include "./parser.h"
 
+# define EXIT_NOT_FOUND  127
+# define EXIT_NOT_EXEC   126
+# define EXIT_SIGINT     130
+
 int	rn_execute(t_command *cmd, t_env **env, int heredoc_fd);
 
 #endif

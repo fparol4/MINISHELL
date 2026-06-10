@@ -17,11 +17,13 @@ volatile sig_atomic_t	g_signal = 0;
 static void	sh_sigint_interactive(int sig)
 {
 	(void)sig;
+	write(1, "chamou\n", 7);
 	g_signal = SIGINT;
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	//g_signal = 0;
 }
 
 static void	sh_sigint_heredoc(int sig)

@@ -12,7 +12,7 @@
 
 #include "_external.h"
 
-t_ext_kind	rn_ext_classify(char *path)
+static t_ext_kind	rn_ext_classify(char *path)
 {
 	struct stat	st;
 
@@ -29,20 +29,20 @@ t_ext_kind	rn_ext_classify(char *path)
 	return (EXT_READY);
 }
 
-int	rn_ext_report(char *path, t_ext_kind kind)
+static int	rn_ext_report(char *path, t_ext_kind kind)
 {
 	if (kind == EXT_NOT_FOUND)
 	{
 		sh_err2(NULL, path, "No such file or directory");
-		return (127);
+		return (EXIT_NOT_FOUND);
 	}
 	if (kind == EXT_DIR)
 	{
 		sh_err2(NULL, path, "Is a directory");
-		return (126);
+		return (EXIT_NOT_EXEC);
 	}
 	sh_err2(NULL, path, "Permission denied");
-	return (126);
+	return (EXIT_NOT_EXEC);
 }
 
 int	rn_ext_resolve(char **args, t_env **env, char **path)
@@ -60,7 +60,7 @@ int	rn_ext_resolve(char **args, t_env **env, char **path)
 	if (!*path)
 	{
 		sh_err2(NULL, args[0], "command not found");
-		return (127);
+		return (EXIT_NOT_FOUND);
 	}
 	kind = rn_ext_classify(*path);
 	if (kind == EXT_READY)

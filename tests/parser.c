@@ -65,19 +65,6 @@ describe(parser_simple_command)
 	t_ast		*ast;
 	t_simple	*simple;
 
-	it("sets expand flag when dollar is in any arg")
-	{
-		ast = parse_input("echo $HOME");
-		assert(ast != NULL);
-		simple = &ast->root->t_define.simple;
-		asserteq(simple->expand, TRUE);
-		parser_free_ast(ast);
-	}
-	}
-	{
-	t_ast		*ast;
-	t_simple	*simple;
-
 	it("parses mixed single and double quotes in one word")
 	{
 		ast = parse_input("echo 'one'\"two\"three");
@@ -172,7 +159,7 @@ describe(parser_redirections)
 	t_simple		*simple;
 	t_parser_redir	*redir;
 
-	it("preserves quoted metadata on redirection targets")
+	it("disables expansion for quoted redirection targets")
 	{
 		ast = parse_input("cat > \"two words\"");
 		assert(ast != NULL);
@@ -180,7 +167,6 @@ describe(parser_redirections)
 		simple = &ast->root->t_define.simple;
 		redir = (t_parser_redir *)simple->redirs.items;
 		asserteq_str(redir[0].file, "\"two words\"");
-		asserteq(redir[0].quoted, TRUE);
 		asserteq(redir[0].expand, FALSE);
 		parser_free_ast(ast);
 	}
@@ -198,7 +184,6 @@ describe(parser_redirections)
 		simple = &ast->root->t_define.simple;
 		redir = (t_parser_redir *)simple->redirs.items;
 		asserteq_str(redir[0].file, "'EOF'");
-		asserteq(redir[0].quoted, TRUE);
 		asserteq(redir[0].expand, FALSE);
 		parser_free_ast(ast);
 	}

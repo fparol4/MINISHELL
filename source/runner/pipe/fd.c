@@ -12,6 +12,27 @@
 
 #include "_pipe.h"
 
+static void	pipe_child_exit(int *fds, size_t pipe_count)
+{
+	rn_pipe_close_all(fds, pipe_count);
+	sh_err(NULL, "dup2 failed");
+	_exit(1);
+}
+
+/* Save the terminal fd before dup2 replaces stdin with the pipe read-end,
+   so heredoc can still read from the terminal inside a pipeline. */
+static int	rn_heredoc_fd(t_pipe_ctx *ctx, size_t pos)
+{
+	int	heredoc_fd;
+
+	if (pos == 0)
+		return (STDIN_FILENO);
+	heredoc_fd = dup(STDIN_FILENO);
+	if (heredoc_fd == -1)
+		pipe_child_exit(ctx->fds, ctx->pipe_count);
+	return (heredoc_fd);
+}
+
 void	rn_pipe_close_all(int *fds, size_t pipe_count)
 {
 	size_t	i;
@@ -44,27 +65,6 @@ int	rn_pipe_create(int *fds, size_t pipe_count)
 		i++;
 	}
 	return (0);
-}
-
-static void	pipe_child_exit(int *fds, size_t pipe_count)
-{
-	rn_pipe_close_all(fds, pipe_count);
-	sh_err(NULL, "dup2 failed");
-	_exit(1);
-}
-
-/* Save the terminal fd before dup2 replaces stdin with the pipe read-end,
-   so heredoc can still read from the terminal inside a pipeline. */
-static int	rn_heredoc_fd(t_pipe_ctx *ctx, size_t pos)
-{
-	int	heredoc_fd;
-
-	if (pos == 0)
-		return (STDIN_FILENO);
-	heredoc_fd = dup(STDIN_FILENO);
-	if (heredoc_fd == -1)
-		pipe_child_exit(ctx->fds, ctx->pipe_count);
-	return (heredoc_fd);
 }
 
 void	rn_pipe_child(t_pipe_ctx *ctx, size_t pos)
