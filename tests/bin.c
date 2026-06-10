@@ -23,7 +23,9 @@ static int	fork_exit(char **args, t_env **env)
 	{
 		dup2(open("/dev/null", O_WRONLY), STDOUT_FILENO);
 		dup2(open("/dev/null", O_WRONLY), STDERR_FILENO);
-		bin_exit(args, env);
+		code = bin_exit(args, env);
+		if (g_signal == SH_EXIT_REQUESTED)
+			_exit(code);
 		_exit(1);
 	}
 	if (pid == -1)
@@ -310,7 +312,9 @@ describe(bin_exit)
 	it("returns 1 for too many args without exiting")
 	{
 		env = NULL;
+		g_signal = 0;
 		asserteq(bin_exit(args, &env), 1);
+		asserteq(g_signal, 0);
 		env_free(&env);
 	}
 	}
@@ -347,7 +351,35 @@ describe(bin_exit)
 		env_free(&env);
 	}
 	}
-}
+	{
+	char	*envp[] = {"$?=17", NULL};
+	t_env	*env;
+
+	it("requests shell exit and returns current status with no args")
+	{
+		env = env_init(envp);
+		g_signal = 0;
+		asserteq(bin_exit(NULL, &env), 17);
+		asserteq(g_signal, SH_EXIT_REQUESTED);
+		env_free(&env);
+		g_signal = 0;
+	}
+	}
+	{
+	char	*args[] = {"42", NULL};
+	t_env	*env;
+
+	it("requests shell exit for numeric arguments")
+	{
+		env = NULL;
+		g_signal = 0;
+		asserteq(bin_exit(args, &env), 42);
+		asserteq(g_signal, SH_EXIT_REQUESTED);
+		env_free(&env);
+		g_signal = 0;
+	}
+	}
+	}
 
 describe(bin_cd)
 {

@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcardozo <fcardozo@student.42.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 18:46:46 by fcardozo         #+#    #+#             */
-/*   Updated: 2026/06/09 18:46:46 by fcardozo         ###   ########.fr       */
+/*   Created: 2026/06/10 16:34:16 by fcardozo         #+#    #+#             */
+/*   Updated: 2026/06/10 16:34:16 by fcardozo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../headers/parser.h"
 #include "_pipe.h"
 #include <readline/history.h>
-#include "../../headers/parser.h"
 
 static void	pipe_child_exit(int *fds, size_t pipe_count)
 {
