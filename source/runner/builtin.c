@@ -12,44 +12,38 @@
 
 #include "_runner.h"
 
+typedef struct s_builtin_map
+{
+	char	*name;
+	int		(*func)(char **, t_env **);
+}	t_builtin_map;
+
+static const t_builtin_map	g_map[] = {
+	{"echo", bin_echo},
+	{"cd", bin_cd},
+	{"pwd", bin_pwd},
+	{"export", bin_export},
+	{"unset", bin_unset},
+	{"env", bin_env},
+	{"exit", bin_exit},
+	{NULL, NULL}
+};
+
 int	rn_exec_bin(char **args, t_env **env, int *status)
 {
+	int	i;
+
 	if (!args || !args[0])
 		return (0);
-	if (ft_strcmp(args[0], "echo") == 0)
+	i = 0;
+	while (g_map[i].name)
 	{
-		*status = bin_echo(args + 1, env);
-		return (1);
-	}
-	if (ft_strcmp(args[0], "cd") == 0)
-	{
-		*status = bin_cd(args + 1, env);
-		return (1);
-	}
-	if (ft_strcmp(args[0], "pwd") == 0)
-	{
-		*status = bin_pwd(args + 1, env);
-		return (1);
-	}
-	if (ft_strcmp(args[0], "export") == 0)
-	{
-		*status = bin_export(args + 1, env);
-		return (1);
-	}
-	if (ft_strcmp(args[0], "unset") == 0)
-	{
-		*status = bin_unset(args + 1, env);
-		return (1);
-	}
-	if (ft_strcmp(args[0], "env") == 0)
-	{
-		*status = bin_env(args + 1, env);
-		return (1);
-	}
-	if (ft_strcmp(args[0], "exit") == 0)
-	{
-		*status = bin_exit(args + 1, env);
-		return (1);
+		if (ft_strcmp(args[0], g_map[i].name) == 0)
+		{
+			*status = g_map[i].func(args + 1, env);
+			return (1);
+		}
+		i++;
 	}
 	return (0);
 }

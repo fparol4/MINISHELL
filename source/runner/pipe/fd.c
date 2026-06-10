@@ -79,5 +79,12 @@ void	rn_pipe_child(t_pipe_ctx *ctx, size_t pos)
 	rn_pipe_close_all(ctx->fds, ctx->pipe_count);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	_exit(rn_execute(ctx->cmds[pos], ctx->env, heredoc_fd));
+	{
+		int	status;
+
+		status = rn_execute(ctx->cmds[pos], ctx->env, heredoc_fd);
+		env_free(ctx->env);
+		parser_free_cmd(ctx->cmds[pos]);
+		_exit(status);
+	}
 }

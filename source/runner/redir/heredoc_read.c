@@ -51,14 +51,6 @@ static ssize_t	rn_heredoc_read_loop(int input_fd, char **line, size_t *len,
 	}
 }
 
-static int	rn_redir_delim(char *line, char *target)
-{
-	int	is_delim;
-
-	is_delim = (ft_strcmp(line, target) == 0);
-	return (is_delim);
-}
-
 char	*rn_redir_readline(int input_fd)
 {
 	char	*line;
@@ -120,7 +112,7 @@ t_heredoc_state	rn_redir_heredoc_loop(int fd, char *target, t_env **env,
 			g_signal = 0;
 			return (HEREDOC_INTR);
 		}
-		if (rn_redir_delim(line, target))
+		if (ft_strcmp(line, target) == 0)
 		{
 			free(line);
 			return (HEREDOC_DONE);

@@ -30,7 +30,6 @@ static int	ft_array_grow(t_array *array)
 	free(array->items);
 	array->items = next;
 	array->capacity = capacity;
-	//free(next);
 	return (0);
 }
 
