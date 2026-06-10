@@ -25,16 +25,15 @@ static void	redir_close_opened(t_redir_fd *opened, size_t count)
 		close(opened[--count].fd);
 }
 
-static int	redir_open_all(t_redir_fd *opened, t_parser_redir *redirs,
-		size_t count, t_env **env, int input_fd)
+static int	redir_open_all(t_redir_fd *opened, t_redir_ctx *ctx)
 {
 	size_t	i;
 	int		fd;
 
 	i = 0;
-	while (i < count)
+	while (i < ctx->count)
 	{
-		fd = rn_redir_fd(&redirs[i], env, input_fd);
+		fd = rn_redir_fd(&ctx->redirs[i], ctx->env, ctx->input_fd);
 		if (fd < 0)
 		{
 			redir_close_opened(opened, i);
@@ -43,7 +42,7 @@ static int	redir_open_all(t_redir_fd *opened, t_parser_redir *redirs,
 			return (1);
 		}
 		opened[i].fd = fd;
-		opened[i].stdio = redir_stdio(redirs[i].type);
+		opened[i].stdio = redir_stdio(ctx->redirs[i].type);
 		i++;
 	}
 	return (0);
@@ -69,24 +68,23 @@ static int	redir_dup_all(t_redir_fd *opened, size_t count)
 	return (0);
 }
 
-int	rn_redir_apply(t_parser_redir *redirs, size_t count, t_env **env,
-		int input_fd)
+int	rn_redir_apply(t_redir_ctx *ctx)
 {
 	t_redir_fd	*opened;
 	int			status;
 
-	if (!redirs || !count)
+	if (!ctx->redirs || !ctx->count)
 		return (0);
-	opened = malloc(sizeof(*opened) * count);
+	opened = malloc(sizeof(*opened) * ctx->count);
 	if (!opened)
 		return (1);
-	status = redir_open_all(opened, redirs, count, env, input_fd);
+	status = redir_open_all(opened, ctx);
 	if (status)
 	{
 		free(opened);
 		return (status);
 	}
-	status = redir_dup_all(opened, count);
+	status = redir_dup_all(opened, ctx->count);
 	free(opened);
 	return (status);
 }

@@ -45,7 +45,7 @@ describe(rn_execute_cmd)
 		t_env		*env = env_init(envp);
 		t_command	node;
 
-		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
+		rn_test_simple_node(&node, raw);
 		asserteq(rn_execute(&node, &env, STDIN_FILENO, NULL), 0);
 		asserteq_str(env_get(&env, "FOO"), "bar");
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
@@ -58,7 +58,7 @@ describe(rn_execute_cmd)
 		t_env		*env = env_init(envp);
 		t_command	node;
 
-		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
+		rn_test_simple_node(&node, raw);
 		asserteq(rn_execute(&node, &env, STDIN_FILENO, NULL), 0);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "0");
 		env_free(&env);
@@ -70,7 +70,7 @@ describe(rn_execute_cmd)
 		t_env		*env = env_init(envp);
 		t_command	node;
 
-		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
+		rn_test_simple_node(&node, raw);
 		asserteq(rn_execute(&node, &env, STDIN_FILENO, NULL), 127);
 		asserteq_str(env_get(&env, ENV_ERRCODE), "127");
 		env_free(&env);
@@ -83,7 +83,7 @@ describe(rn_execute_cmd)
 		char		*err;
 		int			status;
 
-		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
+		rn_test_simple_node(&node, raw);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 127);
@@ -102,7 +102,7 @@ describe(rn_execute_cmd)
 		int			status;
 
 		assert(rn_test_mkdtemp(path) != NULL);
-		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
+		rn_test_simple_node(&node, raw);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 126);
@@ -125,7 +125,7 @@ describe(rn_execute_cmd)
 		fd = rn_test_temp(path);
 		write(fd, "echo nope\n", 10);
 		close(fd);
-		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
+		rn_test_simple_node(&node, raw);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 126);
@@ -149,7 +149,7 @@ describe(rn_execute_cmd)
 		write(fd, "plain text\n", 11);
 		close(fd);
 		assert(chmod(path, 0700) == 0);
-		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
+		rn_test_simple_node(&node, raw);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 126);
@@ -188,7 +188,7 @@ describe(rn_execute_cmd)
 		envp[0] = path_env;
 		envp[1] = NULL;
 		env = env_init(envp);
-		rn_test_node(&node, PNODE_CMD, raw, NULL, NULL);
+		rn_test_simple_node(&node, raw);
 		err = rn_test_capture_error(&node, &env, &status);
 		assert(err != NULL);
 		asserteq(status, 126);

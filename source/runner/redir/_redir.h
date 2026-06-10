@@ -35,16 +35,32 @@ typedef struct s_redir_fd
 	int			stdio;
 }				t_redir_fd;
 
+typedef struct s_redir_ctx
+{
+	t_parser_redir	*redirs;
+	size_t			count;
+	t_env			**env;
+	int				input_fd;
+}				t_redir_ctx;
+
+typedef struct s_heredoc_ctx
+{
+	int		fd;
+	char	*target;
+	t_env	**env;
+	int		expand;
+	int		input_fd;
+}				t_heredoc_ctx;
+
 int				rn_redir_append(char **buf, char *part);
 int				rn_redir_char(char **buf, char c);
 char			*rn_redir_line(char *line, t_env **env, int expand);
 char			*rn_redir_readline(int input_fd);
-t_heredoc_state	rn_redir_heredoc_loop(int fd, char *target, t_env **env,
-					int expand, int input_fd);
+t_heredoc_state	rn_redir_heredoc_loop(t_heredoc_ctx *ctx);
 int				rn_redir_heredoc(char *target, t_env **env, int expand,
 					int input_fd);
 int				rn_redir_fd(t_parser_redir *redir, t_env **env, int input_fd);
-int				rn_redir_apply(t_parser_redir *redirs, size_t count,
-					t_env **env, int input_fd);
+int				rn_redir_apply(t_redir_ctx *ctx);
+int				rn_redir_push(t_redir_ctx *ctx, int saved[2]);
 
 #endif

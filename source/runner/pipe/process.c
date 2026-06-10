@@ -65,28 +65,22 @@ static int	rn_pipe_fork_all(t_pipe_ctx *ctx, pid_t *pids, size_t *forked)
 	return (0);
 }
 
-int	rn_pipe_fork_wait(t_command *root, t_ast *ast, t_command **cmds,
-		t_env **env, int *fds, size_t count)
+int	rn_pipe_fork_wait(t_pipe_ctx *ctx)
 {
-	t_pipe_ctx	ctx;
 	pid_t		*pids;
 	size_t		forked;
 	int			status;
+	size_t		count;
 
-	ctx.cmds = cmds;
-	ctx.root = root;
-	ctx.ast = ast;
-	ctx.env = env;
-	ctx.fds = fds;
-	ctx.pipe_count = count - 1;
+	count = ctx->pipe_count + 1;
 	pids = ft_calloc(count, sizeof(pid_t));
 	if (!pids)
 		return (1);
-	ctx.pids = pids;
+	ctx->pids = pids;
 	sh_sig_mode(SIG_EXEC);
 	forked = 0;
-	status = rn_pipe_fork_all(&ctx, pids, &forked);
-	rn_pipe_close_all(fds, count - 1);
+	status = rn_pipe_fork_all(ctx, pids, &forked);
+	rn_pipe_close_all(ctx->fds, ctx->pipe_count);
 	if (status)
 		rn_pipe_wait(pids, forked);
 	else

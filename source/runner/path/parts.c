@@ -38,8 +38,6 @@ int	rn_path_match(char *full)
 	return (match);
 }
 
-/* Store an existing-but-not-executable path as fallback so the caller can
-   report "permission denied" instead of "command not found" if no match found. */
 int	rn_path_candidate(char *full, char **fallback)
 {
 	if (rn_path_match(full))

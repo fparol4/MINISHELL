@@ -96,14 +96,13 @@ char	*rn_redir_readline(int input_fd)
 	return (line);
 }
 
-t_heredoc_state	rn_redir_heredoc_loop(int fd, char *target, t_env **env,
-		int expand, int input_fd)
+t_heredoc_state	rn_redir_heredoc_loop(t_heredoc_ctx *ctx)
 {
 	char	*line;
 
 	while (1)
 	{
-		line = rn_redir_readline(input_fd);
+		line = rn_redir_readline(ctx->input_fd);
 		if (!line)
 			return (HEREDOC_EOF);
 		if (g_signal == SIGINT)
@@ -112,12 +111,12 @@ t_heredoc_state	rn_redir_heredoc_loop(int fd, char *target, t_env **env,
 			g_signal = 0;
 			return (HEREDOC_INTR);
 		}
-		if (ft_strcmp(line, target) == 0)
+		if (ft_strcmp(line, ctx->target) == 0)
 		{
 			free(line);
 			return (HEREDOC_DONE);
 		}
-		if (rn_redir_write_line(fd, line, env, expand))
+		if (rn_redir_write_line(ctx->fd, line, ctx->env, ctx->expand))
 			return (HEREDOC_FAIL);
 	}
 }

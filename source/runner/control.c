@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "_runner.h"
+#include "redir/_redir.h"
 
 static int	rn_cmd_run(char **args, t_env **env)
 {
@@ -27,6 +28,7 @@ static int	rn_cmd_run(char **args, t_env **env)
 static int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 {
 	t_simple	*simple;
+	t_redir_ctx	redir;
 	char		**args;
 	int			saved[2];
 	int			status;
@@ -38,8 +40,13 @@ static int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 	if (!args)
 		return (1);
 	if (simple->redirs.length)
-		status = rn_redir_push((t_parser_redir *)simple->redirs.items,
-				simple->redirs.length, env, saved, heredoc_fd);
+	{
+		redir.redirs = (t_parser_redir *)simple->redirs.items;
+		redir.count = simple->redirs.length;
+		redir.env = env;
+		redir.input_fd = heredoc_fd;
+		status = rn_redir_push(&redir, saved);
+	}
 	else
 		status = 0;
 	if (status)

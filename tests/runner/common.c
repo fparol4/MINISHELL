@@ -12,26 +12,42 @@
 
 #include "../tester.h"
 
-static void	rn_test_node(t_command *node, t_pnode_type type, char **args,
-		t_command *left, t_command *right)
+typedef struct s_rn_test_capture
+{
+	t_command	*node;
+	t_env		**env;
+	int			*status;
+	char		**captured;
+	int			target;
+}				t_rn_test_capture;
+
+static void	rn_test_simple_node(t_command *node, char **args)
 {
 	ft_bzero(node, sizeof(*node));
-	node->type = type;
-	if (type == PNODE_CMD)
-	{
-		node->t_define.simple.args.items = args;
-		node->t_define.simple.args.elem_size = sizeof(char *);
-		while (args && args[node->t_define.simple.args.length])
-			node->t_define.simple.args.length++;
-		node->t_define.simple.args.capacity = node->t_define.simple.args.length
-			+ 1;
-	}
-	else
-	{
-		node->t_define.pipe.left = left;
-		node->t_define.pipe.right = right;
-	}
+	node->type = PNODE_CMD;
+	node->t_define.simple.args.items = args;
+	node->t_define.simple.args.elem_size = sizeof(char *);
+	while (args && args[node->t_define.simple.args.length])
+		node->t_define.simple.args.length++;
+	node->t_define.simple.args.capacity = node->t_define.simple.args.length + 1;
 }
+
+static void	rn_test_pipe_node(t_command *node, t_command *left,
+		t_command *right)
+{
+	ft_bzero(node, sizeof(*node));
+	node->type = PNODE_PIPE;
+	node->t_define.pipe.left = left;
+	node->t_define.pipe.right = right;
+}
+
+#define rn_test_node(node, type, args, left, right) \
+	do { \
+		if ((type) == PNODE_CMD) \
+			rn_test_simple_node((node), (args)); \
+		else \
+			rn_test_pipe_node((node), (left), (right)); \
+	} while (0)
 
 static t_ast	*rn_test_ast(void)
 {
@@ -127,8 +143,7 @@ static void	rn_test_attach_redirs(t_command *node, t_parser_redir *redirs,
 	node->t_define.simple.redirs.elem_size = sizeof(t_parser_redir);
 }
 
-static int	rn_test_with_stdin(char *input, t_command *node, t_env **env,
-		int *status, char **out)
+static int	rn_test_with_stdin_capture(char *input, t_rn_test_capture *capture)
 {
 	int	pfd[2];
 	int	saved;
@@ -150,50 +165,34 @@ static int	rn_test_with_stdin(char *input, t_command *node, t_env **env,
 	}
 	dup2(pfd[0], STDIN_FILENO);
 	close(pfd[0]);
-	*out = rn_test_capture_execute(node, env, status);
+	*capture->captured = rn_test_capture_fd(capture->target, capture->node,
+			capture->env, capture->status);
 	dup2(saved, STDIN_FILENO);
 	close(saved);
 	return (0);
 }
 
-static int	rn_test_with_stdin_capture(char *input, t_command *node,
-		t_env **env, int *status, char **captured, int target)
+static int	rn_test_with_stdin_error(char *input, t_rn_test_capture *capture)
 {
-	int	pfd[2];
-	int	saved;
-
-	if (pipe(pfd) == -1)
-		return (1);
-	if (write(pfd[1], input, ft_strlen(input)) < 0)
-	{
-		close(pfd[0]);
-		close(pfd[1]);
-		return (1);
-	}
-	close(pfd[1]);
-	saved = dup(STDIN_FILENO);
-	if (saved == -1)
-	{
-		close(pfd[0]);
-		return (1);
-	}
-	dup2(pfd[0], STDIN_FILENO);
-	close(pfd[0]);
-	*captured = rn_test_capture_fd(target, node, env, status);
-	dup2(saved, STDIN_FILENO);
-	close(saved);
-	return (0);
+	capture->target = STDERR_FILENO;
+	return (rn_test_with_stdin_capture(input, capture));
 }
 
-static int	rn_test_with_stdin_error(char *input, t_command *node, t_env **env,
-		int *status, char **err)
+static int	rn_test_with_stdin_out(char *input, t_rn_test_capture *capture)
 {
-	int	code;
-
-	code = rn_test_with_stdin_capture(input, node, env, status, err,
-			STDERR_FILENO);
-	return (code);
+	capture->target = STDOUT_FILENO;
+	return (rn_test_with_stdin_capture(input, capture));
 }
+
+#define rn_test_with_stdin(input, node, env, status, out) \
+	rn_test_with_stdin_out((input), &(t_rn_test_capture){ \
+		(node), (env), (status), (out), 0 \
+	})
+
+#define rn_test_with_stdin_error(input, node, env, status, err) \
+	rn_test_with_stdin_error((input), &(t_rn_test_capture){ \
+		(node), (env), (status), (err), 0 \
+	})
 
 static void	rn_test_ensure_tmp(void)
 {
