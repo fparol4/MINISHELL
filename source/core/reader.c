@@ -64,6 +64,7 @@ static int	core_iteration(t_shell *shell)
 			return (1);
 		}
 		write(STDOUT_FILENO, "bbb\n", 5);
+		write(STDOUT_FILENO, "exit\n", 5);
 		return (-1);
 	}
 	if (g_signal == SIGINT)

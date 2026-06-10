@@ -192,3 +192,33 @@ t\:parser: $(LIBFT)
 
 .PHONY: all clean fclean re test force \
 	t\:envm t\:builtin t\:runner t\:core t\:lexer t\:parser
+
+val:
+	@printf '%s\n' \
+'{' \
+'<readline_all>' \
+'Memcheck:Leak' \
+'match-leak-kinds: reachable' \
+'...' \
+'obj:*libreadline*' \
+'}' \
+'{' \
+'<tinfo_all>' \
+'Memcheck:Leak' \
+'match-leak-kinds: reachable' \
+'...' \
+'obj:*libtinfo*' \
+'}' \
+'{' \
+'<ncurses_all>' \
+'Memcheck:Leak' \
+'match-leak-kinds: reachable' \
+'...' \
+'obj:*libncurses*' \
+'}' \
+> .valgrind.supp
+	@valgrind --leak-check=full --show-leak-kinds=all \
+		--track-origins=yes \
+		--suppressions=.valgrind.supp \
+		./minishell
+	@rm -f .valgrind.supp
