@@ -76,7 +76,10 @@ t_command	*parse_simple_command(t_parser *parser)
 	while (parser->token && parser->token->type != TOKEN_PIPE)
 	{
 		if (parse_simple_token(parser))
+		{
+			parser_finish_command(parser);
 			return (NULL);
+		}
 	}
 	simple = parser->current_cmd;
 	parser_finish_command(parser);
