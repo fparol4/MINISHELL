@@ -54,7 +54,7 @@ static int	rn_exec_cmd(t_command *cmd, t_env **env, int heredoc_fd)
 	return (status);
 }
 
-int	rn_execute(t_command *cmd, t_env **env, int heredoc_fd)
+int	rn_execute(t_command *cmd, t_env **env, int heredoc_fd, t_ast *ast)
 {
 	int	status;
 
@@ -63,7 +63,7 @@ int	rn_execute(t_command *cmd, t_env **env, int heredoc_fd)
 	if (cmd->type == PNODE_CMD)
 		status = rn_exec_cmd(cmd, env, heredoc_fd);
 	else if (cmd->type == PNODE_PIPE)
-		status = rn_pipe(cmd, env);
+		status = rn_pipe(cmd, env, ast);
 	else
 		status = 1;
 	rn_status_set(env, status);

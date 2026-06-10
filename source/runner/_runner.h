@@ -17,8 +17,8 @@
 
 char	**rn_expand(char **args, t_env **env);
 char	*exp_varvalue(char *arg, int *i, t_env **env);
-int		rn_execute(t_command *cmd, t_env **env, int heredoc_fd);
-int		rn_pipe(t_command *cmd, t_env **env);
+int		rn_execute(t_command *cmd, t_env **env, int heredoc_fd, t_ast *ast);
+int		rn_pipe(t_command *cmd, t_env **env, t_ast *ast);
 int		rn_redir_push(t_parser_redir *redirs, size_t count, t_env **env,
 			int saved[2], int heredoc_fd);
 int		rn_redir_restore(int saved[2]);

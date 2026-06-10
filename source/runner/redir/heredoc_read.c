@@ -51,11 +51,6 @@ static ssize_t	rn_heredoc_read_loop(int input_fd, char **line, size_t *len,
 	}
 }
 
-static int	rn_redir_delim(char *line, char *target)
-{
-	return (ft_strcmp(line, target) == 0);
-}
-
 static int	rn_redir_write_line(int fd, char *line, t_env **env, int expand)
 {
 	char	*out;

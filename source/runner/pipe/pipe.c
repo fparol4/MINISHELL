@@ -25,7 +25,7 @@ static int	pipe_alloc(t_command ***cmds, int **fds, size_t count)
 	return (0);
 }
 
-int	rn_pipe(t_command *node, t_env **env)
+int	rn_pipe(t_command *node, t_env **env, t_ast *ast)
 {
 	t_command	**cmds;
 	int			*fds;
@@ -49,7 +49,7 @@ int	rn_pipe(t_command *node, t_env **env)
 		free(fds);
 		return (1);
 	}
-	status = rn_pipe_fork_wait(cmds, env, fds, count);
+	status = rn_pipe_fork_wait(node, ast, cmds, env, fds, count);
 	free(cmds);
 	free(fds);
 	return (status);

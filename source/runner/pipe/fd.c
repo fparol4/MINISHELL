@@ -73,6 +73,10 @@ static void	rn_pipe_child_cleanup(t_pipe_ctx *ctx)
 {
 	env_free(ctx->env);
 	rl_clear_history();
+	if (ctx->ast)
+		parser_free_ast(ctx->ast);
+	else
+		parser_free_cmd(ctx->root);
 	free(ctx->cmds);
 	free(ctx->fds);
 	free(ctx->pids);
@@ -91,18 +95,7 @@ void	rn_pipe_child(t_pipe_ctx *ctx, size_t pos)
 	rn_pipe_close_all(ctx->fds, ctx->pipe_count);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-<<<<<<< HEAD
-	status = rn_execute(ctx->cmds[pos], ctx->env, heredoc_fd);
+	status = rn_execute(ctx->cmds[pos], ctx->env, heredoc_fd, NULL);
 	rn_pipe_child_cleanup(ctx);
 	_exit(status);
-=======
-	{
-		int	status;
-
-		status = rn_execute(ctx->cmds[pos], ctx->env, heredoc_fd);
-		env_free(ctx->env);
-		parser_free_cmd(ctx->cmds[pos]);
-		_exit(status);
-	}
->>>>>>> 09b8415580d4e8fb5f2b1d1b5498fa2afc4d8f78
 }
