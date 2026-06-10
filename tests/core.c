@@ -29,9 +29,11 @@ describe(core_init)
 	{
 		shell.env = NULL;
 		shell.running = FALSE;
+		g_signal = SH_EXIT_REQUESTED;
 		asserteq(core_init(&shell, envp), 0);
 		assert(shell.env != NULL);
 		assert(shell.running == TRUE);
+		asserteq(g_signal, 0);
 		asserteq_str(env_get(&shell.env, ENV_ERRCODE), "0");
 		core_destroy(&shell);
 	}
@@ -43,9 +45,11 @@ describe(core_init)
 	{
 		shell.env = NULL;
 		shell.running = FALSE;
+		g_signal = SH_EXIT_REQUESTED;
 		asserteq(core_init(&shell, NULL), 0);
 		assert(shell.env != NULL);
 		assert(shell.running == TRUE);
+		asserteq(g_signal, 0);
 		assert(env_get(&shell.env, ENV_PWD) != NULL);
 		asserteq_str(env_get(&shell.env, ENV_ERRCODE), "0");
 		core_destroy(&shell);
